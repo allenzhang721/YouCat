@@ -7,3 +7,12 @@
 //
 
 import Foundation
+import UIKit
+
+class Collection {
+    
+    class func viewController() -> UIViewController {
+        let vc = UIStoryboard(name: "Collection", bundle: nil).instantiateInitialViewController()!
+        return vc
+    }
+}

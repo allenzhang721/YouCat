@@ -13,6 +13,13 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        setup()
+    }
+    
+    func setup() {
+        let vc = Collection.viewController()
+        view.addSubview(vc.view)
+        addChildViewController(vc)
     }
 
     override func didReceiveMemoryWarning() {
