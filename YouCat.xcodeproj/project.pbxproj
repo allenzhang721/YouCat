@@ -14,6 +14,10 @@
 		2C344204203D89F3008BF439 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C344202203D89F3008BF439 /* LaunchScreen.storyboard */; };
 		2C34420F203D89F3008BF439 /* YouCatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C34420E203D89F3008BF439 /* YouCatTests.swift */; };
 		2C34421A203D89F3008BF439 /* YouCatUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C344219203D89F3008BF439 /* YouCatUITests.swift */; };
+		2C35AC8B203D8D2C002F0983 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C35AC8A203D8D2C002F0983 /* Collection.swift */; };
+		2C35AC8D203D8D51002F0983 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C35AC8C203D8D51002F0983 /* CollectionViewController.swift */; };
+		2C35AC8F203D8D5E002F0983 /* Collection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C35AC8E203D8D5E002F0983 /* Collection.storyboard */; };
+		2C35AC91203D8D6F002F0983 /* Collection.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C35AC90203D8D6F002F0983 /* Collection.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +51,10 @@
 		2C344215203D89F3008BF439 /* YouCatUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YouCatUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C344219203D89F3008BF439 /* YouCatUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouCatUITests.swift; sourceTree = "<group>"; };
 		2C34421B203D89F3008BF439 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C35AC8A203D8D2C002F0983 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
+		2C35AC8C203D8D51002F0983 /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
+		2C35AC8E203D8D5E002F0983 /* Collection.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Collection.storyboard; sourceTree = "<group>"; };
+		2C35AC90203D8D6F002F0983 /* Collection.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Collection.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +105,11 @@
 		2C3441F8203D89F3008BF439 /* YouCat */ = {
 			isa = PBXGroup;
 			children = (
+				2C35AC89203D8B7B002F0983 /* Launch */,
+				2C35AC88203D8B70002F0983 /* User */,
+				2C35AC85203D8ACA002F0983 /* Collection */,
+				2C35AC87203D8B63002F0983 /* Category */,
+				2C35AC86203D8B38002F0983 /* Detail */,
 				2C3441F9203D89F3008BF439 /* AppDelegate.swift */,
 				2C3441FB203D89F3008BF439 /* ViewController.swift */,
 				2C3441FD203D89F3008BF439 /* Main.storyboard */,
@@ -123,6 +136,45 @@
 				2C34421B203D89F3008BF439 /* Info.plist */,
 			);
 			path = YouCatUITests;
+			sourceTree = "<group>";
+		};
+		2C35AC85203D8ACA002F0983 /* Collection */ = {
+			isa = PBXGroup;
+			children = (
+				2C35AC8A203D8D2C002F0983 /* Collection.swift */,
+				2C35AC8C203D8D51002F0983 /* CollectionViewController.swift */,
+				2C35AC8E203D8D5E002F0983 /* Collection.storyboard */,
+				2C35AC90203D8D6F002F0983 /* Collection.xcassets */,
+			);
+			path = Collection;
+			sourceTree = "<group>";
+		};
+		2C35AC86203D8B38002F0983 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Detail;
+			sourceTree = "<group>";
+		};
+		2C35AC87203D8B63002F0983 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
+		2C35AC88203D8B70002F0983 /* User */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		2C35AC89203D8B7B002F0983 /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Launch;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -232,6 +284,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C35AC91203D8D6F002F0983 /* Collection.xcassets in Resources */,
+				2C35AC8F203D8D5E002F0983 /* Collection.storyboard in Resources */,
 				2C344204203D89F3008BF439 /* LaunchScreen.storyboard in Resources */,
 				2C344201203D89F3008BF439 /* Assets.xcassets in Resources */,
 				2C3441FF203D89F3008BF439 /* Main.storyboard in Resources */,
@@ -259,6 +313,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C35AC8D203D8D51002F0983 /* CollectionViewController.swift in Sources */,
+				2C35AC8B203D8D2C002F0983 /* Collection.swift in Sources */,
 				2C3441FC203D89F3008BF439 /* ViewController.swift in Sources */,
 				2C3441FA203D89F3008BF439 /* AppDelegate.swift in Sources */,
 			);
