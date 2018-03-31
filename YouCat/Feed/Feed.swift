@@ -9,10 +9,10 @@
 import Foundation
 import UIKit
 
-class Collection {
+class Feed {
     
     class func viewController() -> UIViewController {
-        let vc = UIStoryboard(name: "Collection", bundle: nil).instantiateInitialViewController()!
+        let vc = UIStoryboard(name: "Feed", bundle: nil).instantiateInitialViewController()!
         return vc
     }
 }

@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     }
     
     func setup() {
-        let vc = Collection.viewController()
+        let vc = Feed.viewController()
         view.addSubview(vc.view)
         addChildViewController(vc)
     }

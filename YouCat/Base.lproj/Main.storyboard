@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" systemVersion="17A277" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="i5U-kk-tzw">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -9,7 +13,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="YouCat" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -19,6 +23,85 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="-935" y="16"/>
+        </scene>
+        <!--Feed-->
+        <scene sceneID="ygm-iY-zoD">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Feed" id="IVN-XH-o4o" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="FMN-Qx-03M"/>
+                    <navigationItem key="navigationItem" id="yrn-Oo-frq"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gfi-As-JXJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2070" y="-197"/>
+        </scene>
+        <!--首页-->
+        <scene sceneID="uZw-0l-17F">
+            <objects>
+                <navigationController title="首页" hidesBarsOnSwipe="YES" hidesBarsOnTap="YES" id="WFQ-Ev-HaL" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="首页" image="tabbar-home" id="NGE-62-tOp"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="163-Xs-gTm">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="IVN-XH-o4o" kind="relationship" relationship="rootViewController" id="6gJ-QJ-Xs6"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="R5W-za-lHT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1446" y="-196"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="hDE-KZ-zHE">
+            <objects>
+                <tabBarController id="i5U-kk-tzw" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="oDc-j1-woj">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="WFQ-Ev-HaL" kind="relationship" relationship="viewControllers" id="wTm-2B-X88"/>
+                        <segue destination="31i-ii-Pgo" kind="relationship" relationship="viewControllers" id="bEj-iQ-45v"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iZA-ih-BjC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="145" y="16"/>
+        </scene>
+        <!--Category-->
+        <scene sceneID="A66-f2-u8W">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Category" id="P0k-Zw-bR5" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="ypf-mH-WoB"/>
+                    <navigationItem key="navigationItem" id="bn3-Hu-wh0"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BGT-U9-f9x" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2050" y="558"/>
+        </scene>
+        <!--网红猫-->
+        <scene sceneID="aF5-Q9-2aA">
+            <objects>
+                <navigationController title="网红猫" hidesBottomBarWhenPushed="YES" hidesBarsOnSwipe="YES" hidesBarsOnTap="YES" id="31i-ii-Pgo" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="网红猫" image="tabbar-cats" id="Y1M-gj-x6k"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="bMq-bH-ars">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="P0k-Zw-bR5" kind="relationship" relationship="rootViewController" id="qAi-D4-3WM"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bc2-hD-Q6t" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1446" y="559"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="tabbar-cats" width="34" height="34"/>
+        <image name="tabbar-home" width="34" height="34"/>
+    </resources>
 </document>

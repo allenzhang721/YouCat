@@ -1,0 +1,6 @@
+framework module Pods_YouCat {
+  umbrella header "Pods-YouCat-umbrella.h"
+
+  export *
+  module * { export * }
+}
