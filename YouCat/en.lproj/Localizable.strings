@@ -1,0 +1,116 @@
+/* 
+  Localizable.strings
+  Youcat
+
+  Created by ting on 2018/11/29.
+  Copyright © 2018年 Curios. All rights reserved.
+*/
+"DefaultName" = "youCat";
+"Slogon" = "喵萌，让我们一起云吸猫";
+"UserProfile" = "的个人主页";
+"HomeLabel" = "Favorite";
+"ThemeLabel" = "Category";
+"PublishLabel" = "posts";
+"FollowersLabel" = "followers";
+"FollowingLabel" = "following";
+"PostLabel" = "Post";
+"LikeLabel" = "Like";
+
+"EnterCommentLabel" = "Comment";
+"DefaultName" = "User_";
+"NicknameLabel" = "Name";
+"NicknamePlaceholder" = "Enter your nickname";
+"BioLabel" = "Bio";
+"BioPlaceholder" = "Enter your bio";
+"GenderLabel" = "Gender";
+"GenderTitle" = "Edit Gender";
+"MaleLabel" = "Male";
+"FemaleLabel" = "Female";
+"PhoneLabel" = "Phone";
+"LoginLabel" = "Log In";
+"LogoutLabel" = "Log Out";
+"LogoutTitle" = "Log Out?";
+"IconTitle" = "Edit Icon";
+"PhotoLabel" = "Take Photo";
+"CameraAccessTitle" = 'Allow youCat to access your camera in "Settings"->"Privacy"';
+"LibraryLabel" = "Select from Album";
+"LibraryAccessTitle" = 'Allow youCat to access your album in "Settings"->"Privacy"->"Photos"';
+"SetLabel" = "Set Up";
+"NotSetLabel" = "Not set";
+"NotConnectedLabel" = "Not connected";
+"ContentLinkLabel" = "URL";
+"ReportLabel" = "Report";
+"ShareLabel" = "Share";
+"BlockLabel" = "Block";
+"UnBlockLabel" = "Unblock";
+"UnFollowLabel" = "Unfollow";
+"ShareButtonLabel" = "share";
+"DeleteLabel" = "Delete";
+"DeleteCommentTitle" = "Delete Comment";
+"LoadMoreLabel" = "View more";
+
+"FollowButtonLabel" = "+ Follow";
+"FollowingButtonLabel" = "Following";
+"UnBlockButtonLabel" = "Unblock";
+"EditProfileButtonLabel" = "Edit Profile";
+"BlockTitle" = "Block?";
+"ConfirmLabel" = "Confirm";
+"CancelLabel" = "Cancel";
+"OKLabel" = "OK";
+"SubmitLabel" = "Submit";
+"SaveLabel" = "Save";
+"QuitLabel" = "Quit";
+"SaveChangeTitle" = "Save Change?";
+"EditNicknameTitle" = "Edit Nickname";
+"EditBioTitle" = "Edit Bio";
+
+"SettingLabel" = "Setting";
+"PhonePlaceholder" = "Phone number";
+"CodePlaceholder" = "Verification Code";
+"PasswordPlcceholder" = "Password";
+"LoginTitle" = "Welcome to youCat";
+"PasswordLoginLabel" = "Login with password";
+"CodeLoginLabel" = "Login with SMS";
+"SendCodeLabel" = "Send Code";
+"ResendCodelLabel" = "Resend";
+"LoginOtherAccountLabel" = "Or login with";
+
+"ReplyLabel" = "@ ";
+"CommentSuccessLabel" = "Comment Success";
+"EnterIncorrectCodeMessage" = "Please enter correct verification code.";
+"EnterIncorrectPhoneMessage" = "Please enter correct phone number.";
+"IncorrectCodeMessage" = "Verification Code incorrect, Please try again later.";
+"LoginFailedMessage" = "Login failed, Please try again later.";
+"EditNicknameErrorMessage" = "Edit nickname failed，Please try again later.";
+"EditBioErrorMessage" = "Edit bio failed，Please try again later.";
+"UploadIconErrorMessage" = "Upload icon failed, Please try again later.";
+"SettingUserInfoErrorMessage" = "Update failed，Please try again later.";
+
+"ShareToTitle" = "Share To";
+"WeChatFriendLabel" = "WeChat";
+"WeChatEmoticonLabel" = "WeChat Emoji";
+"WeChatMomentsLabel" = "Moments";
+"WeiboLabel" = "Weibo";
+
+"JustNowLabel" = "Just Now";
+"YesterdayLabel" = "Yesterday";
+"AgoLabel" = " ago";
+"MinuteLabel" = " minute";
+"MinutesLabel" = " minutes";
+"HourLabel" = " hour";
+"HoursLabel" = " hours";
+"DaysLabel" = " days";
+"DayLabel" = " day";
+"DateFormatLabel" = "MM/dd/yyyy";
+
+"ReportInfringement" = "Infringement";
+"ReportPolitical" = "Political";
+"ReportPornLabel" = "Porn";
+"ReportSpamLabel" = "Spam";
+"ReportScamLabel" = "Scam";
+"ReportAbuseLabel" = "Abuse";
+
+"LoginFailedWeChatUninstall" = "Not find weChat, Can't login with weChat";
+"LoginFailedWeiboUninstall" = "Not find Weibo, Can't login with Weibo";
+"ShareFailedWeChatUninstall" = "weChat is not installed, Can't share to weChat";
+"ShareFailedWeiboUninstall" = "Weibo is not installed, Can't share to Weibo";

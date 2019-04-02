@@ -1,15 +1,64 @@
 PODS:
   - Alamofire (4.6.0)
-  - Kingfisher (4.6.2)
+  - HappyDNS (0.3.14)
+  - Locksmith (4.0.0)
+  - MJRefresh (3.1.15.7)
+  - mob_smssdk (3.2.1):
+    - MOBFoundation
+  - MOBFoundation (3.1.8)
+  - Qiniu (7.2.5):
+    - HappyDNS (~> 0.3)
+  - SnapKit (4.0.0)
+  - SwiftyJSON (4.0.0)
+  - WechatOpenSDK (1.8.2)
+  - Weibo_SDK (3.2.3)
 
 DEPENDENCIES:
   - Alamofire (~> 4.6.0)
-  - Kingfisher (~> 4.6.2)
+  - Locksmith
+  - MJRefresh (~> 3.1)
+  - mob_smssdk
+  - Qiniu (~> 7.1)
+  - SnapKit (~> 4.0)
+  - SwiftyJSON (~> 4.0.0)
+  - WechatOpenSDK
+  - Weibo_SDK (from `https://github.com/sinaweibosdk/weibo_ios_sdk.git`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - HappyDNS
+    - Locksmith
+    - MJRefresh
+    - mob_smssdk
+    - MOBFoundation
+    - Qiniu
+    - SnapKit
+    - SwiftyJSON
+    - WechatOpenSDK
+
+EXTERNAL SOURCES:
+  Weibo_SDK:
+    :git: https://github.com/sinaweibosdk/weibo_ios_sdk.git
+
+CHECKOUT OPTIONS:
+  Weibo_SDK:
+    :commit: f5b138320aefe0ed20b76b8510521432f1a6c9ac
+    :git: https://github.com/sinaweibosdk/weibo_ios_sdk.git
 
 SPEC CHECKSUMS:
   Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
-  Kingfisher: 55b9c395bf8d3949676ad3861111923990ab68cf
+  HappyDNS: dc6a164ee81979093123c241c6353bcf0218add6
+  Locksmith: e9bebbaaa4cee3c511bc358a44f843c3fe00e21f
+  MJRefresh: 697f8ec75ebdbe9207767bb682cf0f51b0d8a41f
+  mob_smssdk: edc462704cc07c6d245eee16c4c09ac4f4d53e61
+  MOBFoundation: 7f1e157be332576e4d45809a03bc733292c6ad8d
+  Qiniu: 909b408ee489ea54827e9717be90b94bc9dfbc48
+  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
+  SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
+  WechatOpenSDK: 676feec516a11173eafd1fe64b10d27babf28701
+  Weibo_SDK: 652ca78c2f7147a5de5e75e7cbea89838a81772a
 
-PODFILE CHECKSUM: ec6598ce6a668f3019f6de0360918934709665ca
+PODFILE CHECKSUM: 3c06073a1daf80bfefa29b28a6854019acbcdef5
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.3
