@@ -92,6 +92,7 @@
 		2C827F48206F3EEB0035DCE2 /* ThemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C827F47206F3EEB0035DCE2 /* ThemeViewController.swift */; };
 		4BDCF867747000828440DF7E /* Pods_YouCatTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D76547DA6CCEE139A5F6E084 /* Pods_YouCatTests.framework */; };
 		83A6F551E87BF929BB599A40 /* Pods_YouCat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F17FB4EF2FA68C8A2CD9B94 /* Pods_YouCat.framework */; };
+		951F7E7822567DE00066589F /* YCAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 951F7E7722567DE00066589F /* YCAssets.xcassets */; };
 		9529EC8A225676BF006E0CC4 /* YCPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC86225676BE006E0CC4 /* YCPreviewViewController.swift */; };
 		9529EC8B225676BF006E0CC4 /* YCImagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC87225676BE006E0CC4 /* YCImagePickerViewController.swift */; };
 		9529EC8C225676BF006E0CC4 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC88225676BE006E0CC4 /* CameraController.swift */; };
@@ -287,6 +288,7 @@
 		5536AD062810EA944BFD8DAA /* Pods_YouCatUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouCatUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		581287F3A5F73B04B2906D2F /* Pods-YouCatTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCatTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCatTests/Pods-YouCatTests.release.xcconfig"; sourceTree = "<group>"; };
 		7EA9D9DE110AC0A34E1D6FE9 /* Pods-YouCat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCat.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCat/Pods-YouCat.release.xcconfig"; sourceTree = "<group>"; };
+		951F7E7722567DE00066589F /* YCAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = YCAssets.xcassets; sourceTree = "<group>"; };
 		9529EC86225676BE006E0CC4 /* YCPreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCPreviewViewController.swift; sourceTree = "<group>"; };
 		9529EC87225676BE006E0CC4 /* YCImagePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCImagePickerViewController.swift; sourceTree = "<group>"; };
 		9529EC88225676BE006E0CC4 /* CameraController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
@@ -610,6 +612,7 @@
 				9529EC86225676BE006E0CC4 /* YCPreviewViewController.swift */,
 				9529EC8E22567779006E0CC4 /* YCDemoViewController.swift */,
 				9529EC902256778B006E0CC4 /* YCCapture.storyboard */,
+				951F7E7722567DE00066589F /* YCAssets.xcassets */,
 			);
 			path = Capture;
 			sourceTree = "<group>";
@@ -819,6 +822,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C344204203D89F3008BF439 /* LaunchScreen.storyboard in Resources */,
+				951F7E7822567DE00066589F /* YCAssets.xcassets in Resources */,
 				9529EC912256778B006E0CC4 /* YCCapture.storyboard in Resources */,
 				252B900921B038AF00E41842 /* Localizable.strings in Resources */,
 				2C3441FF203D89F3008BF439 /* Main.storyboard in Resources */,
