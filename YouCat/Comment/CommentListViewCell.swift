@@ -25,6 +25,7 @@ class YCCommentListViewCell: UITableViewCell, YCImageProtocol, YCNumberStringPro
     }
     
     var userIcon: UIImageView!
+    var iconView: UIView!
     var userNameLabel: UILabel!
     var contentLabel: UILabel!
     
@@ -63,26 +64,34 @@ class YCCommentListViewCell: UITableViewCell, YCImageProtocol, YCNumberStringPro
         tapView.isUserInteractionEnabled = true
         tapView.addGestureRecognizer(viewTap)
         
-        self.userIcon = UIImageView();
-        self.addSubview(self.userIcon)
-        self.userIcon.snp.makeConstraints { (make) in
-            make.left.equalTo(15)
-            make.top.equalTo(10)
+        self.iconView = UIView()
+        self.addSubview(self.iconView)
+        self.iconView.snp.makeConstraints { (make) in
+            make.left.equalTo(6)
+            make.top.equalTo(6)
             make.width.equalTo(44)
             make.height.equalTo(44)
         }
-        self.cropImageCircle(self.userIcon, 22)
+        self.userIcon = UIImageView();
+        self.iconView.addSubview(self.userIcon)
+        self.userIcon.snp.makeConstraints { (make) in
+            make.left.equalTo(4)
+            make.top.equalTo(4)
+            make.width.equalTo(36)
+            make.height.equalTo(36)
+        }
+        self.cropImageCircle(self.userIcon, 18)
         self.userIcon.image = UIImage(named: "default_icon")
         let iconTap = UITapGestureRecognizer(target: self, action: #selector(self.iconTapHandler))
-        self.userIcon.isUserInteractionEnabled = true
-        self.userIcon.addGestureRecognizer(iconTap)
+        iconView.isUserInteractionEnabled = true
+        iconView.addGestureRecognizer(iconTap)
         
         self.userNameLabel = UILabel()
         self.userNameLabel.numberOfLines = 1
         self.addSubview(self.userNameLabel)
         self.userNameLabel.snp.makeConstraints { (make) in
             make.left.equalTo(self.userIcon.snp.right).offset(10)
-            make.top.equalTo(self.userIcon.snp.top).offset(0)
+            make.top.equalTo(self.userIcon.snp.top).offset(-3)
             make.right.equalTo(-54)
             make.height.equalTo(22)
         }
@@ -182,21 +191,33 @@ class YCCommentListViewCell: UITableViewCell, YCImageProtocol, YCNumberStringPro
                 self.likeCountLabel.isHidden = false
                 self.contentLabel.textAlignment = .left
                 if comment.commentType == 0 {
-                    self.userIcon.snp.remakeConstraints { (make) in
-                        make.left.equalTo(15)
-                        make.top.equalTo(10)
+                    self.iconView.snp.remakeConstraints { (make) in
+                        make.left.equalTo(6)
+                        make.top.equalTo(6)
                         make.width.equalTo(44)
                         make.height.equalTo(44)
                     }
-                    self.cropImageCircle(self.userIcon, 22)
-                }else if comment.commentType == 1 {
                     self.userIcon.snp.remakeConstraints { (make) in
-                        make.left.equalTo(64)
-                        make.top.equalTo(0)
-                        make.width.equalTo(32)
-                        make.height.equalTo(32)
+                        make.left.equalTo(4)
+                        make.top.equalTo(4)
+                        make.width.equalTo(36)
+                        make.height.equalTo(36)
                     }
-                    self.cropImageCircle(self.userIcon, 16)
+                    self.cropImageCircle(self.userIcon, 18)
+                }else if comment.commentType == 1 {
+                    self.iconView.snp.remakeConstraints { (make) in
+                        make.left.equalTo(46)
+                        make.top.equalTo(-8)
+                        make.width.equalTo(44)
+                        make.height.equalTo(44)
+                    }
+                    self.userIcon.snp.remakeConstraints { (make) in
+                        make.left.equalTo(10)
+                        make.top.equalTo(10)
+                        make.width.equalTo(24)
+                        make.height.equalTo(24)
+                    }
+                    self.cropImageCircle(self.userIcon, 12)
                 }
                 if let user = comment.user{
                     self.userNameLabel.text = self.getNicknameString(user: user)
@@ -250,7 +271,7 @@ class YCCommentListViewCell: UITableViewCell, YCImageProtocol, YCNumberStringPro
                 self.timeLabel.isHidden = true
                 self.likeBtn.isHidden = true
                 self.likeCountLabel.isHidden = true
-                self.userIcon.snp.remakeConstraints { (make) in
+                self.iconView.snp.remakeConstraints { (make) in
                     make.left.equalTo(0)
                     make.top.equalTo(-22)
                     make.width.equalTo(44)

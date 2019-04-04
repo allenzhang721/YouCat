@@ -71,32 +71,42 @@ class YCThemeViewController: UIViewController, YCImageProtocol {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 54))
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
         
-        self.userIcon = UIImageView();
-        headerView.addSubview(self.userIcon)
-        self.userIcon.snp.makeConstraints { (make) in
+        let iconView = UIView()
+        headerView.addSubview(iconView)
+        iconView.snp.makeConstraints { (make) in
             make.right.equalTo(-20)
-            make.top.equalTo(5)
+            make.top.equalTo(8)
             make.width.equalTo(44)
             make.height.equalTo(44)
         }
-        self.cropImageCircle(self.userIcon, 22)
+        
+        self.userIcon = UIImageView();
+        iconView.addSubview(self.userIcon)
+        self.userIcon.snp.makeConstraints { (make) in
+            make.right.equalTo(4)
+            make.top.equalTo(4)
+            make.width.equalTo(36)
+            make.height.equalTo(36)
+        }
+        self.cropImageCircle(self.userIcon, 18)
         self.userIcon.image = UIImage(named: "default_icon")
+        
+        let iconTap = UITapGestureRecognizer(target: self, action: #selector(self.iconTapHandler))
+        iconView.isUserInteractionEnabled = true
+        iconView.addGestureRecognizer(iconTap)
         
         let titleLabel = UILabel()
         headerView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { (make) in
             make.left.equalTo(20)
-            make.centerY.equalTo(self.userIcon).offset(3)
+            make.centerY.equalTo(self.userIcon).offset(0)
         }
         titleLabel.text = YCLanguageHelper.getString(key: "ThemeLabel")
         titleLabel.textColor = YCStyleColor.black
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 26)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 36)
         
-        let iconTap = UITapGestureRecognizer(target: self, action: #selector(self.iconTapHandler))
-        self.userIcon.isUserInteractionEnabled = true
-        self.userIcon.addGestureRecognizer(iconTap)
         
         self.tableView.tableHeaderView = headerView
         

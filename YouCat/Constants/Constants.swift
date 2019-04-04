@@ -74,7 +74,7 @@ enum RequestHost: CustomStringConvertible {
     var description: String {
         switch self {
         case .debug:
-            return "http://0.0.0.0:9909"
+            return "http://127.0.0.1:9909"
         case .production:
             return "http://www.youcat.cn"
         }
@@ -352,7 +352,7 @@ enum ParameterKey: CustomStringConvertible{
     case areaCode, phone, active, setPassword, weiboUser, password, newPassword
     case followersCount, followingCount
     case publishID, content, contentType, fromType, fromID, fromURL, publishDate, user, medias, tags, publishType
-    case themeID, creator, name, description, coverImage, coverVideo, themeType, publishCount, createDate
+    case themeID, creator, name, description, coverImage, coverVideo, themeType, styleType, publishCount, createDate
     case tagID, tagName
     case likeID, beLikedID, beLikedType, likeDate
     case commentID, beRepliedUser, beCommentedID, beCommentedType, beRepliedID, commentType, commentDate, replyCount, listCount, replyList, contentImages
@@ -516,6 +516,8 @@ enum ParameterKey: CustomStringConvertible{
             return "CoverVideo"
         case .themeType:
             return "ThemeType"
+        case .styleType:
+            return "StyleType"
         case .publishCount:
             return "PublishCount"
         case .createDate:

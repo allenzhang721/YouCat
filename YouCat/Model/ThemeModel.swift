@@ -16,18 +16,20 @@ class YCThemeModel: YCBaseModel {
     let name: String;
     let description: String;
     let themeType: Int;
+    let styleType: Int;
     let createDate: Date?
     let creator: YCRelationUserModel?
     let coverImage: YCImageModel?
     let coverVideo: YCVideoModel?
     var relation: Int;
     
-    init(themeID: String, uuid: String, name:String, description: String, themeType: Int, relation: Int, createDate: String, creatorJSON: JSON?, coverImageJSON: JSON?, coverVideoJSON: JSON?) {
+    init(themeID: String, uuid: String, name:String, description: String, themeType: Int, styleType: Int, relation: Int, createDate: String, creatorJSON: JSON?, coverImageJSON: JSON?, coverVideoJSON: JSON?) {
         self.themeID = themeID;
         self.uuid = uuid;
         self.name = name;
         self.description = description;
         self.themeType = themeType;
+        self.styleType = styleType;
         self.relation = relation;
         if createDate == ""{
             self.createDate = nil;
@@ -75,6 +77,7 @@ class YCThemeModel: YCBaseModel {
         let name:String        = json[Parameter(.name)].string ?? "";
         let description:String = json[Parameter(.description)].string ?? "";
         let themeType:Int      = json[Parameter(.themeType)].int ?? 0;
+        let styleType:Int      = json[Parameter(.styleType)].int ?? 0;
         let relation:Int       = json[Parameter(.relation)].int ?? 0;
         
         let createDate:String  = json[Parameter(.createDate)].string ?? "";
@@ -83,7 +86,7 @@ class YCThemeModel: YCBaseModel {
         let coverImage:JSON    = json[Parameter(.coverImage)]
         let coverVideo:JSON    = json[Parameter(.coverVideo)]
         
-        self.init(themeID: themeID, uuid: uuid, name: name, description: description, themeType: themeType, relation: relation, createDate: createDate, creatorJSON: creator, coverImageJSON: coverImage, coverVideoJSON: coverVideo)
+        self.init(themeID: themeID, uuid: uuid, name: name, description: description, themeType: themeType, styleType: styleType, relation: relation, createDate: createDate, creatorJSON: creator, coverImageJSON: coverImage, coverVideoJSON: coverVideo)
     }
     
     override func getData() -> [String : Any] {
@@ -93,6 +96,7 @@ class YCThemeModel: YCBaseModel {
             Parameter(.name)        :self.name,
             Parameter(.description) :self.description,
             Parameter(.themeType)   :self.themeType,
+            Parameter(.styleType)   :self.styleType,
             Parameter(.relation)    :self.relation
         ]
         if let createDate = self.createDate{
@@ -121,7 +125,7 @@ class YCThemeDetailModel: YCThemeModel{
     let commentCount: Int;
     var isLike: Int;
     
-    init(themeID: String, uuid: String, name:String, description: String, themeType: Int, relation: Int, followersCount: Int, publishCount: Int, likeCount: Int, commentCount: Int, isLike: Int, createDate: String, creatorJSON: JSON?, coverImageJSON: JSON?, coverVideoJSON: JSON?) {
+    init(themeID: String, uuid: String, name:String, description: String, themeType: Int, styleType: Int, relation: Int, followersCount: Int, publishCount: Int, likeCount: Int, commentCount: Int, isLike: Int, createDate: String, creatorJSON: JSON?, coverImageJSON: JSON?, coverVideoJSON: JSON?) {
         
         self.followersCount = followersCount
         self.publishCount = publishCount
@@ -129,7 +133,7 @@ class YCThemeDetailModel: YCThemeModel{
         self.commentCount = commentCount
         self.isLike = isLike
         
-        super.init(themeID: themeID, uuid: uuid, name: name, description: description, themeType: themeType, relation: relation, createDate: createDate, creatorJSON: creatorJSON, coverImageJSON: coverImageJSON, coverVideoJSON: coverVideoJSON)
+        super.init(themeID: themeID, uuid: uuid, name: name, description: description, themeType: themeType, styleType: styleType, relation: relation, createDate: createDate, creatorJSON: creatorJSON, coverImageJSON: coverImageJSON, coverVideoJSON: coverVideoJSON)
     }
     
     convenience init(_ json: JSON) {
@@ -138,6 +142,7 @@ class YCThemeDetailModel: YCThemeModel{
         let name:String        = json[Parameter(.name)].string ?? "";
         let description:String = json[Parameter(.description)].string ?? "";
         let themeType:Int      = json[Parameter(.themeType)].int ?? 0;
+        let styleType:Int      = json[Parameter(.styleType)].int ?? 0;
         let relation:Int       = json[Parameter(.relation)].int ?? 0;
         let followersCount:Int = json[Parameter(.followersCount)].int ?? 0;
         let publishCount:Int   = json[Parameter(.publishCount)].int ?? 0;
@@ -150,7 +155,7 @@ class YCThemeDetailModel: YCThemeModel{
         let coverImage:JSON    = json[Parameter(.coverImage)]
         let coverVideo:JSON    = json[Parameter(.coverVideo)]
         
-        self.init(themeID: themeID, uuid: uuid, name: name, description: description, themeType: themeType, relation: relation, followersCount: followersCount, publishCount: publishCount, likeCount: likeCount, commentCount: commentCount, isLike: isLike, createDate: createDate, creatorJSON: creator, coverImageJSON: coverImage, coverVideoJSON: coverVideo)
+        self.init(themeID: themeID, uuid: uuid, name: name, description: description, themeType: themeType, styleType: styleType, relation: relation, followersCount: followersCount, publishCount: publishCount, likeCount: likeCount, commentCount: commentCount, isLike: isLike, createDate: createDate, creatorJSON: creator, coverImageJSON: coverImage, coverVideoJSON: coverVideo)
     }
     
     override func getData() -> [String : Any] {

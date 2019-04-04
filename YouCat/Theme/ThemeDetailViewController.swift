@@ -57,6 +57,10 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     
     var isFirstShow: Bool = true
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = true
         super.viewWillAppear(animated)
@@ -114,7 +118,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         closeButton.addTarget(self, action: #selector(self.closeButtonClick), for: .touchUpInside)
         self.view.addSubview(closeButton)
         closeButton.snp.makeConstraints { (make) in
-            make.top.equalTo(YCScreen.safeArea.top)
+            make.top.equalTo(10)
             make.right.equalTo(-10)
             make.width.equalTo(44)
             make.height.equalTo(44)
@@ -126,7 +130,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         operateButton.addTarget(self, action: #selector(self.operateButtonClick), for: .touchUpInside)
         self.view.addSubview(operateButton)
         operateButton.snp.makeConstraints { (make) in
-            make.top.equalTo(YCScreen.safeArea.top)
+            make.top.equalTo(10)
             make.left.equalTo(10)
             make.width.equalTo(44)
             make.height.equalTo(44)
@@ -197,10 +201,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
             if let cover = theme.coverImage {
                 let coverW = cover.imageWidth
                 let coverH = cover.imageHeight
-                var rate:CGFloat = CGFloat(coverH/coverW)
-                if rate > 3/4{
-                    rate = 3/4
-                }
+                let rate:CGFloat = CGFloat(coverH/coverW)
                 self.coverImg.frame.size.height = bounds.width * rate
                 self.coverImg.loadSnapImage(cover, snapShot: false)
             }else {
