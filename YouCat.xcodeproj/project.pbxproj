@@ -92,6 +92,12 @@
 		2C827F48206F3EEB0035DCE2 /* ThemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C827F47206F3EEB0035DCE2 /* ThemeViewController.swift */; };
 		4BDCF867747000828440DF7E /* Pods_YouCatTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D76547DA6CCEE139A5F6E084 /* Pods_YouCatTests.framework */; };
 		83A6F551E87BF929BB599A40 /* Pods_YouCat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F17FB4EF2FA68C8A2CD9B94 /* Pods_YouCat.framework */; };
+		9529EC8A225676BF006E0CC4 /* YCPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC86225676BE006E0CC4 /* YCPreviewViewController.swift */; };
+		9529EC8B225676BF006E0CC4 /* YCImagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC87225676BE006E0CC4 /* YCImagePickerViewController.swift */; };
+		9529EC8C225676BF006E0CC4 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC88225676BE006E0CC4 /* CameraController.swift */; };
+		9529EC8D225676BF006E0CC4 /* YCCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC89225676BF006E0CC4 /* YCCaptureViewController.swift */; };
+		9529EC8F22567779006E0CC4 /* YCDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC8E22567779006E0CC4 /* YCDemoViewController.swift */; };
+		9529EC912256778B006E0CC4 /* YCCapture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9529EC902256778B006E0CC4 /* YCCapture.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -281,6 +287,12 @@
 		5536AD062810EA944BFD8DAA /* Pods_YouCatUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouCatUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		581287F3A5F73B04B2906D2F /* Pods-YouCatTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCatTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCatTests/Pods-YouCatTests.release.xcconfig"; sourceTree = "<group>"; };
 		7EA9D9DE110AC0A34E1D6FE9 /* Pods-YouCat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCat.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCat/Pods-YouCat.release.xcconfig"; sourceTree = "<group>"; };
+		9529EC86225676BE006E0CC4 /* YCPreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCPreviewViewController.swift; sourceTree = "<group>"; };
+		9529EC87225676BE006E0CC4 /* YCImagePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCImagePickerViewController.swift; sourceTree = "<group>"; };
+		9529EC88225676BE006E0CC4 /* CameraController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
+		9529EC89225676BF006E0CC4 /* YCCaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCCaptureViewController.swift; sourceTree = "<group>"; };
+		9529EC8E22567779006E0CC4 /* YCDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YCDemoViewController.swift; sourceTree = "<group>"; };
+		9529EC902256778B006E0CC4 /* YCCapture.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = YCCapture.storyboard; sourceTree = "<group>"; };
 		D76547DA6CCEE139A5F6E084 /* Pods_YouCatTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouCatTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E309D7DCD1368C5CF318F47C /* Pods-YouCatTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCatTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouCatTests/Pods-YouCatTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -500,6 +512,7 @@
 		2C3441F8203D89F3008BF439 /* YouCat */ = {
 			isa = PBXGroup;
 			children = (
+				9529EC85225676A2006E0CC4 /* Capture */,
 				25D721BE21A6E0E8007F5648 /* Header */,
 				25D721C121A6E8F2007F5648 /* Login */,
 				252B900221AFDEDA00E41842 /* Setting */,
@@ -586,6 +599,19 @@
 				324630E61A7AB8CF2E43F5C8 /* Pods-YouCatUITests.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		9529EC85225676A2006E0CC4 /* Capture */ = {
+			isa = PBXGroup;
+			children = (
+				9529EC88225676BE006E0CC4 /* CameraController.swift */,
+				9529EC89225676BF006E0CC4 /* YCCaptureViewController.swift */,
+				9529EC87225676BE006E0CC4 /* YCImagePickerViewController.swift */,
+				9529EC86225676BE006E0CC4 /* YCPreviewViewController.swift */,
+				9529EC8E22567779006E0CC4 /* YCDemoViewController.swift */,
+				9529EC902256778B006E0CC4 /* YCCapture.storyboard */,
+			);
+			path = Capture;
 			sourceTree = "<group>";
 		};
 		B60935539CA32EC8F5FD4621 /* Frameworks */ = {
@@ -793,6 +819,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C344204203D89F3008BF439 /* LaunchScreen.storyboard in Resources */,
+				9529EC912256778B006E0CC4 /* YCCapture.storyboard in Resources */,
 				252B900921B038AF00E41842 /* Localizable.strings in Resources */,
 				2C3441FF203D89F3008BF439 /* Main.storyboard in Resources */,
 				256299C421808002005FDDFC /* Assets.xcassets in Resources */,
@@ -933,6 +960,7 @@
 				256299C0217DEB41005FDDFC /* PublishCollectionViewCell.swift in Sources */,
 				256299CB21849004005FDDFC /* PublishDetailViewController.swift in Sources */,
 				252B902121B539B700E41842 /* UploadController.swift in Sources */,
+				9529EC8F22567779006E0CC4 /* YCDemoViewController.swift in Sources */,
 				25B878F1215BA01A00E30C91 /* ImageController.swift in Sources */,
 				25B878AA215510C200E30C91 /* DeviceManager.swift in Sources */,
 				25B878A32153B84A00E30C91 /* LikeDomain.swift in Sources */,
@@ -954,15 +982,18 @@
 				25305269214C237C00BB9624 /* ThemeRequest.swift in Sources */,
 				25D721C521A7E737007F5648 /* LoginProtocol.swift in Sources */,
 				25368B76217A12EA00C3EB56 /* ThemeTableViewCell.swift in Sources */,
+				9529EC8B225676BF006E0CC4 /* YCImagePickerViewController.swift in Sources */,
 				25D721C321A7DE6E007F5648 /* LoginViewController.swift in Sources */,
 				2C3441FC203D89F3008BF439 /* ViewController.swift in Sources */,
 				25305270214F996D00BB9624 /* BaseRequest.swift in Sources */,
 				2C827F48206F3EEB0035DCE2 /* ThemeViewController.swift in Sources */,
 				2C3441FA203D89F3008BF439 /* AppDelegate.swift in Sources */,
+				9529EC8C225676BF006E0CC4 /* CameraController.swift in Sources */,
 				2530525A2147FB0600BB9624 /* MediaModel.swift in Sources */,
 				257E895A21C394990084944E /* CommentListViewController.swift in Sources */,
 				253052582147FA2900BB9624 /* UserModel.swift in Sources */,
 				25B878A82154F8B200E30C91 /* UserManager.swift in Sources */,
+				9529EC8A225676BF006E0CC4 /* YCPreviewViewController.swift in Sources */,
 				252B900E21B03A5A00E41842 /* LanguageHelper.swift in Sources */,
 				25B878EF215B674000E30C91 /* StyleColor.swift in Sources */,
 				252B901821B533D800E41842 /* UploadModel.swift in Sources */,
@@ -983,6 +1014,7 @@
 				256299C221802589005FDDFC /* PublishCollectionViewLayout.swift in Sources */,
 				25B878EC215A72F000E30C91 /* PublishTableViewCell.swift in Sources */,
 				2530526B214F86B900BB9624 /* LikeRequest.swift in Sources */,
+				9529EC8D225676BF006E0CC4 /* YCCaptureViewController.swift in Sources */,
 				25D0CCCC2179FF4C00809D3D /* ContentProtocol.swift in Sources */,
 				25305262214A840500BB9624 /* LikeModel.swift in Sources */,
 				25305264214AA80A00BB9624 /* CommentModel.swift in Sources */,
@@ -1186,7 +1218,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 678ACPN786;
+				DEVELOPMENT_TEAM = 9JC986Y29M;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/ShareSDK/Required",
@@ -1224,7 +1256,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 678ACPN786;
+				DEVELOPMENT_TEAM = 9JC986Y29M;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/ShareSDK/Required",
