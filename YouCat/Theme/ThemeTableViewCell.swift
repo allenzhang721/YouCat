@@ -29,7 +29,7 @@ class YCThemeTableViewCell: UITableViewCell, YCImageProtocol, YCContentStringPro
         super.init(coder: aDecoder)
     }
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
         self.initView()
@@ -52,7 +52,7 @@ class YCThemeTableViewCell: UITableViewCell, YCImageProtocol, YCContentStringPro
         
         let shadowView = UIView()
         self.addSubview(shadowView)
-        self.sendSubview(toBack: shadowView)
+        self.sendSubviewToBack(shadowView)
         shadowView.snp.makeConstraints { (make) in
             make.left.equalTo(self.bgView)
             make.right.equalTo(self.bgView)

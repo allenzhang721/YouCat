@@ -194,7 +194,7 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.estimatedRowHeight = YCScreen.bounds.width
-        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.register(YCCommentListViewCell.self, forCellReuseIdentifier: "YCCommentListCell")
         
         self.loadingView = YCLoadingView(style: .INSIDE)

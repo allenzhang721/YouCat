@@ -47,9 +47,9 @@ class YCUploadDomain: YCBaseDomain {
                 let newToken = modelList[0] as! YCTokenModel
                 var imgData :Data? = nil
                 if imageType == "jpg" {
-                    imgData = UIImageJPEGRepresentation(image, 0.5)
+                    imgData = image.jpegData(compressionQuality: 0.5)
                 }else if imageType == "png" {
-                    imgData = UIImagePNGRepresentation(image)
+                    imgData = image.pngData()
                 }
                 if let token = newToken.token, let data = imgData {
                     let uploadModel = YCUploadModel(key: imageKey, token: token, fileData: data)

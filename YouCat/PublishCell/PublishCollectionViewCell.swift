@@ -68,7 +68,7 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
         
         let shadowView = UIView()
         self.addSubview(shadowView)
-        self.sendSubview(toBack: shadowView)
+        self.sendSubviewToBack(shadowView)
         shadowView.snp.makeConstraints { (make) in
             make.left.equalTo(self.bgView)
             make.right.equalTo(self.bgView)

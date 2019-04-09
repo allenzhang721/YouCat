@@ -405,11 +405,15 @@ extension YCSetUserIconViewController: YCAlertProtocol {
 
 extension YCSetUserIconViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]){
-        if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
-            self.changeUserIcon(pickedImage)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        if let editedImage = info[.editedImage] as? UIImage {
+            self.changeUserIcon(editedImage)
+            picker.dismiss(animated: true, completion: nil)
+        } else if let originalImage = info[.originalImage] as? UIImage {
+            self.changeUserIcon(originalImage)
+            picker.dismiss(animated: true, completion: nil)
         }
-        dismiss(animated: true, completion: nil)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

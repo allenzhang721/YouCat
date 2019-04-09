@@ -42,7 +42,7 @@ class YCCommentListViewCell: UITableViewCell, YCImageProtocol, YCNumberStringPro
         super.init(coder: aDecoder)
     }
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
         self.backgroundColor = UIColor.clear
@@ -250,9 +250,9 @@ class YCCommentListViewCell: UITableViewCell, YCImageProtocol, YCNumberStringPro
                     }
                 }
                 let contentStr = self.getContentString(content: comment.content)
-                let contentAttrs = [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 16), NSAttributedStringKey.foregroundColor : self.contentColor]
+                let contentAttrs = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16), NSAttributedString.Key.foregroundColor : self.contentColor]
                 if let beUser = comment.beRepliedUser {
-                    let replyAttrs = [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 16), NSAttributedStringKey.foregroundColor : self.replyColor]
+                    let replyAttrs = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16), NSAttributedString.Key.foregroundColor : self.replyColor]
                     let beUserName = self.getNicknameString(user: beUser)
                     let replyUserAttrsString = NSMutableAttributedString(string: beUserName, attributes: replyAttrs)
                     let replyLabelAttrsString = NSMutableAttributedString(string: YCLanguageHelper.getString(key: "ReplyLabel"), attributes: contentAttrs)
@@ -278,7 +278,7 @@ class YCCommentListViewCell: UITableViewCell, YCImageProtocol, YCNumberStringPro
                     make.height.equalTo(44)
                 }
                 self.contentLabel.textAlignment = .center
-                let contentAttrs = [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14), NSAttributedStringKey.foregroundColor : self.contentColor]
+                let contentAttrs = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : self.contentColor]
                 let contentAttrsString = NSMutableAttributedString(string:YCLanguageHelper.getString(key: "LoadMoreLabel"), attributes:contentAttrs)
                 self.contentLabel.attributedText = contentAttrsString
             }

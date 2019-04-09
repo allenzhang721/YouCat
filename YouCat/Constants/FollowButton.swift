@@ -131,7 +131,7 @@ class YCFollowButton: UIView {
         self.bgLabel.textAlignment = .center
         self.bgLabel.text = ""
         
-        self.loadingView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        self.loadingView = UIActivityIndicatorView(style: .gray)
         self.addSubview(self.loadingView)
         self.loadingView.snp.makeConstraints { (make) in
             make.center.equalTo(self).offset(0)

@@ -156,7 +156,7 @@ extension YCShareProtocol {
                 web.description = description
                 if let img = thumbImage {
                     let image = compressMaxImage(img, maxW: 50, maxH: 50)
-                    web.thumbnailData = UIImageJPEGRepresentation(image, 0.5)
+                    web.thumbnailData = image.jpegData(compressionQuality: 0.5)
                 }
                 
                 web.webpageUrl = url

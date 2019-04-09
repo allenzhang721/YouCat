@@ -22,11 +22,11 @@ class YCLanguageHelper: NSObject {
     
     class func getString(key:String) -> String{
         
-        let bundle = YCLanguageHelper.shareInstance.bundle
-        
-        let str = bundle?.localizedString(forKey: key, value: nil, table: nil)
-        
-        return str!
+        if let bundle = YCLanguageHelper.shareInstance.bundle {
+            let str = bundle.localizedString(forKey: key, value: nil, table: nil)
+            return str
+        }
+        return ""
     }
     
     func getUserLanguage() -> String {

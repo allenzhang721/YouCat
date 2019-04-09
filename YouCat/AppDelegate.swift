@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
     
     var window: UIWindow?
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UIButton.initializeMethod()
         self.setup()
         
@@ -27,9 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
         return true
     }
     
-    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         
-        let urlKey: String = options[UIApplicationOpenURLOptionsKey.sourceApplication] as! String
+        let urlKey: String = options[UIApplication.OpenURLOptionsKey.sourceApplication] as! String
         
         if urlKey == "com.sina.weibo" {
             // 新浪微博 的回调
@@ -216,11 +216,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
                         top = 22
                     }
                     let bottom = top==44 ? 34 : 0
-                    YCScreen.safeArea = UIEdgeInsetsMake(top, 0, CGFloat(bottom), 0)
+                    YCScreen.safeArea = UIEdgeInsets(top: top, left: 0, bottom: CGFloat(bottom), right: 0)
                 }
             } else {
                 // Fallback on earlier versions
-                YCScreen.safeArea = UIEdgeInsetsMake(22, 0, 0, 0)
+                YCScreen.safeArea = UIEdgeInsets(top: 22, left: 0, bottom: 0, right: 0)
             }
         }
     }
