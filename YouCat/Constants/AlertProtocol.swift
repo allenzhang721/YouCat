@@ -35,7 +35,7 @@ extension YCAlertProtocol {
         alert.addAction(UIAlertAction(title: okAlertLabel, style: .destructive, handler: { (_) -> Void in
             compelecationBlock(true)
         }))
-        alert.addAction(UIAlertAction(title: cancelAlertLabel, style: UIAlertActionStyle.cancel, handler: { (_) -> Void in
+        alert.addAction(UIAlertAction(title: cancelAlertLabel, style: UIAlertAction.Style.cancel, handler: { (_) -> Void in
             compelecationBlock(false)
         }))
         view.present(alert, animated: true, completion: nil)
@@ -47,7 +47,7 @@ extension YCAlertProtocol {
             let firstTextField = alert.textFields![0] as UITextField
             compelecationBlock(true, firstTextField.text!)
         }))
-        alert.addAction(UIAlertAction(title: cancelAlertLabel, style: UIAlertActionStyle.cancel, handler: { (_) -> Void in
+        alert.addAction(UIAlertAction(title: cancelAlertLabel, style: UIAlertAction.Style.cancel, handler: { (_) -> Void in
             compelecationBlock(false, "")
         }))
         alert.addTextField { (textField) in
@@ -57,7 +57,7 @@ extension YCAlertProtocol {
     }
     
     func showSingleAlert(_ alertTile:String?, alertMessage:String?, view: UIViewController, compelecationBlock: (() -> Void)?){
-        let alert = UIAlertController(title: alertTile, message: alertMessage, preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: alertTile, message: alertMessage, preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: YCLanguageHelper.getString(key: "OKLabel"), style: .default, handler: { (_) -> Void in
             if compelecationBlock != nil {
                 compelecationBlock!()
@@ -71,9 +71,9 @@ extension YCAlertProtocol {
         for i in 0..<okAlertArray.count {
             var alertIndex = i
             let alertDic = okAlertArray[i]
-            var alertStyle:UIAlertActionStyle = .default
+            var alertStyle:UIAlertAction.Style = .default
             let title = alertDic["title"] as? String
-            if let style = alertDic["style"] as? UIAlertActionStyle {
+            if let style = alertDic["style"] as? UIAlertAction.Style {
                 alertStyle = style
             }
             if let index = alertDic["tag"] as? Int {
@@ -87,7 +87,7 @@ extension YCAlertProtocol {
             }
             alert.addAction(alertAction)
         }
-        let cancel = UIAlertAction(title: cancelAlertLabel, style: UIAlertActionStyle.cancel, handler: { (_) -> Void in
+        let cancel = UIAlertAction(title: cancelAlertLabel, style: UIAlertAction.Style.cancel, handler: { (_) -> Void in
             compelecationBlock(-1)
         })
         alert.addAction(cancel)

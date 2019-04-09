@@ -24,7 +24,7 @@ class ViewController: UIViewController {
         let navigationController = UINavigationController(rootViewController: self.root)
         navigationController.isNavigationBarHidden = true
         self.view.addSubview(navigationController.view)
-        self.addChildViewController(navigationController)
+        self.addChild(navigationController)
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.rootPushUserViewNotification(_:)), name: NSNotification.Name("RootPushUserView"), object: nil)
     }

@@ -12,7 +12,7 @@ import UIKit
 func gotoSetting(title: String, mesage: String, view: UIViewController) {
     let alert = UIAlertController(title: title, message: mesage, preferredStyle: .alert)
     alert.addAction(UIAlertAction(title: YCLanguageHelper.getString(key: "SetLabel"), style: .destructive, handler: { (_) -> Void in
-        if let url = URL(string: UIApplicationOpenSettingsURLString), UIApplication.shared.canOpenURL(url) {
+        if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
             if #available(iOS 10.0, *) {
                 UIApplication.shared.open(url, options: [:], completionHandler: { (ist) in
                     
@@ -22,7 +22,7 @@ func gotoSetting(title: String, mesage: String, view: UIViewController) {
             }
         }
     }))
-    alert.addAction(UIAlertAction(title: YCLanguageHelper.getString(key: "CancelLabel"), style: UIAlertActionStyle.cancel, handler: { (_) -> Void in
+    alert.addAction(UIAlertAction(title: YCLanguageHelper.getString(key: "CancelLabel"), style: UIAlertAction.Style.cancel, handler: { (_) -> Void in
     }))
     view.present(alert, animated: true, completion: nil)
 }
@@ -45,7 +45,7 @@ struct FilePath {
 
 struct YCScreen {
     static var bounds = CGRect(x: 0, y: 0, width: 0, height: 0)
-    static var safeArea = UIEdgeInsetsMake(0, 0, 0, 0)
+    static var safeArea = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 }
 
 struct YCSocialConfigs {

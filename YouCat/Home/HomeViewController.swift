@@ -70,7 +70,7 @@ class YCHomeViewController: UIViewController, YCImageProtocol {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.estimatedRowHeight = YCScreen.bounds.height
-        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.register(YCPublishTableViewCell.self, forCellReuseIdentifier: "YCHomeCell")
         
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 54))

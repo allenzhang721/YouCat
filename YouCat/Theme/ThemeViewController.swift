@@ -102,7 +102,7 @@ class YCThemeViewController: UIViewController, YCImageProtocol {
         
         let rowHeight = self.view.frame.size.width * 4/3
         self.tableView.estimatedRowHeight = rowHeight
-        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.rowHeight = UITableView.automaticDimension
         
         self.tableView.register(YCThemeTableViewCell.self, forCellReuseIdentifier: "YCThemeCell")
         

@@ -47,13 +47,13 @@ extension YCImageProtocol{
 
 func compressJPGImage(_ image:UIImage, maxWidth:Float = 1280.00, needScale:Bool = false) -> (UIImage?, Data?){
     let newImage = compressImage(image, maxW: maxWidth, needScale: needScale)
-    let newData = UIImageJPEGRepresentation(newImage, 0.5)
+    let newData = newImage.jpegData(compressionQuality: 0.5)
     return (newImage, newData)
 }
 
 func compressPNGImage(_ image:UIImage, maxWidth:Float = 1280.00, needScale:Bool = false) -> (UIImage?, Data?){
     let newImage = compressImage(image, maxW: maxWidth, needScale: needScale)
-    let newData = UIImagePNGRepresentation(newImage)
+    let newData = newImage.pngData()
     return (newImage, newData)
 }
 
