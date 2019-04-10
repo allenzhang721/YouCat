@@ -115,7 +115,7 @@ class YCFollowButton: UIView {
             make.top.equalTo(0)
             make.bottom.equalTo(0)
         }
-        self.bgView.layer.cornerRadius = 8
+        self.bgView.layer.cornerRadius = 16
         self.bgView.layer.borderWidth = 1
         
         self.bgLabel = UILabel()
@@ -165,42 +165,44 @@ class YCFollowButton: UIView {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.5, execute: {
             if self.status == .Loading {
                 self.bgLabel.text = ""
-                self.bgView.backgroundColor = YCStyleColor.white
-                self.bgView.layer.borderColor = YCStyleColor.grayWhite.cgColor
                 self.loadingView.startAnimating()
             }
         })
     }
     
     func setEditProfileStatus() {
-        self.bgView.backgroundColor = YCStyleColor.red
+        self.bgView.backgroundColor = YCStyleColor.zero
         self.bgView.layer.borderColor = YCStyleColor.red.cgColor
+        self.bgView.layer.borderWidth = 1
         self.bgLabel.text = YCLanguageHelper.getString(key: "EditProfileButtonLabel")
-        self.bgLabel.textColor = YCStyleColor.white
+        self.bgLabel.textColor = YCStyleColor.red
         self.loadingView.stopAnimating()
     }
     
     func setFollowingStatus(){
-        self.bgView.backgroundColor = YCStyleColor.white
-        self.bgView.layer.borderColor = YCStyleColor.grayWhite.cgColor
+        self.bgView.backgroundColor = YCStyleColor.zero
+        self.bgView.layer.borderColor = YCStyleColor.green.cgColor
+        self.bgView.layer.borderWidth = 1
         self.bgLabel.text = YCLanguageHelper.getString(key: "FollowingButtonLabel")
-        self.bgLabel.textColor = YCStyleColor.black
+        self.bgLabel.textColor = YCStyleColor.green
         self.loadingView.stopAnimating()
     }
     
     func setUnFollowStatus(){
-        self.bgView.backgroundColor = YCStyleColor.red
+        self.bgView.backgroundColor = YCStyleColor.zero
         self.bgView.layer.borderColor = YCStyleColor.red.cgColor
+        self.bgView.layer.borderWidth = 1
         self.bgLabel.text = YCLanguageHelper.getString(key: "FollowButtonLabel")
-        self.bgLabel.textColor = YCStyleColor.white
+        self.bgLabel.textColor = YCStyleColor.red
         self.loadingView.stopAnimating()
     }
     
     func setUnblockStatus(){
-        self.bgView.backgroundColor = YCStyleColor.red
-        self.bgView.layer.borderColor = YCStyleColor.red.cgColor
+        self.bgView.backgroundColor = YCStyleColor.zero
+        self.bgView.layer.borderColor = YCStyleColor.black.cgColor
+        self.bgView.layer.borderWidth = 1
         self.bgLabel.text = YCLanguageHelper.getString(key: "UnBlockButtonLabel")
-        self.bgLabel.textColor = YCStyleColor.white
+        self.bgLabel.textColor = YCStyleColor.black
         self.loadingView.stopAnimating()
     }
 }

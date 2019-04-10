@@ -49,7 +49,7 @@
 "DeleteCommentTitle" = "Delete Comment";
 "LoadMoreLabel" = "View more";
 
-"FollowButtonLabel" = "+ Follow";
+"FollowButtonLabel" =    "+ Follow";
 "FollowingButtonLabel" = "Following";
 "UnBlockButtonLabel" = "Unblock";
 "EditProfileButtonLabel" = "Edit Profile";

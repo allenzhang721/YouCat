@@ -132,7 +132,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         self.operatorButton = UIButton()
         self.headerView.addSubview(self.operatorButton)
         self.operatorButton.snp.makeConstraints { (make) in
-            make.right.equalTo(self).offset(-64)
+            make.right.equalTo(self).offset(-54)
             make.centerY.equalTo(self.userIcon).offset(0)
             make.width.equalTo(44)
             make.height.equalTo(44)

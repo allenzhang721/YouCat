@@ -19,6 +19,7 @@ class YCRootTabbarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.creatTabBar()
+        self.delegate = self;
     }
     
     override func didReceiveMemoryWarning() {
@@ -44,5 +45,21 @@ class YCRootTabbarController: UITabBarController {
         self.tabBar.tintColor = YCStyleColor.red
         self.navigationController?.isNavigationBarHidden = true
     }
-    
 }
+
+extension YCRootTabbarController: UITabBarControllerDelegate{
+    
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if let cl = tabBarController.selectedViewController, cl.isEqual(viewController){
+            let index = tabBarController.selectedIndex
+            if index == 0 {
+                NotificationCenter.default.post(name: NSNotification.Name("reFreshHome"), object: nil)
+            }else if index == 1 {
+                NotificationCenter.default.post(name: NSNotification.Name("reFreshCategory"), object: nil)
+            }
+            return false;
+        }
+        return true
+    }
+}
+

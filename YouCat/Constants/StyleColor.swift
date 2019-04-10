@@ -9,10 +9,12 @@
 import UIKit
 
 class YCStyleColor {
+    static let zero: UIColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
     static let black: UIColor = UIColor.black
     static let blackAlpha: UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.8)
+    static let blackAlphaMore: UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.4)
     static let white: UIColor = UIColor.white
-    static let whiteAlpha: UIColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.8)
+    static let whiteAlpha: UIColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
     static let red: UIColor = UIColor.red
     static let redblack: UIColor = UIColor.red
     static let green: UIColor = UIColor(red: 0.247, green: 0.74, blue: 0.192, alpha: 1)

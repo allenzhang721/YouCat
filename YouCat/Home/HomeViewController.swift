@@ -55,6 +55,7 @@ class YCHomeViewController: UIViewController, YCImageProtocol {
         super.viewDidLoad()
         self.initView()
         NotificationCenter.default.addObserver(self, selector: #selector(self.loginUserChange(_:)), name: NSNotification.Name("LoginUserChange"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.refreshHome(_:)), name: NSNotification.Name("reFreshHome"), object: nil)
     }
     
     func initView() {
@@ -208,6 +209,18 @@ extension YCHomeViewController: YCLoginProtocol {
     @objc func loginUserChange(_ notify: Notification) {
         self.isFirstLoad = true
         self.setUserIcon()
+    }
+    
+    @objc func refreshHome(_ notify: Notification) {
+        if self.tableView.contentOffset.y > 0 {
+            let offset = CGPoint(x: 0, y: 0)
+            self.tableView.setContentOffset(offset, animated: true)
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.3) {
+                self.headerFresh.beginRefreshing()
+            }
+        }else {
+            self.headerFresh.beginRefreshing()
+        }
     }
     
     func setUserIcon(){

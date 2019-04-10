@@ -57,10 +57,6 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     
     var isFirstShow: Bool = true
     
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = true
         super.viewWillAppear(animated)
@@ -118,7 +114,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         closeButton.addTarget(self, action: #selector(self.closeButtonClick), for: .touchUpInside)
         self.view.addSubview(closeButton)
         closeButton.snp.makeConstraints { (make) in
-            make.top.equalTo(10)
+            make.top.equalTo(YCScreen.safeArea.top)
             make.right.equalTo(-10)
             make.width.equalTo(44)
             make.height.equalTo(44)
@@ -130,8 +126,8 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         operateButton.addTarget(self, action: #selector(self.operateButtonClick), for: .touchUpInside)
         self.view.addSubview(operateButton)
         operateButton.snp.makeConstraints { (make) in
-            make.top.equalTo(10)
-            make.left.equalTo(10)
+            make.top.equalTo(YCScreen.safeArea.top)
+            make.right.equalTo(-54)
             make.width.equalTo(44)
             make.height.equalTo(44)
         }
@@ -145,18 +141,18 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         self.coverImg = YCImageView(frame: CGRect(x:0, y:0, width: bounds.width, height: bounds.width))
         self.topView.addSubview(self.coverImg)
         
-        self.themeNameLabel = UILabel(frame: CGRect(x:20, y:0, width: bounds.width - 150, height: 36))
+        self.themeNameLabel = UILabel(frame: CGRect(x:20, y:0, width: bounds.width - 120, height: 36))
         self.topView.addSubview(self.themeNameLabel)
         self.themeNameLabel.textColor = YCStyleColor.black
-        self.themeNameLabel.font = UIFont.systemFont(ofSize: 24)
+        self.themeNameLabel.font = UIFont.boldSystemFont(ofSize: 36)
         
         self.themeDescLabel = UILabel(frame: CGRect(x:20, y:0, width: bounds.width - 40, height: 22))
         self.topView.addSubview(self.themeDescLabel)
         self.themeDescLabel.textColor = YCStyleColor.gray
-        self.themeDescLabel.font = UIFont.systemFont(ofSize: 16)
+        self.themeDescLabel.font = UIFont.boldSystemFont(ofSize: 18)
         self.themeDescLabel.numberOfLines = 0
         
-        self.followButton = YCFollowButton(frame: CGRect(x:bounds.width - 140, y:0, width: 120, height: 32))
+        self.followButton = YCFollowButton(frame: CGRect(x:bounds.width - 110, y:0, width: 90, height: 32))
         self.topView.addSubview(self.followButton)
         let followTap = UITapGestureRecognizer(target: self, action: #selector(self.followButtonTap))
         self.followButton.addGestureRecognizer(followTap)
@@ -197,11 +193,15 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     
     func setValue(themeModel: YCThemeModel?){
         let bounds = YCScreen.bounds
+        var stypleType = 1;
         if let theme = themeModel {
             if let cover = theme.coverImage {
                 let coverW = cover.imageWidth
                 let coverH = cover.imageHeight
-                let rate:CGFloat = CGFloat(coverH/coverW)
+                var rate:CGFloat = CGFloat(coverH/coverW)
+                if rate > 4/3 {
+                    rate = 4/3
+                }
                 self.coverImg.frame.size.height = bounds.width * rate
                 self.coverImg.loadSnapImage(cover, snapShot: false)
             }else {
@@ -214,6 +214,10 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
             }else {
                 self.followButton.status = .Unfollow
             }
+            stypleType = theme.styleType
+            if stypleType == 0{
+                stypleType = 1
+            }
         }else {
             self.coverImg.frame.size.height = bounds.width * 9/16
             self.coverImg.defaultStyle()
@@ -221,17 +225,52 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
             self.themeDescLabel.text = ""
             self.followButton.status = .Unfollow
         }
-        self.themeNameLabel.frame.origin.y = self.coverImg.frame.height + 10
         self.themeNameLabel.sizeToFit()
-        self.themeDescLabel.frame.origin.y = self.themeNameLabel.frame.origin.y +  self.themeNameLabel.frame.height + 10
-        self.themeDescLabel.frame.origin.x = 20
-        self.themeDescLabel.frame.size.width = bounds.width - 40
         self.themeDescLabel.sizeToFit()
-        self.followButton.frame.origin.y = self.themeNameLabel.frame.origin.y - (self.followButton.frame.height - self.themeNameLabel.frame.height)/2
-        let topH = self.themeDescLabel.frame.origin.y + self.themeDescLabel.frame.height + 11
+        var topH:CGFloat = 1
+        switch stypleType {
+        case 1:
+            self.themeNameLabel.frame.origin.x = 20
+            self.themeNameLabel.frame.origin.y = self.coverImg.frame.height + 10
+            self.themeDescLabel.frame.origin.y = self.themeNameLabel.frame.origin.y +  self.themeNameLabel.frame.height + 10
+            self.themeDescLabel.frame.origin.x = 20
+            self.themeDescLabel.frame.size.width = bounds.width - 40
+            self.followButton.frame.origin.y = self.themeNameLabel.frame.origin.y - (self.followButton.frame.height - self.themeNameLabel.frame.height)/2
+            topH = self.themeDescLabel.frame.origin.y + self.themeDescLabel.frame.height + 11
+            self.themeNameLabel.textColor = YCStyleColor.black
+            self.themeDescLabel.textColor = YCStyleColor.gray
+            self.topLineView.isHidden = false
+            break;
+        case 2:
+            self.themeNameLabel.frame.origin.x = 20
+            self.themeNameLabel.frame.origin.y = YCScreen.safeArea.top + 20
+            self.themeDescLabel.frame.origin.y = self.themeNameLabel.frame.origin.y +  self.themeNameLabel.frame.height + 10
+            self.themeDescLabel.frame.origin.x = 20
+            self.themeDescLabel.frame.size.width = bounds.width - 40
+            self.followButton.frame.origin.y = self.coverImg.frame.height - self.followButton.frame.height - 20
+            topH = self.coverImg.frame.height
+            self.themeNameLabel.textColor = YCStyleColor.white
+            self.themeDescLabel.textColor = YCStyleColor.whiteAlpha
+            self.topLineView.isHidden = true
+            break;
+        case 3:
+            self.themeNameLabel.frame.origin.x = 20
+            self.themeNameLabel.frame.origin.y = YCScreen.safeArea.top + 20
+            self.themeDescLabel.frame.origin.y = self.themeNameLabel.frame.origin.y +  self.themeNameLabel.frame.height + 10
+            self.themeDescLabel.frame.origin.x = 20
+            self.themeDescLabel.frame.size.width = bounds.width - 40
+            self.followButton.frame.origin.y = self.coverImg.frame.height - self.followButton.frame.height - 20
+            topH = self.coverImg.frame.height
+            self.themeNameLabel.textColor = YCStyleColor.black
+            self.themeDescLabel.textColor = YCStyleColor.blackAlphaMore
+            self.topLineView.isHidden = true
+            break;
+        default:
+            break;
+        }
+        
         self.topView.frame.size.height = topH
         self.topLineView.frame.origin.y = topH - 1
-        
         self.collectionLayout.headerReferenceSize = CGSize(width: bounds.width, height: topH)
         self.loadingView.snp.updateConstraints { (make) in
             make.top.equalTo(topH+10)

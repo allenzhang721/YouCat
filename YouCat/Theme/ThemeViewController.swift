@@ -50,6 +50,7 @@ class YCThemeViewController: UIViewController, YCImageProtocol {
         super.viewDidLoad()
         self.initView()
         NotificationCenter.default.addObserver(self, selector: #selector(self.loginUserChange(_:)), name: NSNotification.Name("LoginUserChange"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCategory(_:)), name: NSNotification.Name("reFreshCategory"), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -252,6 +253,18 @@ extension YCThemeViewController: YCLoginProtocol {
     @objc func loginUserChange(_ notify: Notification) {
         self.isFirstLoad = true
         self.setUserIcon()
+    }
+    
+    @objc func refreshCategory(_ notify: Notification) {
+        if self.tableView.contentOffset.y > 0 {
+            let offset = CGPoint(x: 0, y: 0)
+            self.tableView.setContentOffset(offset, animated: true)
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.3) {
+                self.headerFresh.beginRefreshing()
+            }
+        }else {
+            self.headerFresh.beginRefreshing()
+        }
     }
     
     func setUserIcon(){
