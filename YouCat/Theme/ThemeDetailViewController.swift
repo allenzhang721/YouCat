@@ -152,7 +152,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         self.themeDescLabel.font = UIFont.boldSystemFont(ofSize: 18)
         self.themeDescLabel.numberOfLines = 0
         
-        self.followButton = YCFollowButton(frame: CGRect(x:bounds.width - 110, y:0, width: 90, height: 32))
+        self.followButton = YCFollowButton(frame: CGRect(x:bounds.width - 100, y:0, width: 90, height: 32))
         self.topView.addSubview(self.followButton)
         let followTap = UITapGestureRecognizer(target: self, action: #selector(self.followButtonTap))
         self.followButton.addGestureRecognizer(followTap)
@@ -166,11 +166,11 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         let bounds = YCScreen.bounds
         let rect:CGRect = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
         self.collectionLayout = YCCollectionViewWaterfallLayout()
-        self.collectionLayout.minimumLineSpacing = 10
-        self.collectionLayout.minimumInteritemSpacing = 8
+        self.collectionLayout.minimumLineSpacing = 16
+        self.collectionLayout.minimumInteritemSpacing = 14
         self.collectionLayout.columnCount = 2
         let bottom = YCScreen.safeArea.bottom == 0 ? 10 : YCScreen.safeArea.bottom
-        self.collectionLayout.sectionInset = UIEdgeInsets(top: 10, left: 9, bottom: bottom, right: 9)
+        self.collectionLayout.sectionInset = UIEdgeInsets(top: 20, left: 15, bottom: bottom, right: 15)
         self.collectionLayout.headerReferenceSize = CGSize(width: bounds.width, height: bounds.width)
         self.collectionView = UICollectionView(frame: rect, collectionViewLayout: self.collectionLayout)
         self.view.addSubview(self.collectionView)
@@ -247,7 +247,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
             self.themeDescLabel.frame.origin.y = self.themeNameLabel.frame.origin.y +  self.themeNameLabel.frame.height + 10
             self.themeDescLabel.frame.origin.x = 20
             self.themeDescLabel.frame.size.width = bounds.width - 40
-            self.followButton.frame.origin.y = self.coverImg.frame.height - self.followButton.frame.height - 20
+            self.followButton.frame.origin.y = self.coverImg.frame.height - self.followButton.frame.height - 10
             topH = self.coverImg.frame.height
             self.themeNameLabel.textColor = YCStyleColor.white
             self.themeDescLabel.textColor = YCStyleColor.whiteAlpha
@@ -259,7 +259,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
             self.themeDescLabel.frame.origin.y = self.themeNameLabel.frame.origin.y +  self.themeNameLabel.frame.height + 10
             self.themeDescLabel.frame.origin.x = 20
             self.themeDescLabel.frame.size.width = bounds.width - 40
-            self.followButton.frame.origin.y = self.coverImg.frame.height - self.followButton.frame.height - 20
+            self.followButton.frame.origin.y = self.coverImg.frame.height - self.followButton.frame.height - 10
             topH = self.coverImg.frame.height
             self.themeNameLabel.textColor = YCStyleColor.black
             self.themeDescLabel.textColor = YCStyleColor.blackAlphaMore
@@ -426,7 +426,7 @@ extension YCThemeDetailViewController: YCCollectionViewWaterfallLayoutDelegate {
     func collectionView(collectionView: UICollectionView, layout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize{
         let row = indexPath.item
         let publishModel = self.publishes[row]
-        let size = self.getPublishSize(publish: publishModel, publishSize: self.publishSizes)
+        let size = self.getPublishSize(publish: publishModel, publishSize: self.publishSizes, frame: YCScreen.bounds.size, sectionInset: UIEdgeInsets(top: 10, left: 15, bottom: 0, right: 15), minimumInteritemSpacing: 14, columnCount: 2)
         self.publishSizes[publishModel.publishID] = size
         return size
     }

@@ -11,6 +11,7 @@ import UIKit
 class YCStyleColor {
     static let zero: UIColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
     static let black: UIColor = UIColor.black
+    static let blackGray: UIColor =  UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
     static let blackAlpha: UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.8)
     static let blackAlphaMore: UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.4)
     static let white: UIColor = UIColor.white

@@ -80,6 +80,7 @@ class YCFollowButton: UIView {
     var loadingView: UIActivityIndicatorView!
     
     var fontSize: Int = 16
+    var buttonRadius: Int = 16
     
     var status: YCFollowButtonStatus = .Loading {
         didSet{
@@ -105,6 +106,12 @@ class YCFollowButton: UIView {
         self.initView()
     }
     
+    init(fontSize: Int, radius: Int) {
+        self.fontSize = fontSize
+        self.buttonRadius = radius
+        super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        self.initView()
+    }
     
     func initView(){
         self.bgView = UIView()
@@ -115,7 +122,7 @@ class YCFollowButton: UIView {
             make.top.equalTo(0)
             make.bottom.equalTo(0)
         }
-        self.bgView.layer.cornerRadius = 16
+        self.bgView.layer.cornerRadius = CGFloat(self.buttonRadius)
         self.bgView.layer.borderWidth = 1
         
         self.bgLabel = UILabel()
@@ -171,29 +178,29 @@ class YCFollowButton: UIView {
     }
     
     func setEditProfileStatus() {
-        self.bgView.backgroundColor = YCStyleColor.zero
+        self.bgView.backgroundColor = YCStyleColor.red
         self.bgView.layer.borderColor = YCStyleColor.red.cgColor
         self.bgView.layer.borderWidth = 1
         self.bgLabel.text = YCLanguageHelper.getString(key: "EditProfileButtonLabel")
-        self.bgLabel.textColor = YCStyleColor.red
+        self.bgLabel.textColor = YCStyleColor.white
         self.loadingView.stopAnimating()
     }
     
     func setFollowingStatus(){
-        self.bgView.backgroundColor = YCStyleColor.zero
+        self.bgView.backgroundColor = YCStyleColor.green
         self.bgView.layer.borderColor = YCStyleColor.green.cgColor
         self.bgView.layer.borderWidth = 1
         self.bgLabel.text = YCLanguageHelper.getString(key: "FollowingButtonLabel")
-        self.bgLabel.textColor = YCStyleColor.green
+        self.bgLabel.textColor = YCStyleColor.white
         self.loadingView.stopAnimating()
     }
     
     func setUnFollowStatus(){
-        self.bgView.backgroundColor = YCStyleColor.zero
+        self.bgView.backgroundColor = YCStyleColor.red
         self.bgView.layer.borderColor = YCStyleColor.red.cgColor
         self.bgView.layer.borderWidth = 1
         self.bgLabel.text = YCLanguageHelper.getString(key: "FollowButtonLabel")
-        self.bgLabel.textColor = YCStyleColor.red
+        self.bgLabel.textColor = YCStyleColor.white
         self.loadingView.stopAnimating()
     }
     

@@ -451,11 +451,17 @@ extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLogi
     }
     
     
-    func cellFollowButtonTap(_ cell: YCPublishDetailViewCell?) {
+    func cellFollowButtonTap(_ cell: YCPublishDetailViewCell?, followBlock: (()->Void)?) {
         self.showLoginView(view: self, noNeedShowBlock: {
-            
+            self.followHandler(cell)
+            if let block = followBlock {
+                block()
+            }
         }) {
-            
+            self.followHandler(cell)
+            if let block = followBlock {
+                block()
+            }
         }
     }
     
@@ -464,6 +470,13 @@ extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLogi
             self.showCommentView(cell: cell)
         }) {
             self.showCommentView(cell: cell)
+        }
+    }
+    
+    func followHandler(_ ce: YCPublishDetailViewCell?) {
+        if let cell = ce, let publish = cell.publishModel, let user = publish.user {
+            YCUserDomain().followUser(userID: user.userID) { (resultMode) in
+            }
         }
     }
     

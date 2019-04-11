@@ -117,15 +117,14 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         }
         self.cropImageCircle(iconBg, 23)
         
-        self.followButton = YCFollowButton(fontSize: 14)
+        self.followButton = YCFollowButton(fontSize: 12, radius: 12)
         self.headerView.addSubview(self.followButton)
         self.followButton.snp.makeConstraints { (make) in
             make.left.equalTo(self.userIcon.snp.right).offset(10)
             make.centerY.equalTo(self.userIcon).offset(2)
             make.width.equalTo(60)
-            make.height.equalTo(30)
+            make.height.equalTo(24)
         }
-        self.followButton.isHidden = true
         let followButtonTap = UITapGestureRecognizer(target: self, action: #selector(self.followButtonTapHandler))
         self.followButton.addGestureRecognizer(followButtonTap)
     
@@ -144,7 +143,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         self.shareLabel = UILabel();
         self.addSubview(self.shareLabel)
         self.shareLabel.snp.makeConstraints { (make) in
-            make.right.equalTo(-20)
+            make.right.equalTo(-10)
             make.width.equalTo(44)
             make.bottom.equalTo(0-buttonBottom)
         }
@@ -156,8 +155,8 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         self.shareBtn = UIButton();
         self.addSubview(self.shareBtn)
         self.shareBtn.snp.makeConstraints { (make) in
-            make.right.equalTo(-20)
-            make.bottom.equalTo(self.shareLabel.snp.top).offset(5)
+            make.right.equalTo(-10)
+            make.bottom.equalTo(self.shareLabel.snp.top).offset(10)
             make.width.equalTo(44)
             make.height.equalTo(44)
         }
@@ -183,7 +182,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             make.bottom.equalTo(self.contentPageController.snp.top).offset(5)
         }
         self.contentLabel.textColor = YCStyleColor.white
-        self.contentLabel.font = UIFont.systemFont(ofSize: 16)
+        self.contentLabel.font = UIFont.systemFont(ofSize: 18)
         self.contentLabel.text = ""
         self.contentLabel.shadowColor = YCStyleColor.black
         self.contentLabel.shadowOffset = CGSize(width: 0, height: 0.5)
@@ -207,7 +206,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         self.likeCountLabel.snp.makeConstraints { (make) in
             make.right.equalTo(self.likeBtn).offset(0)
             make.left.equalTo(self.likeBtn).offset(0)
-            make.top.equalTo(self.likeBtn.snp.bottom).offset(-5)
+            make.top.equalTo(self.likeBtn.snp.bottom).offset(-10)
         }
         self.likeCountLabel.textColor = YCStyleColor.white
         self.likeCountLabel.font = UIFont.systemFont(ofSize: 12)
@@ -231,7 +230,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         self.commentCountLabel.snp.makeConstraints { (make) in
             make.right.equalTo(self.commentBtn).offset(0)
             make.left.equalTo(self.commentBtn).offset(0)
-            make.top.equalTo(self.commentBtn.snp.bottom).offset(-5)
+            make.top.equalTo(self.commentBtn.snp.bottom).offset(-10)
         }
         self.commentCountLabel.textColor = YCStyleColor.white
         self.commentCountLabel.font = UIFont.systemFont(ofSize: 12)
@@ -241,8 +240,8 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         self.commentView = UIView()
         self.addSubview(self.commentView)
         self.commentView.snp.makeConstraints { (make) in
-            make.left.equalTo(20)
-            make.right.equalTo(self.commentBtn.snp.left).offset(-5)
+            make.left.equalTo(15)
+            make.right.equalTo(self.commentBtn.snp.left)
             make.top.equalTo(self.commentBtn).offset(13)
             make.height.equalTo(35)
         }
@@ -350,12 +349,13 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
                 }else {
                     self.userIcon.image = UIImage(named: "default_icon")
                 }
-//                if user.relation == 0 {
-//                    self.followButton.isHidden = false
-//                    self.followButton.setUnFollowStatus()
-//                }else {
-//                    self.followButton.isHidden = true
-//                }
+                if user.relation == 0 {
+                    self.followButton.isHidden = false
+                    self.followButton.alpha = 1
+                    self.followButton.setUnFollowStatus()
+                }else {
+                    self.followButton.isHidden = true
+                }
             }
             self.contentLabel.text = self.getContentString(content: publish.content)
             self.likeCountLabel.text = self.getNumberString(number: publish.likeCount)
@@ -380,6 +380,9 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         if let publish = self.publishModel {
             if self.contentViews.count == 0 {
                 let medias = publish.medias;
+                if medias.count == 0 {
+                    return
+                }
                 self.contentScrollView.isScrollEnabled = false
                 let bound = self.frame
                 var model: YCBaseModel
@@ -603,7 +606,18 @@ extension YCPublishDetailViewCell {
     @objc func followButtonTapHandler() {
         if let delegate = self.delegate {
             self.isFocus = true
-            delegate.cellFollowButtonTap(self)
+            delegate.cellFollowButtonTap(self) {
+                UIView.animate(withDuration: 0.5, animations: {
+                    
+                })
+                
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.followButton.alpha = 0
+                }, completion: { (_) in
+                    self.followButton.isHidden = true
+                    self.followButton.alpha = 1
+                })
+            }
         }
     }
     
@@ -761,7 +775,7 @@ protocol YCPublishDetailViewCellDelegate {
     func cellDidPlayToEnd(cell: YCPublishDetailViewCell?)
     func cellCommentTap(_ cell: YCPublishDetailViewCell?)
     func cellContentDoubleTap(_ cell: YCPublishDetailViewCell?, sender:UITapGestureRecognizer)
-    func cellFollowButtonTap(_ cell:YCPublishDetailViewCell?)
+    func cellFollowButtonTap(_ cell:YCPublishDetailViewCell?, followBlock: (()->Void)?)
     func cellShareButtonClick(_ cell:YCPublishDetailViewCell?)
     func cellLikeButtonClick(_ cell:YCPublishDetailViewCell?)
     func cellCommentButtonClick(_ cell:YCPublishDetailViewCell?)

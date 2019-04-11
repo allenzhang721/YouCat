@@ -299,9 +299,9 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
         let rect:CGRect = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
         self.collectionLayout = YCCollectionViewWaterfallLayout()
         self.collectionLayout.minimumLineSpacing = 10
-        self.collectionLayout.minimumInteritemSpacing = 8
+        self.collectionLayout.minimumInteritemSpacing = 14
         self.collectionLayout.columnCount = 2
-        self.collectionLayout.sectionInset = UIEdgeInsets(top: 10, left: 9, bottom: 10, right: 9)
+        self.collectionLayout.sectionInset = UIEdgeInsets(top: 20, left: 15, bottom: 10, right: 15)
         self.collectionLayout.headerReferenceSize = CGSize(width: bounds.width, height: bounds.width)
         
         self.collectionView = UICollectionView(frame: rect, collectionViewLayout: self.collectionLayout)
@@ -587,7 +587,7 @@ extension YCUserViewController: YCCollectionViewWaterfallLayoutDelegate {
     func collectionView(collectionView: UICollectionView, layout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize{
         let row = indexPath.item
         let publishModel = self.publishes[row]
-        let size = self.getPublishSize(publish: publishModel, publishSize: self.publishSizes)
+        let size = self.getPublishSize(publish: publishModel, publishSize: self.publishSizes, frame: YCScreen.bounds.size, sectionInset: UIEdgeInsets(top: 10, left: 15, bottom: 0, right: 15), minimumInteritemSpacing: 14, columnCount: 2)
         self.publishSizes[publishModel.publishID] = size
         return size
     }

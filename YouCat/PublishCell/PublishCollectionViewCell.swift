@@ -23,6 +23,7 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
     var publishView: UIView!
     var contentLabel: UILabel!
     var userIcon: UIImageView!
+    var iconBg: UIView!
     
     var likeImg: UIImageView!
     var likeCountLabel: UILabel!
@@ -51,19 +52,17 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
     }
  
     func initView() {
-        let bounds = UIScreen.main.bounds
         self.backgroundColor = YCStyleColor.white
         self.bgView = UIView()
         self.addSubview(self.bgView)
         self.bgView.snp.makeConstraints { (make) in
-            make.left.equalTo(1).priority(999)
+            make.left.equalTo(1)
             make.right.equalTo(-1).priority(999)
             make.top.equalTo(1)
             make.bottom.equalTo(-1).priority(999)
-            make.width.equalTo((bounds.width-30)/2)
         }
         self.bgView.backgroundColor = YCStyleColor.white
-        self.bgView.layer.cornerRadius = 4;
+        self.bgView.layer.cornerRadius = 8;
         self.bgView.clipsToBounds = true
         
         let shadowView = UIView()
@@ -76,8 +75,8 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
             make.bottom.equalTo(self.bgView)
         }
         shadowView.backgroundColor = YCStyleColor.white
-        shadowView.layer.cornerRadius = 4;
-        self.addShadow(shadowView, 4, 2)
+        shadowView.layer.cornerRadius = 8;
+        self.addShadow(shadowView, 8, 4)
         
         self.publishView = UIView()
         self.bgView.addSubview(self.publishView)
@@ -93,31 +92,41 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
         self.userIcon = UIImageView();
         self.addSubview(self.userIcon)
         self.userIcon.snp.makeConstraints { (make) in
-            make.left.equalTo(self.bgView).offset(5)
-            make.top.equalTo(self.publishView.snp.bottom).offset(-17)
-            make.width.equalTo(34)
-            make.height.equalTo(34)
+            make.left.equalTo(self.bgView).offset(8)
+            make.top.equalTo(self.publishView.snp.bottom).offset(-22)
+            make.width.equalTo(44)
+            make.height.equalTo(44)
         }
-        self.cropImageCircle(self.userIcon, 17)
+        self.cropImageCircle(self.userIcon, 22)
         self.userIcon.image = UIImage(named: "default_icon")
         
+        self.iconBg = UIView()
+        self.iconBg.backgroundColor = YCStyleColor.white
+        self.insertSubview(self.iconBg, belowSubview: self.userIcon)
+        self.iconBg.snp.makeConstraints { (make) in
+            make.center.equalTo(self.userIcon).offset(0)
+            make.width.equalTo(46)
+            make.height.equalTo(46)
+        }
+        self.cropImageCircle(self.iconBg, 23)
+        
         self.contentLabel = UILabel();
-        self.contentLabel.numberOfLines = 0
+        self.contentLabel.numberOfLines = 3
         self.addSubview(self.contentLabel)
         self.contentLabel.snp.makeConstraints { (make) in
             make.left.equalTo(self.bgView).offset(5)
             make.right.equalTo(self.bgView).offset(-5)
-            make.top.equalTo(self.publishView.snp.bottom).offset(22)
+            make.top.equalTo(self.publishView.snp.bottom).offset(32)
         }
-        self.contentLabel.textColor = YCStyleColor.black
-        self.contentLabel.font = UIFont.systemFont(ofSize: 14)
+        self.contentLabel.textColor = YCStyleColor.blackGray
+        self.contentLabel.font = UIFont.systemFont(ofSize: 16)
         self.contentLabel.text = ""
         
         self.likeCountLabel = UILabel();
         self.addSubview(self.likeCountLabel)
         self.likeCountLabel.snp.makeConstraints { (make) in
             make.right.equalTo(self.bgView).offset(-10)
-            make.top.equalTo(self.publishView.snp.bottom).offset(5)
+            make.top.equalTo(self.publishView.snp.bottom).offset(8)
         }
         self.likeCountLabel.numberOfLines = 1
         self.likeCountLabel.textColor = YCStyleColor.gray
@@ -128,10 +137,10 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
         self.likeImg = UIImageView()
         self.addSubview(self.likeImg)
         self.likeImg.snp.makeConstraints { (make) in
-            make.right.equalTo(self.likeCountLabel.snp.left).offset(-2)
+            make.right.equalTo(self.likeCountLabel.snp.left).offset(0)
             make.centerY.equalTo(self.likeCountLabel).offset(0)
-            make.width.equalTo(22)
-            make.height.equalTo(22)
+            make.width.equalTo(33)
+            make.height.equalTo(33)
         }
         self.likeImg.image = UIImage(named: "like_gray")
         
@@ -170,8 +179,10 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
             }
             if self.type == .POST {
                 self.userIcon.isHidden = true
+                self.iconBg.isHidden = true
             }else {
                 self.userIcon.isHidden = false
+                self.iconBg.isHidden = false
             }
             for view in self.contentViews {
                 view.removeFromSuperview()
@@ -271,7 +282,7 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
 
 protocol YCPublishCollectionViewCellDelegate: YCContentStringProtocol {
     func cellUserIconTap(_ cell:YCPublishCollectionViewCell?)
-    func getPublishSize(publish: YCPublishModel, publishSize: [String : CGSize]) -> CGSize
+    func getPublishSize(publish: YCPublishModel, publishSize: [String : CGSize], frame: CGSize, sectionInset: UIEdgeInsets, minimumInteritemSpacing: Float, columnCount: Int) -> CGSize
 }
 
 extension YCPublishCollectionViewCellDelegate {
@@ -280,13 +291,13 @@ extension YCPublishCollectionViewCellDelegate {
         
     }
     
-    func getPublishSize(publish: YCPublishModel, publishSize: [String : CGSize]) -> CGSize {
+    func getPublishSize(publish: YCPublishModel, publishSize: [String : CGSize], frame: CGSize, sectionInset: UIEdgeInsets, minimumInteritemSpacing: Float, columnCount: Int) -> CGSize {
         let publishID = publish.publishID
         if let size = publishSize[publishID]{
             return size
         }else {
-            let bounds = UIScreen.main.bounds
-            let cellW = Float((bounds.width-26)/2)
+            let contentWidth = Float(frame.width - sectionInset.left - sectionInset.right)
+            let cellW = Float((contentWidth - Float(columnCount - 1)*minimumInteritemSpacing)/Float(columnCount))
             var cellH = cellW
             let medias = publish.medias
             let mediasCount = medias.count
@@ -324,13 +335,13 @@ extension YCPublishCollectionViewCellDelegate {
             }
             let content = self.getContentString(content: publish.content)
             let label = UILabel(frame: CGRect(x: 9, y: 0, width: CGFloat(cellW-12), height: 22))
-            label.numberOfLines = 0
+            label.numberOfLines = 3
             label.textColor = YCStyleColor.black
-            label.font = UIFont.systemFont(ofSize: 14)
+            label.font = UIFont.systemFont(ofSize: 16)
             label.text = content
             label.sizeToFit();
             let contentH = Float(label.frame.height)
-            cellH = mediaH + contentH + 38
+            cellH = mediaH + contentH + 45
             let size = CGSize(width: CGFloat(cellW), height: CGFloat(cellH))
             return size
         }

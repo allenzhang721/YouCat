@@ -49,7 +49,7 @@
 "DeleteCommentTitle" = "删除评论";
 "LoadMoreLabel" = "加载更多";
 
-"FollowButtonLabel" = "+ 关注";
+"FollowButtonLabel" = "关注";
 "FollowingButtonLabel" = "已关注";
 "UnBlockButtonLabel" = "移出黑名单";
 "EditProfileButtonLabel" = "编辑个人资料";
