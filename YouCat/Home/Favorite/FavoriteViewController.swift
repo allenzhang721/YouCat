@@ -9,25 +9,25 @@
 import UIKit
 import MJRefresh
 
-class YCDiscoverViewController: UIViewController, YCImageProtocol, YCContentStringProtocol, YCAlertProtocol {
+class YCFavoriteViewController: UIViewController, YCImageProtocol, YCContentStringProtocol, YCAlertProtocol {
     
-    static var _instaceArray: [YCDiscoverViewController] = [];
+    static var _instaceArray: [YCFavoriteViewController] = [];
     
-    static func getInstance() -> YCDiscoverViewController{
-        var _instance: YCDiscoverViewController
+    static func getInstance() -> YCFavoriteViewController{
+        var _instance: YCFavoriteViewController
         if _instaceArray.count > 0 {
             _instance = _instaceArray[0]
             _instaceArray.remove(at: 0)
             _instance.initViewController()
             return _instance
         }else {
-            _instance = YCDiscoverViewController();
+            _instance = YCFavoriteViewController();
             _instance.initViewController()
         }
         return _instance
     }
     
-    static func addInstance(instace: YCDiscoverViewController) {
+    static func addInstance(instace: YCFavoriteViewController) {
         _instaceArray.append(instace)
     }
     
@@ -250,7 +250,7 @@ class YCDiscoverViewController: UIViewController, YCImageProtocol, YCContentStri
     }
 }
 
-extension YCDiscoverViewController: YCLoginProtocol {
+extension YCFavoriteViewController: YCLoginProtocol {
     
     @objc func loginUserChange(_ notify: Notification) {
         self.isFirstLoad = true
@@ -283,7 +283,7 @@ extension YCDiscoverViewController: YCLoginProtocol {
 }
 
 
-extension YCDiscoverViewController: UICollectionViewDataSource {
+extension YCFavoriteViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int{
         return self.publishes.count
@@ -306,7 +306,7 @@ extension YCDiscoverViewController: UICollectionViewDataSource {
     }
 }
 
-extension YCDiscoverViewController: YCCollectionViewWaterfallLayoutDelegate {
+extension YCFavoriteViewController: YCCollectionViewWaterfallLayoutDelegate {
     
     func collectionView(collectionView: UICollectionView, layout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize{
         let row = indexPath.item
@@ -335,7 +335,7 @@ extension YCDiscoverViewController: YCCollectionViewWaterfallLayoutDelegate {
     }
 }
 
-extension YCDiscoverViewController: YCPublishCollectionViewCellDelegate {
+extension YCFavoriteViewController: YCPublishCollectionViewCellDelegate {
     
     func cellUserIconTap(_ cell:YCPublishCollectionViewCell?){
         

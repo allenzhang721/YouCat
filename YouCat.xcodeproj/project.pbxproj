@@ -67,7 +67,7 @@
 		257B041621D642AE0004FB1B /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2523377F21D3A72C00662885 /* libsqlite3.tbd */; };
 		257B041921E254290004FB1B /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2523378121D3A76200662885 /* libc++.tbd */; };
 		257E895A21C394990084944E /* CommentListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 257E895921C394990084944E /* CommentListViewController.swift */; };
-		259AC950225E32090064987F /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 259AC94F225E32090064987F /* DiscoverViewController.swift */; };
+		259AC950225E32090064987F /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 259AC94F225E32090064987F /* FavoriteViewController.swift */; };
 		25B878A121515CB300E30C91 /* UserDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B878A021515CB300E30C91 /* UserDomain.swift */; };
 		25B878A32153B84A00E30C91 /* LikeDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B878A22153B84A00E30C91 /* LikeDomain.swift */; };
 		25B878A52153CAB400E30C91 /* CommentDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B878A42153CAB400E30C91 /* CommentDomain.swift */; };
@@ -246,7 +246,7 @@
 		257B041221D6429F0004FB1B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		257B041421D642A50004FB1B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		257E895921C394990084944E /* CommentListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentListViewController.swift; sourceTree = "<group>"; };
-		259AC94F225E32090064987F /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
+		259AC94F225E32090064987F /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
 		25B878A021515CB300E30C91 /* UserDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDomain.swift; sourceTree = "<group>"; };
 		25B878A22153B84A00E30C91 /* LikeDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeDomain.swift; sourceTree = "<group>"; };
 		25B878A42153CAB400E30C91 /* CommentDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDomain.swift; sourceTree = "<group>"; };
@@ -433,12 +433,12 @@
 			path = Comment;
 			sourceTree = "<group>";
 		};
-		259AC94E225E31DB0064987F /* Discover */ = {
+		259AC94E225E31DB0064987F /* Favorite */ = {
 			isa = PBXGroup;
 			children = (
-				259AC94F225E32090064987F /* DiscoverViewController.swift */,
+				259AC94F225E32090064987F /* FavoriteViewController.swift */,
 			);
-			path = Discover;
+			path = Favorite;
 			sourceTree = "<group>";
 		};
 		25B878A62154F5B900E30C91 /* Manager */ = {
@@ -561,7 +561,7 @@
 		2C35AC85203D8ACA002F0983 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				259AC94E225E31DB0064987F /* Discover */,
+				259AC94E225E31DB0064987F /* Favorite */,
 				2C35AC8C203D8D51002F0983 /* HomeViewController.swift */,
 			);
 			path = Home;
@@ -998,7 +998,7 @@
 				25305262214A840500BB9624 /* LikeModel.swift in Sources */,
 				25305264214AA80A00BB9624 /* CommentModel.swift in Sources */,
 				2530524B2147CC1900BB9624 /* PublishRequest.swift in Sources */,
-				259AC950225E32090064987F /* DiscoverViewController.swift in Sources */,
+				259AC950225E32090064987F /* FavoriteViewController.swift in Sources */,
 				25307944213EE556002DC02D /* URLRequest.swift in Sources */,
 				25D721C721A9A9F3007F5648 /* SetUserIconViewController.swift in Sources */,
 				25305267214BB5CA00BB9624 /* UserRequest.swift in Sources */,

@@ -8,8 +8,8 @@
 "DefaultName" = "youCat";
 "Slogon" = "喵萌，让我们一起云吸猫";
 "UserProfile" = "的个人主页";
-"HomeLabel" = "Discover";
-"ThemeLabel" = "Category";
+"HomeLabel" = "Favorite";
+"ThemeLabel" = "Discover";
 "PublishLabel" = "posts";
 "FollowersLabel" = "followers";
 "FollowingLabel" = "following";

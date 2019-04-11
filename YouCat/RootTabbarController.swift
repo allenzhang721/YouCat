@@ -30,7 +30,7 @@ class YCRootTabbarController: UITabBarController {
     //创建tabBar
     func creatTabBar()  {
         
-        let feed  = YCDiscoverViewController.getInstance()
+        let feed  = YCFavoriteViewController.getInstance()
         let feedNav = UINavigationController(rootViewController:feed)
         
         let feedTabBarItem = UITabBarItem(title: YCLanguageHelper.getString(key: "HomeLabel"), image: UIImage(named: "tabbar-home"), tag: 1)
