@@ -259,9 +259,9 @@ extension YCThemeViewController: YCLoginProtocol {
         if self.tableView.contentOffset.y > 0 {
             let offset = CGPoint(x: 0, y: 0)
             self.tableView.setContentOffset(offset, animated: true)
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.3) {
-                self.headerFresh.beginRefreshing()
-            }
+//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.3) {
+//                self.headerFresh.beginRefreshing()
+//            }
         }else {
             self.headerFresh.beginRefreshing()
         }

@@ -261,9 +261,6 @@ extension YCFavoriteViewController: YCLoginProtocol {
         if self.collectionView.contentOffset.y > 0 {
             let offset = CGPoint(x: 0, y: 0)
             self.collectionView.setContentOffset(offset, animated: true)
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.3) {
-                self.headerFresh.beginRefreshing()
-            }
         }else {
             self.headerFresh.beginRefreshing()
         }
