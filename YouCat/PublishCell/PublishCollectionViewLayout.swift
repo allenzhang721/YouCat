@@ -58,7 +58,7 @@ class YCCollectionViewWaterfallLayout: UICollectionViewLayout {
         }
     }
   
-    public var sectionInset:UIEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0) {
+    public var sectionInset:UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0) {
         didSet {
             invalidateIfNotEqual(oldValue: oldValue as AnyObject, newValue: sectionInset as AnyObject)
         }

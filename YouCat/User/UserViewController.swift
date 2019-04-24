@@ -301,7 +301,7 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
         self.collectionLayout.minimumLineSpacing = 10
         self.collectionLayout.minimumInteritemSpacing = 8
         self.collectionLayout.columnCount = 2
-        self.collectionLayout.sectionInset = UIEdgeInsetsMake(10, 9, 10, 9)
+        self.collectionLayout.sectionInset = UIEdgeInsets(top: 10, left: 9, bottom: 10, right: 9)
         self.collectionLayout.headerReferenceSize = CGSize(width: bounds.width, height: bounds.width)
         
         self.collectionView = UICollectionView(frame: rect, collectionViewLayout: self.collectionLayout)

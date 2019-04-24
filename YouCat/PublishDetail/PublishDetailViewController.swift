@@ -156,7 +156,7 @@ class YCPublishDetailViewController: UIViewController {
         self.collectionLayout.minimumLineSpacing = 0
         self.collectionLayout.minimumInteritemSpacing = 0
         self.collectionLayout.columnCount = 1
-        self.collectionLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        self.collectionLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 //        self.collectionLayout.footerReferenceSize = CGSize(width: bounds.width, height: 44)
         
         self.collectionView = UICollectionView(frame: rect, collectionViewLayout: self.collectionLayout)

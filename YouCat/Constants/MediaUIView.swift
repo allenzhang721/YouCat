@@ -221,7 +221,7 @@ class YCImageView: YCBaseView {
             if let img = self.img, let url = URL(string: imgPath) {
                 self.isLoading = true
                 var loadingView: UIActivityIndicatorView?
-                loadingView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+                loadingView = UIActivityIndicatorView(style: .whiteLarge)
                 self.addSubview(loadingView!)
                 loadingView!.snp.makeConstraints({ (make) in
                     make.center.equalTo(self).offset(0)
@@ -270,7 +270,7 @@ class YCImageView: YCBaseView {
             let queue = DispatchQueue(label: "mediaData")
             queue.async {
                 let newImage = compressMaxImage(image, maxW: width, maxH: height)
-                let imgData = UIImageJPEGRepresentation(newImage, 0.8)
+                let imgData = newImage.jpegData(compressionQuality: 0.8)
                 DispatchQueue.main.async {
                     completionBlock(imgData)
                 }
@@ -335,7 +335,7 @@ class YCAnimationView: YCBaseView {
                 make.height.equalTo(imageH)
             })
             self.img?.autoPlayAnimatedImage = false
-            self.img?.runLoopMode = .commonModes
+            self.img?.runLoopMode = RunLoop.Mode.common
             self.img?.repeatCount = .once
             self.img?.delegate = self
             self.img?.contentMode = .scaleAspectFill
@@ -389,7 +389,7 @@ class YCAnimationView: YCBaseView {
             if let _ = self.img, let url = URL(string: imgPath) {
                 self.isLoading = true
                 var loadingView: UIActivityIndicatorView?
-                loadingView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+                loadingView = UIActivityIndicatorView(style: .whiteLarge)
                 self.addSubview(loadingView!)
                 loadingView!.snp.makeConstraints({ (make) in
                     make.center.equalTo(self).offset(0)
@@ -595,7 +595,7 @@ class YCVideoView: YCBaseView {
             self.playButton?.image = UIImage(named: "play_button_black")
             
             self.loadingView = UIActivityIndicatorView()
-            self.loadingView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+            self.loadingView = UIActivityIndicatorView(style: .whiteLarge)
             self.addSubview(self.loadingView!)
             if let cover = self.cover {
                 self.loadingView?.snp.makeConstraints { (make) in
@@ -658,7 +658,7 @@ class YCVideoView: YCBaseView {
             self.playButton?.image = UIImage(named: "play_button_black")
             
             self.loadingView = UIActivityIndicatorView()
-            self.loadingView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+            self.loadingView = UIActivityIndicatorView(style: .whiteLarge)
             self.addSubview(self.loadingView!)
             if let cover = self.cover {
                 self.loadingView?.snp.makeConstraints { (make) in

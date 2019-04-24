@@ -56,7 +56,7 @@ class YCCommentViewController: UIViewController {
         let viewSigleTap = UITapGestureRecognizer(target: self, action: #selector(self.viewTapHandler))
         self.view.addGestureRecognizer(viewSigleTap)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShowHandler), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShowHandler), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -154,7 +154,7 @@ extension YCCommentViewController: UITextViewDelegate{
     }
     
     @objc func keyboardWillShowHandler(_ notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardWidth  = keyboardRectangle.width
             let keyboardHeight = keyboardRectangle.height
@@ -194,9 +194,9 @@ extension YCCommentViewController: UITextViewDelegate{
             if let nowText = textView.text {
                 let newText = NSString(string: nowText).replacingCharacters(in: range, with: text)
                 let s: NSString = "Text"
-                let fontSize = s.size(withAttributes: [NSAttributedStringKey.font: textView.font as Any])
+                let fontSize = s.size(withAttributes: [NSAttributedString.Key.font: textView.font as Any])
                 let tallerSize = CGSize(width: textView.frame.size.width-15, height: textView.frame.size.height*2)
-                let newSize = NSString(string: newText).boundingRect(with: tallerSize, options: .usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: textView.font as Any], context: nil).size
+                let newSize = NSString(string: newText).boundingRect(with: tallerSize, options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: textView.font as Any], context: nil).size
                 let newLineNum = newSize.height / fontSize.height;
                 if newLineNum > 4 {
                     textView.isScrollEnabled = true

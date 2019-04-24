@@ -33,7 +33,7 @@ class YCLoadingView: UIView {
             self.layer.cornerRadius = 10
             self.backgroundColor = YCStyleColor.blackAlpha
             
-            self.loading = UIActivityIndicatorView(activityIndicatorStyle: .white)
+            self.loading = UIActivityIndicatorView(style: .white)
             self.addSubview(self.loading)
             self.loading.snp.makeConstraints { (make) in
                 make.center.equalTo(self).offset(0)
@@ -44,7 +44,7 @@ class YCLoadingView: UIView {
                 make.width.equalTo(44)
                 make.height.equalTo(44)
             })
-            self.loading = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+            self.loading = UIActivityIndicatorView(style: .gray)
             self.addSubview(self.loading)
             self.loading.snp.makeConstraints { (make) in
                 make.center.equalTo(self).offset(0)

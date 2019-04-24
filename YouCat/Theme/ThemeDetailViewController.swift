@@ -170,7 +170,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         self.collectionLayout.minimumInteritemSpacing = 8
         self.collectionLayout.columnCount = 2
         let bottom = YCScreen.safeArea.bottom == 0 ? 10 : YCScreen.safeArea.bottom
-        self.collectionLayout.sectionInset = UIEdgeInsetsMake(10, 9, bottom, 9)
+        self.collectionLayout.sectionInset = UIEdgeInsets(top: 10, left: 9, bottom: bottom, right: 9)
         self.collectionLayout.headerReferenceSize = CGSize(width: bounds.width, height: bounds.width)
         self.collectionView = UICollectionView(frame: rect, collectionViewLayout: self.collectionLayout)
         self.view.addSubview(self.collectionView)
