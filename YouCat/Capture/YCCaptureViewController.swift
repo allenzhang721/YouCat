@@ -8,6 +8,7 @@
 
 import UIKit
 import MobileCoreServices
+import AVFoundation
 
 class YCCaptureViewController: UIViewController {
     
@@ -114,13 +115,12 @@ class YCCaptureViewController: UIViewController {
     
     private func beganLibrary() {
         switch mediaType {
-        case .video(let maxDuration, _, _):
+        case .video(_, _, _):
             let imagePicker = UIImagePickerController()
             imagePicker.sourceType = .photoLibrary
             imagePicker.mediaTypes = [String(kUTTypeMovie)]
-            imagePicker.allowsEditing = true
             imagePicker.videoQuality = .typeHigh
-            imagePicker.videoMaximumDuration = maxDuration
+//            imagePicker.videoMaximumDuration = maxDuration
             imagePicker.delegate = self
             present(imagePicker, animated: true, completion: nil)
         }
@@ -135,6 +135,18 @@ class YCCaptureViewController: UIViewController {
         for tag in  [1001, 1002, 1003] {
             self.view.viewWithTag(tag)?.alpha = 1
         }
+    }
+    
+    private func clipVideo(url: URL) {
+        let clip = YCClipViewController.viewController(videoUrl: url, done: {[weak self] (vc, url) in
+            vc.removeFromParent()
+            self?.navigationController?.setToolbarHidden(true, animated: false)
+            self?.previewVideo(url: url)
+        }) {[weak self] (vc) in
+            self?.navigationController?.popViewController(animated: true)
+        }
+        
+        navigationController?.pushViewController(clip, animated: true)
     }
     
     var captureShaperLayer: CAShapeLayer?
@@ -335,7 +347,12 @@ extension YCCaptureViewController: UIImagePickerControllerDelegate, UINavigation
         case .video:
             // file:///private/var/mobile/Containers/Data/Application/8FECFE12-2129-4A6A-B00A-13C3C482A331/tmp/50CB4711-ACAE-4B47-B465-2E921D76A134.MOV
             if let videoUrl = info[.mediaURL] as? URL {
-                previewVideo(url: videoUrl)
+                let asset = AVAsset(url: videoUrl)
+                if (asset.duration.seconds <= 10) {
+                    previewVideo(url: videoUrl)
+                } else {
+                    clipVideo(url: videoUrl)
+                }
             }
         }
         dismiss(animated: true, completion: nil)

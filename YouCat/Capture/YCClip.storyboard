@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ElZ-Vg-pkr">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Clip View Controller-->
+        <scene sceneID="ZW6-D3-oWI">
+            <objects>
+                <viewController id="ElZ-Vg-pkr" customClass="YCClipViewController" customModule="CuriosImagePicker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cTq-mM-cVc">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sbC-E2-RT6" userLabel="panelContainer">
+                                <rect key="frame" x="0.0" y="755" width="414" height="50"/>
+                                <subviews>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="4s5-nd-yUy">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="uLq-fE-fuq">
+                                            <size key="itemSize" width="50" height="50"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SnapshotCell" id="GU0-5Y-bUc">
+                                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="100" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RaS-7l-zhN">
+                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        </imageView>
+                                                    </subviews>
+                                                </view>
+                                            </collectionViewCell>
+                                        </cells>
+                                        <connections>
+                                            <outlet property="dataSource" destination="ElZ-Vg-pkr" id="EFg-6Y-ACC"/>
+                                            <outlet property="delegate" destination="ElZ-Vg-pkr" id="PZJ-qc-4Iq"/>
+                                        </connections>
+                                    </collectionView>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lCB-bn-NBt" userLabel="lPanel">
+                                        <rect key="frame" x="16" y="0.0" width="16" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <view alpha="0.80000000000000004" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dYR-gV-j3w" userLabel="lMask">
+                                                <rect key="frame" x="-16" y="0.0" width="16" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.99607843139999996" green="0.82352941180000006" blue="0.01176470588" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="mar-Kg-9US" appends="YES" id="fdf-gf-Wwz"/>
+                                        </connections>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AkL-Ct-gpR" userLabel="uBorder">
+                                        <rect key="frame" x="32" y="0.0" width="358" height="2"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.99607843139999996" green="0.82352941180000006" blue="0.01176470588" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rZ3-xA-yIv" userLabel="dBorder">
+                                        <rect key="frame" x="32" y="48" width="358" height="2"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                        <color key="backgroundColor" red="0.99607843139999996" green="0.82352941180000006" blue="0.01176470588" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <viewLayoutGuide key="safeArea" id="5HD-n9-uvz"/>
+                                    </view>
+                                    <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h9R-sK-zX0" userLabel="indicator">
+                                        <rect key="frame" x="120" y="1" width="5" height="48"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="42A-Xy-6u1" userLabel="rPanel">
+                                        <rect key="frame" x="382" y="0.0" width="16" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <view alpha="0.80000000000000004" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mzj-gB-Q7F" userLabel="rMask">
+                                                <rect key="frame" x="16" y="0.0" width="16" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.99607843139999996" green="0.82352941180000006" blue="0.01176470588" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="tQ3-vI-FP8" appends="YES" id="8Ui-uf-hz0"/>
+                                        </connections>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="NMB-rz-TbG"/>
+                                </constraints>
+                            </view>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6VF-f1-FUR" userLabel="videoContainer">
+                                <rect key="frame" x="0.0" y="44" width="414" height="703"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="sbC-E2-RT6" firstAttribute="leading" secondItem="imC-Bk-Jpp" secondAttribute="leading" id="9Ur-Yg-myE"/>
+                            <constraint firstItem="sbC-E2-RT6" firstAttribute="trailing" secondItem="imC-Bk-Jpp" secondAttribute="trailing" id="CpN-Qi-FEn"/>
+                            <constraint firstItem="6VF-f1-FUR" firstAttribute="leading" secondItem="imC-Bk-Jpp" secondAttribute="leading" id="JeI-NH-mBy"/>
+                            <constraint firstItem="sbC-E2-RT6" firstAttribute="top" secondItem="6VF-f1-FUR" secondAttribute="bottom" constant="8" id="Xtl-mC-bO1"/>
+                            <constraint firstItem="6VF-f1-FUR" firstAttribute="top" secondItem="imC-Bk-Jpp" secondAttribute="top" id="gV0-hZ-i65"/>
+                            <constraint firstItem="sbC-E2-RT6" firstAttribute="bottom" secondItem="imC-Bk-Jpp" secondAttribute="bottom" constant="-8" id="oNT-CU-1BV"/>
+                            <constraint firstItem="6VF-f1-FUR" firstAttribute="trailing" secondItem="imC-Bk-Jpp" secondAttribute="trailing" id="sVd-4L-RGM"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="imC-Bk-Jpp"/>
+                    </view>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
+                    <connections>
+                        <outlet property="dBorder" destination="rZ3-xA-yIv" id="AoG-jN-6Gh"/>
+                        <outlet property="indicator" destination="h9R-sK-zX0" id="cZI-2G-g10"/>
+                        <outlet property="lMask" destination="dYR-gV-j3w" id="1JB-A0-kox"/>
+                        <outlet property="lPanel" destination="lCB-bn-NBt" id="hRa-IP-Aiq"/>
+                        <outlet property="panelContainer" destination="sbC-E2-RT6" id="1cM-dB-C9m"/>
+                        <outlet property="rMask" destination="Mzj-gB-Q7F" id="VjO-4k-o86"/>
+                        <outlet property="rPanel" destination="42A-Xy-6u1" id="eCh-fs-zap"/>
+                        <outlet property="snapshotView" destination="4s5-nd-yUy" id="rF4-kp-wgk"/>
+                        <outlet property="uBorder" destination="AkL-Ct-gpR" id="YUI-s7-his"/>
+                        <outlet property="videoContainer" destination="6VF-f1-FUR" id="5hd-G5-6mu"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2L2-Fg-Ir9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="mar-Kg-9US">
+                    <connections>
+                        <action selector="pan:" destination="ElZ-Vg-pkr" id="WG0-2u-gh3"/>
+                    </connections>
+                </panGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="tQ3-vI-FP8">
+                    <connections>
+                        <action selector="pan:" destination="ElZ-Vg-pkr" id="cfd-BQ-3lS"/>
+                    </connections>
+                </panGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="111.59420289855073" y="51.5625"/>
+        </scene>
+    </scenes>
+</document>

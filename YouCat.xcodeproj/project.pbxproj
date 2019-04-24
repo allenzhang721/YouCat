@@ -99,6 +99,8 @@
 		9529EC8D225676BF006E0CC4 /* YCCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC89225676BF006E0CC4 /* YCCaptureViewController.swift */; };
 		9529EC8F22567779006E0CC4 /* YCDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC8E22567779006E0CC4 /* YCDemoViewController.swift */; };
 		9529EC912256778B006E0CC4 /* YCCapture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9529EC902256778B006E0CC4 /* YCCapture.storyboard */; };
+		953EF1782270CF88001D8D86 /* YCClip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 953EF1762270CF88001D8D86 /* YCClip.storyboard */; };
+		953EF1792270CF88001D8D86 /* YCClipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953EF1772270CF88001D8D86 /* YCClipViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -295,6 +297,8 @@
 		9529EC89225676BF006E0CC4 /* YCCaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCCaptureViewController.swift; sourceTree = "<group>"; };
 		9529EC8E22567779006E0CC4 /* YCDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YCDemoViewController.swift; sourceTree = "<group>"; };
 		9529EC902256778B006E0CC4 /* YCCapture.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = YCCapture.storyboard; sourceTree = "<group>"; };
+		953EF1762270CF88001D8D86 /* YCClip.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = YCClip.storyboard; sourceTree = "<group>"; };
+		953EF1772270CF88001D8D86 /* YCClipViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCClipViewController.swift; sourceTree = "<group>"; };
 		D76547DA6CCEE139A5F6E084 /* Pods_YouCatTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouCatTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E309D7DCD1368C5CF318F47C /* Pods-YouCatTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCatTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouCatTests/Pods-YouCatTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -610,6 +614,8 @@
 				9529EC89225676BF006E0CC4 /* YCCaptureViewController.swift */,
 				9529EC87225676BE006E0CC4 /* YCImagePickerViewController.swift */,
 				9529EC86225676BE006E0CC4 /* YCPreviewViewController.swift */,
+				953EF1772270CF88001D8D86 /* YCClipViewController.swift */,
+				953EF1762270CF88001D8D86 /* YCClip.storyboard */,
 				9529EC8E22567779006E0CC4 /* YCDemoViewController.swift */,
 				9529EC902256778B006E0CC4 /* YCCapture.storyboard */,
 				951F7E7722567DE00066589F /* YCAssets.xcassets */,
@@ -825,6 +831,7 @@
 				951F7E7822567DE00066589F /* YCAssets.xcassets in Resources */,
 				9529EC912256778B006E0CC4 /* YCCapture.storyboard in Resources */,
 				252B900921B038AF00E41842 /* Localizable.strings in Resources */,
+				953EF1782270CF88001D8D86 /* YCClip.storyboard in Resources */,
 				2C3441FF203D89F3008BF439 /* Main.storyboard in Resources */,
 				256299C421808002005FDDFC /* Assets.xcassets in Resources */,
 				252B901121B040B500E41842 /* InfoPlist.strings in Resources */,
@@ -1004,6 +1011,7 @@
 				252B901F21B5397B00E41842 /* UploadAction.swift in Sources */,
 				253052502147D50B00BB9624 /* BaseDomain.swift in Sources */,
 				2538AD2721B948F30021F245 /* CommentViewController.swift in Sources */,
+				953EF1792270CF88001D8D86 /* YCClipViewController.swift in Sources */,
 				256299CD2185A049005FDDFC /* SliderView.swift in Sources */,
 				256299CF21870608005FDDFC /* PublishDetailViewCell.swift in Sources */,
 				25D0CCCA2179EF8600809D3D /* DateManager.swift in Sources */,
