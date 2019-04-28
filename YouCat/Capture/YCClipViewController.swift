@@ -36,7 +36,6 @@ import AVFoundation
 class YCClipViewController: UIViewController {
     
     let maxClipDuration = TimeInterval(10)
-    private(set) var videoUrl: URL!
     private(set) var videoAsset: AVAsset!
     private(set) var videoDuration: TimeInterval! // must > 10s
     private var secondWidth: CGFloat!
@@ -56,10 +55,9 @@ class YCClipViewController: UIViewController {
     private var doneHandler: ((UIViewController, URL)->())?
     private var cancelledHandler: ((UIViewController)->())?
     
-    class func viewController(videoUrl: URL, done:((UIViewController, URL)->())? = nil, cancelled:((UIViewController)->())? = nil) -> YCClipViewController {
+    class func viewController(asset: AVAsset, done:((UIViewController, URL)->())? = nil, cancelled:((UIViewController)->())? = nil) -> YCClipViewController {
         let vc = UIStoryboard(name: "YCClip", bundle: nil).instantiateInitialViewController() as! YCClipViewController
-        vc.videoUrl = videoUrl
-        vc.videoAsset = AVAsset(url: videoUrl)
+        vc.videoAsset = asset
         vc.videoDuration = round(vc.videoAsset.duration.seconds)
         vc.doneHandler = done
         vc.cancelledHandler = cancelled
@@ -95,8 +93,6 @@ class YCClipViewController: UIViewController {
     }
     
     private func setupNavigation() {
-        navigationController?.setToolbarHidden(false, animated: false)
-        navigationController?.toolbar.barStyle = .blackTranslucent
         setToolbarItems([
             UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancell)),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
@@ -110,7 +106,7 @@ class YCClipViewController: UIViewController {
     
     @objc func done() {
         let r = calculateTimeRange()
-        exportVideo(url: videoUrl, range: r) {[weak self] (url) in
+        exportVideo(asset: videoAsset, range: r) {[weak self] (url) in
             guard let sf = self else {return}
             DispatchQueue.main.async {
                 sf.doneHandler?(sf, url)
@@ -118,9 +114,9 @@ class YCClipViewController: UIViewController {
         }
     }
     
-    private func exportVideo(url: URL, range: CMTimeRange, completed:@escaping (URL)->()) {
+    private func exportVideo(asset: AVAsset, range: CMTimeRange, completed:@escaping (URL)->()) {
         // https://stackoverflow.com/questions/31092455/avassetexportsession-export-fails-non-deterministically-with-error-operation-s/31146867
-        let asset = AVAsset(url: url)
+//        let asset = AVAsset(url: url)
         let exporter = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetMediumQuality)
         let outUrl = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("\(UUID().uuidString.components(separatedBy: "-").last!)").appendingPathExtension("mov")
         exporter?.outputURL = outUrl

@@ -11,10 +11,10 @@ import AVFoundation
 
 class YCPreviewViewController: UIViewController {
     
-    let videoUrl: URL
+    let asset: AVAsset
     
-    init(url: URL) {
-        self.videoUrl = url
+    init(asset: AVAsset) {
+        self.asset = asset
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -136,8 +136,9 @@ class YCPreviewViewController: UIViewController {
             // Fallback on earlier versions
         }
         
-        DispatchQueue.main.async {
-            let asset = AVAsset(url: self.videoUrl)
+        DispatchQueue.main.async {[weak self] in
+            guard let sf = self else {return}
+            let asset = sf.asset
             let item = AVPlayerItem(asset: asset)
             let player = AVQueuePlayer(playerItem: item)
             let avideoLayer = AVPlayerLayer(player: player)
@@ -146,7 +147,7 @@ class YCPreviewViewController: UIViewController {
             previewView.layer.addSublayer(avideoLayer)
             player.play()
             
-            self.looper = AVPlayerLooper(player: player, templateItem: item)
+            self?.looper = AVPlayerLooper(player: player, templateItem: item)
         }
     }
     var looper: AVPlayerLooper?

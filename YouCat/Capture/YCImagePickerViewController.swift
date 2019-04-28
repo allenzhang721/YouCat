@@ -44,7 +44,8 @@ class YCImagePickerViewController: UINavigationController {
     
     public weak var pickerDelegate: YCImagePickerViewControllerDelegate?
     public var mediaType: YCMediaType = .video(maxDuration: 20, dynamicDuration: 2, snapshotSize: CGSize.zero)
-    private(set) var videoUrl: URL?
+//    private(set) var videoUrl: URL?
+    private(set) var videoAsset: AVAsset?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,11 +56,11 @@ class YCImagePickerViewController: UINavigationController {
     
     func setup() {
         NotificationCenter.default.addObserver(forName: YCImagePickerViewControllerShouldUpdateVideoNotification, object: nil, queue: .main) {[weak self] (noti) in
-            if let url = noti.object as? URL {
-                print("video url = ", url)
-                self?.videoUrl = url
+            if let asset = noti.object as? AVAsset {
+//                print("video url = ", url)
+                self?.videoAsset = asset
             } else {
-                self?.videoUrl = nil
+                self?.videoAsset = nil
             }
         }
         
@@ -79,7 +80,7 @@ class YCImagePickerViewController: UINavigationController {
     }
     
     private func export() {
-        guard let url = videoUrl else {return}
+        guard let asset = videoAsset else {return}
         let viewSize = view.bounds.size
         let queue = DispatchQueue(label: "com.export.queue")
         queue.async { [weak self] in
@@ -92,22 +93,22 @@ class YCImagePickerViewController: UINavigationController {
             switch sf.mediaType {
             case .video(_, let dynamicDuration, let snapshotSize):
                 group.enter()
-                sf.exportDynamicVideo(url: url,screenSize: viewSize, dynamicDuration: dynamicDuration) { (url) in
+                sf.exportDynamicVideo(asset: asset,screenSize: viewSize, dynamicDuration: dynamicDuration) { (url) in
                     print("dynamic video url = \(url)")
                     dynamicUrl = url
                     group.leave()
                 }
                 
                 group.enter()
-                sf.exportVideo(url: url, screenSize: viewSize) { (url) in
+                sf.exportVideo(asset: asset, screenSize: viewSize) { (url) in
                     print("exported video url = \(url)")
                     videoUrl = url
                     group.leave()
                 }
                 
                 group.enter()
-                sf.exportDynamicImages(url: url, dynamicDuration: dynamicDuration, snapshotSize: snapshotSize) { (frames) in
-                    print("exported video frames = \(url)")
+                sf.exportDynamicImages(asset: asset, dynamicDuration: dynamicDuration, snapshotSize: snapshotSize) { (frames) in
+//                    print("exported video frames = \(url)")
                     dynamicFrames = frames
                     snapshot = frames.first?.image
                     group.leave()
@@ -139,9 +140,9 @@ class YCImagePickerViewController: UINavigationController {
         
     }
     
-    private func exportVideo(url: URL, screenSize: CGSize, completed:@escaping (URL)->()) {
+    private func exportVideo(asset: AVAsset, screenSize: CGSize, completed:@escaping (URL)->()) {
         // https://stackoverflow.com/questions/31092455/avassetexportsession-export-fails-non-deterministically-with-error-operation-s/31146867
-        let asset = AVAsset(url: url)
+        
         guard let videoTrack = asset.tracks.first(where: { (track) -> Bool in track.mediaType == .video}) else {return}
         let audioTrack = asset.tracks.first(where: { (track) -> Bool in track.mediaType == .audio})
         
@@ -194,11 +195,10 @@ class YCImagePickerViewController: UINavigationController {
         }
     }
     
-    private func exportDynamicImages(url: URL, dynamicDuration: TimeInterval, snapshotSize: CGSize, completed:@escaping ([DynamicFrame])->()) {
+    private func exportDynamicImages(asset: AVAsset, dynamicDuration: TimeInterval, snapshotSize: CGSize, completed:@escaping ([DynamicFrame])->()) {
         let queue = DispatchQueue(label: "com.youcat.dynamicImages")
         queue.async {
             let group = DispatchGroup()
-            let asset = AVAsset(url: url)
             let dynamicInterval: TimeInterval = 1.0/15.0;
             let frames = Int(dynamicDuration / dynamicInterval);
             let times  = (0..<frames).map{CMTime(seconds: TimeInterval($0) * dynamicInterval, preferredTimescale: 100)}.map{NSValue(time: $0)}
@@ -227,9 +227,8 @@ class YCImagePickerViewController: UINavigationController {
         
     }
     
-    private func exportDynamicVideo(url: URL, screenSize: CGSize, dynamicDuration: TimeInterval, completed:@escaping (URL)->()) {
+    private func exportDynamicVideo(asset: AVAsset, screenSize: CGSize, dynamicDuration: TimeInterval, completed:@escaping (URL)->()) {
         // https://stackoverflow.com/questions/31092455/avassetexportsession-export-fails-non-deterministically-with-error-operation-s/31146867
-        let asset = AVAsset(url: url)
         guard let videoTrack = asset.tracks.first(where: { (track) -> Bool in track.mediaType == .video}) else {return}
         let audioTrack = asset.tracks.first(where: { (track) -> Bool in track.mediaType == .audio})
         

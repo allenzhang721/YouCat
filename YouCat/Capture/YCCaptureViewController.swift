@@ -89,7 +89,8 @@ class YCCaptureViewController: UIViewController {
         
         guard camera.isRecording == false else {return}
         camera.startVideoCapture {[weak self] (url) in
-            self?.previewVideo(url: url)
+            let asset = AVAsset(url: url)
+            self?.previewVideo(asset: asset)
         }
         
         
@@ -116,19 +117,39 @@ class YCCaptureViewController: UIViewController {
     private func beganLibrary() {
         switch mediaType {
         case .video(_, _, _):
-            let imagePicker = UIImagePickerController()
-            imagePicker.sourceType = .photoLibrary
-            imagePicker.mediaTypes = [String(kUTTypeMovie)]
-            imagePicker.videoQuality = .typeHigh
-//            imagePicker.videoMaximumDuration = maxDuration
-            imagePicker.delegate = self
-            present(imagePicker, animated: true, completion: nil)
+//            let imagePicker = UIImagePickerController()
+//            imagePicker.sourceType = .photoLibrary
+//            imagePicker.mediaTypes = [String(kUTTypeMovie)]
+//            imagePicker.videoQuality = .typeHigh
+////            imagePicker.videoMaximumDuration = maxDuration
+//            imagePicker.delegate = self
+//            present(imagePicker, animated: true, completion: nil)
+            
+            let photos = YCPhotosViewController.viewController {[weak self] (vc, type) in
+                switch type {
+                case .done(let asset):
+                    if (asset.duration.seconds <= 10) {
+                        self?.previewVideo(asset: asset)
+                    } else {
+                        self?.clipVideo(asset: asset)
+                        //                    clipVideo(url: videoUrl)
+                    }
+                    
+                case .cancel:
+                    ()
+                }
+                
+                self?.dismiss(animated: true, completion: nil)
+            }
+            
+            present(photos, animated: true, completion: nil)
+            
         }
     }
     
-    private func previewVideo(url: URL) {
-        NotificationCenter.default.post(name: YCImagePickerViewControllerShouldUpdateVideoNotification, object: url)
-        let preview = YCPreviewViewController(url: url)
+    private func previewVideo(asset: AVAsset) {
+        NotificationCenter.default.post(name: YCImagePickerViewControllerShouldUpdateVideoNotification, object: asset)
+        let preview = YCPreviewViewController(asset: asset)
         navigationController?.pushViewController(preview, animated: false)
         
         captureShaperLayer?.removeAllAnimations()
@@ -137,12 +158,16 @@ class YCCaptureViewController: UIViewController {
         }
     }
     
-    private func clipVideo(url: URL) {
-        let clip = YCClipViewController.viewController(videoUrl: url, done: {[weak self] (vc, url) in
+    private func clipVideo(asset: AVAsset) {
+        navigationController?.setToolbarHidden(false, animated: false)
+        navigationController?.toolbar.barStyle = .blackTranslucent
+        let clip = YCClipViewController.viewController(asset: asset, done: {[weak self] (vc, url) in
             vc.removeFromParent()
             self?.navigationController?.setToolbarHidden(true, animated: false)
-            self?.previewVideo(url: url)
+            let asset = AVAsset(url: url)
+            self?.previewVideo(asset: asset)
         }) {[weak self] (vc) in
+            self?.navigationController?.setToolbarHidden(true, animated: false)
             self?.navigationController?.popViewController(animated: true)
         }
         
@@ -268,13 +293,13 @@ class YCCaptureViewController: UIViewController {
         
         let captureCircle = UIView(frame: CGRect.zero)
         captureCircle.backgroundColor = .white
-        captureCircle.layer.cornerRadius = 15
+        captureCircle.layer.cornerRadius = 35
         captureCircle.translatesAutoresizingMaskIntoConstraints = false
         captureContainerView.addSubview(captureCircle)
         if #available(iOS 11.0, *) {
             NSLayoutConstraint.activate([
-                captureCircle.widthAnchor.constraint(equalToConstant: 30),
-                captureCircle.heightAnchor.constraint(equalToConstant: 30),
+                captureCircle.widthAnchor.constraint(equalToConstant: 70),
+                captureCircle.heightAnchor.constraint(equalToConstant: 70),
                 captureCircle.centerXAnchor.constraint(equalTo: captureContainerView.centerXAnchor),
                 captureCircle.centerYAnchor.constraint(equalTo: captureContainerView.centerYAnchor)
                 ])
@@ -341,24 +366,24 @@ class YCCaptureViewController: UIViewController {
     }
 }
 
-extension YCCaptureViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        switch mediaType {
-        case .video:
-            // file:///private/var/mobile/Containers/Data/Application/8FECFE12-2129-4A6A-B00A-13C3C482A331/tmp/50CB4711-ACAE-4B47-B465-2E921D76A134.MOV
-            if let videoUrl = info[.mediaURL] as? URL {
-                let asset = AVAsset(url: videoUrl)
-                if (asset.duration.seconds <= 10) {
-                    previewVideo(url: videoUrl)
-                } else {
-                    clipVideo(url: videoUrl)
-                }
-            }
-        }
-        dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        dismiss(animated: true, completion: nil)
-    }
-}
+//extension YCCaptureViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+//    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+//        switch mediaType {
+//        case .video:
+//            // file:///private/var/mobile/Containers/Data/Application/8FECFE12-2129-4A6A-B00A-13C3C482A331/tmp/50CB4711-ACAE-4B47-B465-2E921D76A134.MOV
+//            if let videoUrl = info[.mediaURL] as? URL {
+//                let asset = AVAsset(url: videoUrl)
+//                if (asset.duration.seconds <= 10) {
+//                    previewVideo(url: videoUrl)
+//                } else {
+////                    clipVideo(url: videoUrl)
+//                }
+//            }
+//        }
+//        dismiss(animated: true, completion: nil)
+//    }
+//
+//    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+//        dismiss(animated: true, completion: nil)
+//    }
+//}
