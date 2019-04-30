@@ -35,7 +35,7 @@ import AVFoundation
 
 class YCClipViewController: UIViewController {
     
-    let maxClipDuration = TimeInterval(10)
+    private var maxClipDuration = TimeInterval(10)
     private(set) var videoAsset: AVAsset!
     private(set) var videoDuration: TimeInterval! // must > 10s
     private var secondWidth: CGFloat!
@@ -43,6 +43,8 @@ class YCClipViewController: UIViewController {
     
     @IBOutlet weak var videoContainer: UIView!
     @IBOutlet weak var panelContainer: UIView!
+    @IBOutlet weak var durationContainer: UIVisualEffectView!
+    
     @IBOutlet weak var snapshotView: UICollectionView! // video thumbnails
     @IBOutlet weak var lPanel: UIView!
     @IBOutlet weak var lMask: UIView!
@@ -51,13 +53,16 @@ class YCClipViewController: UIViewController {
     @IBOutlet weak var uBorder: UIView!
     @IBOutlet weak var dBorder: UIView!
     @IBOutlet weak var indicator: UIView!
+    @IBOutlet weak var durationLabel: UILabel!
+    
     private var videoPlayerLayer: AVPlayerLayer?
     private var doneHandler: ((UIViewController, URL)->())?
     private var cancelledHandler: ((UIViewController)->())?
     
-    class func viewController(asset: AVAsset, done:((UIViewController, URL)->())? = nil, cancelled:((UIViewController)->())? = nil) -> YCClipViewController {
+    class func viewController(asset: AVAsset, maxDuration: TimeInterval, done:((UIViewController, URL)->())? = nil, cancelled:((UIViewController)->())? = nil) -> YCClipViewController {
         let vc = UIStoryboard(name: "YCClip", bundle: nil).instantiateInitialViewController() as! YCClipViewController
         vc.videoAsset = asset
+        vc.maxClipDuration = maxDuration
         vc.videoDuration = round(vc.videoAsset.duration.seconds)
         vc.doneHandler = done
         vc.cancelledHandler = cancelled
@@ -72,6 +77,9 @@ class YCClipViewController: UIViewController {
         setupNavigation()
         snapshotView.contentInset = UIEdgeInsets(top: 0, left: 32, bottom: 0, right: 32)
         
+        indicator.layer.shadowColor = UIColor.black.cgColor
+        indicator.layer.shadowRadius = 4
+        
         let player = AVPlayer(playerItem: AVPlayerItem(asset: videoAsset))
         let avideoLayer = AVPlayerLayer(player: player)
         avideoLayer.videoGravity = .resizeAspect
@@ -79,11 +87,17 @@ class YCClipViewController: UIViewController {
         videoContainer.layer.addSublayer(avideoLayer)
         videoPlayerLayer = avideoLayer
         
-        generateSnapshots()
+        
+        DispatchQueue.main.async {[weak self] in
+            self?.generateSnapshots()
+            self?.calculateAndSeek(reverse: false)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        videoPlayerLayer?.player?.play()
+//        videoPlayerLayer?.player?.play()
+        calculateAndPlay()
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -106,7 +120,7 @@ class YCClipViewController: UIViewController {
     
     @objc func done() {
         let r = calculateTimeRange()
-        exportVideo(asset: videoAsset, range: r) {[weak self] (url) in
+        exportVideo(asset: videoAsset, range: r.range) {[weak self] (url) in
             guard let sf = self else {return}
             DispatchQueue.main.async {
                 sf.doneHandler?(sf, url)
@@ -142,6 +156,16 @@ class YCClipViewController: UIViewController {
     }
     */
     
+    private func indicator(hidden: Bool, animated: Bool) {
+        if animated {
+            UIView.animate(withDuration: 0.1) {
+                self.indicator.alpha = hidden ? 0 : 1
+            }
+        } else {
+            self.indicator.alpha = hidden ? 0 : 1
+        }
+    }
+    
     var beganPanCenterOffset: CGFloat = 0
     @IBAction func pan(_ sender: UIPanGestureRecognizer) {
         guard let v = sender.view else {
@@ -153,6 +177,9 @@ class YCClipViewController: UIViewController {
         case .began:
             videoPlayerLayer?.player?.pause()
             beganPanCenterOffset = v.center.x - sender.location(in: panelContainer).x
+            if (v != indicator) {
+                indicator(hidden: true, animated: false)
+            }
             
         case .changed:
             if v == lPanel {
@@ -169,10 +196,20 @@ class YCClipViewController: UIViewController {
                 v.center.x = max(min(nextX, maxX), minX)
                 updateUI()
                 calculateAndSeek(reverse: true)
+            } else if v == indicator {
+                let minX = lPanel.frame.maxX
+                let maxX = rPanel.frame.minX
+                let nextX = sender.location(in: panelContainer).x + beganPanCenterOffset
+                v.center.x = max(min(nextX, maxX), minX)
+//                updateUI()
+                calculateAndSeek(reverse: false, resetIndicator: false)
             }
 
         case .ended, .cancelled, .failed:
-            calculateAndPlay()
+            if (v != indicator) {
+                indicator(hidden: false, animated: true)
+            }
+            calculateAndPlay(resetIndicator: false)
         }
     }
     
@@ -180,7 +217,7 @@ class YCClipViewController: UIViewController {
         let generator = AVAssetImageGenerator(asset: videoAsset)
         generator.requestedTimeToleranceAfter = .zero
         generator.requestedTimeToleranceBefore = .zero
-        let times = (0..<Int(videoDuration)).map{return NSValue(time: CMTime(seconds: Double($0), preferredTimescale: 100))}
+        let times = (0..<Int(videoDuration)).map{return NSValue(time: CMTime(seconds: Double($0), preferredTimescale: CMTimeScale(NSEC_PER_SEC)))}
         generator.generateCGImagesAsynchronously(forTimes: times) {[weak self] (requestedTime, image, actualTime, result, error) in
             if let img = image {
                 let indx = Int(requestedTime.seconds)
@@ -205,27 +242,33 @@ class YCClipViewController: UIViewController {
         rMask.frame.origin.x = 16
     }
     
-    fileprivate func calculateTimeRange() -> CMTimeRange {
+    fileprivate func calculateTimeRange() -> (range: CMTimeRange, idc: CMTime) {
         let minP = lPanel.convert(lPanel.bounds.origin, to: snapshotView)
         let maxP = rPanel.convert(rPanel.bounds.origin, to: snapshotView)
+        let indP = indicator.convert(indicator.bounds.origin, to: snapshotView)
         let location = minP.x + lPanel.bounds.width
         let length = maxP.x - minP.x - lPanel.bounds.width
+        let idcLoc = indP.x + indicator.bounds.width / 2
         let total = snapshotView.contentSize.width
         let loc = Double(location / total)
         let len = Double(length / total)
-        let start = CMTime(seconds: videoDuration * loc, preferredTimescale: 100)
-        let end = CMTime(seconds: videoDuration * (loc + len), preferredTimescale: 100)
+        let idc = Double(idcLoc / total)
+        let start = CMTime(seconds: videoDuration * loc, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        let end = CMTime(seconds: videoDuration * (loc + len), preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        let mid = CMTime(seconds: videoDuration * idc, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         let range = CMTimeRange(start: start, end: end)
-        return range
+        return (range, mid)
     }
     
-    fileprivate func calculateRange() -> (location: Float, length: Float) {
+    fileprivate func calculateRange() -> (location: Float, length: Float, idc: Float) {
         let minP = lPanel.convert(lPanel.bounds.origin, to: snapshotView)
         let maxP = rPanel.convert(rPanel.bounds.origin, to: snapshotView)
+        let indP = indicator.convert(indicator.bounds.origin, to: snapshotView)
         let location = minP.x + lPanel.bounds.width
         let length = maxP.x - minP.x - lPanel.bounds.width
+        let idc = indP.x + indicator.bounds.width / 2
         let total = snapshotView.contentSize.width
-        return (Float(location / total), Float(length / total))
+        return (Float(location / total), Float(length / total), Float(idc / total))
     }
     
     /// Dragging or scrolling to seek the current video frame.
@@ -233,23 +276,36 @@ class YCClipViewController: UIViewController {
     /// - Parameter reverse: If reverse = YES, will seek the end video frame; elsewise seek the start video frame.
     /// - Returns: The selected range of time.
     @discardableResult
-    fileprivate func calculateAndSeek(reverse: Bool) -> (start: CMTime, end: CMTime) {
+    fileprivate func calculateAndSeek(reverse: Bool, resetIndicator: Bool = true) -> (start: CMTime, end: CMTime, idc: CMTime) {
+        if (resetIndicator) {
+            indicator.center.x = lPanel.frame.maxX
+        }
         let r = calculateRange()
-        let time = CMTime(seconds: videoDuration * (reverse ?  Double(r.location + r.length) : Double(r.location)), preferredTimescale: 100)
-        let start = CMTime(seconds: videoDuration * Double(r.location), preferredTimescale: 100)
-        let end = CMTime(seconds: videoDuration * Double(r.location + r.length), preferredTimescale: 100)
-        videoPlayerLayer?.player?.seek(to: time, toleranceBefore: .zero, toleranceAfter: .zero)
-        return (start, end)
+        let start = CMTime(seconds: videoDuration * Double(r.location), preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        let end = CMTime(seconds: videoDuration * Double(r.location + r.length), preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        let idc = CMTime(seconds: videoDuration * Double(r.idc), preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        videoPlayerLayer?.player?.seek(to: reverse ? end : idc, toleranceBefore: .zero, toleranceAfter: .zero)
+        durationLabel.text = "\(Int(round(end.seconds - start.seconds))) 秒"
+        return (start, end, idc)
     }
     
     var playerTimeObserver: Any?
+    var indictorTimeObserver: Any?
     /// Drag or scroll did end and play the selected range of video.
-    fileprivate func calculateAndPlay() {
-        let times = calculateAndSeek(reverse: false)
+    fileprivate func calculateAndPlay(resetIndicator: Bool = true) {
+        let times = calculateAndSeek(reverse: false, resetIndicator: resetIndicator)
+        
+        if let observer = indictorTimeObserver {videoPlayerLayer?.player?.removeTimeObserver(observer)}
+        indictorTimeObserver = videoPlayerLayer?.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.01, preferredTimescale: CMTimeScale(NSEC_PER_SEC)), queue: .main, using: { (time) in
+            self.indicator.center.x += self.secondWidth / 100;
+        })
+        
         if let observer = playerTimeObserver {videoPlayerLayer?.player?.removeTimeObserver(observer)}
         playerTimeObserver = videoPlayerLayer?.player?.addBoundaryTimeObserver(forTimes: [NSValue(time: times.end)], queue: DispatchQueue.main, using: {[weak self] in
+            if let idcObserver = self?.indictorTimeObserver {self?.videoPlayerLayer?.player?.removeTimeObserver(idcObserver); self?.indictorTimeObserver = nil}
             self?.calculateAndPlay()
         })
+
         videoPlayerLayer?.player?.play()
     }
 }
@@ -278,6 +334,7 @@ extension YCClipViewController: UICollectionViewDelegateFlowLayout {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         videoPlayerLayer?.player?.pause()
+        indicator(hidden: true, animated: false)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -285,11 +342,14 @@ extension YCClipViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        indicator(hidden: false, animated: true)
         calculateAndPlay()
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        
         if (!decelerate) {
+            indicator(hidden: false, animated: true)
             calculateAndPlay()
         }
     }

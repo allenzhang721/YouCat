@@ -43,10 +43,16 @@ enum PickerInfo {
 class YCImagePickerViewController: UINavigationController {
     
     public weak var pickerDelegate: YCImagePickerViewControllerDelegate?
-    public var mediaType: YCMediaType = .video(maxDuration: 20, dynamicDuration: 2, snapshotSize: CGSize.zero)
-//    private(set) var videoUrl: URL?
+    public var maxDuration: TimeInterval {
+        get {return pmaxDuration}
+        set {pmaxDuration = max(10, newValue)}
+    }
+    private var pmaxDuration: TimeInterval = 10
+    private lazy var mediaType: YCMediaType = {[weak self] in
+        return .video(maxDuration: self?.pmaxDuration ?? 10, dynamicDuration: 2, snapshotSize: CGSize.zero)
+    }()
     private(set) var videoAsset: AVAsset?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

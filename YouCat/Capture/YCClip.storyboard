@@ -79,11 +79,6 @@
                                         <color key="backgroundColor" red="0.99607843139999996" green="0.82352941180000006" blue="0.01176470588" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <viewLayoutGuide key="safeArea" id="5HD-n9-uvz"/>
                                     </view>
-                                    <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h9R-sK-zX0" userLabel="indicator">
-                                        <rect key="frame" x="120" y="1" width="5" height="48"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </view>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="42A-Xy-6u1" userLabel="rPanel">
                                         <rect key="frame" x="382" y="0.0" width="16" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -100,6 +95,27 @@
                                             <outletCollection property="gestureRecognizers" destination="tQ3-vI-FP8" appends="YES" id="8Ui-uf-hz0"/>
                                         </connections>
                                     </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h9R-sK-zX0" userLabel="indicator">
+                                        <rect key="frame" x="120" y="-4" width="31" height="59"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cN2-2B-sOd">
+                                                <rect key="frame" x="13" y="0.0" width="5" height="59"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <real key="value" value="2.5"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="Le4-CF-Et9" appends="YES" id="qlL-7s-01C"/>
+                                        </connections>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -110,14 +126,48 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="703"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vl2-hv-r5T">
+                                <rect key="frame" x="183.5" y="711" width="47" height="24"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="zAx-ui-OHq">
+                                    <rect key="frame" x="0.0" y="0.0" width="47" height="24"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="999 秒" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="INT-CD-hDJ">
+                                            <rect key="frame" x="-1" y="0.0" width="49" height="24"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                            <integer key="value" value="12"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="47" id="Gg4-bO-Lza"/>
+                                    <constraint firstAttribute="height" constant="24" id="KAE-8i-add"/>
+                                </constraints>
+                                <blurEffect style="dark"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="12"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </visualEffectView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="sbC-E2-RT6" firstAttribute="top" secondItem="vl2-hv-r5T" secondAttribute="bottom" constant="20" id="43f-Gq-Vvy"/>
                             <constraint firstItem="sbC-E2-RT6" firstAttribute="leading" secondItem="imC-Bk-Jpp" secondAttribute="leading" id="9Ur-Yg-myE"/>
                             <constraint firstItem="sbC-E2-RT6" firstAttribute="trailing" secondItem="imC-Bk-Jpp" secondAttribute="trailing" id="CpN-Qi-FEn"/>
                             <constraint firstItem="6VF-f1-FUR" firstAttribute="leading" secondItem="imC-Bk-Jpp" secondAttribute="leading" id="JeI-NH-mBy"/>
                             <constraint firstItem="sbC-E2-RT6" firstAttribute="top" secondItem="6VF-f1-FUR" secondAttribute="bottom" constant="8" id="Xtl-mC-bO1"/>
                             <constraint firstItem="6VF-f1-FUR" firstAttribute="top" secondItem="imC-Bk-Jpp" secondAttribute="top" id="gV0-hZ-i65"/>
+                            <constraint firstItem="vl2-hv-r5T" firstAttribute="centerX" secondItem="cTq-mM-cVc" secondAttribute="centerX" id="kGb-HV-pvm"/>
                             <constraint firstItem="sbC-E2-RT6" firstAttribute="bottom" secondItem="imC-Bk-Jpp" secondAttribute="bottom" constant="-8" id="oNT-CU-1BV"/>
                             <constraint firstItem="6VF-f1-FUR" firstAttribute="trailing" secondItem="imC-Bk-Jpp" secondAttribute="trailing" id="sVd-4L-RGM"/>
                         </constraints>
@@ -126,6 +176,8 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <connections>
                         <outlet property="dBorder" destination="rZ3-xA-yIv" id="AoG-jN-6Gh"/>
+                        <outlet property="durationContainer" destination="vl2-hv-r5T" id="ont-Sh-sZv"/>
+                        <outlet property="durationLabel" destination="INT-CD-hDJ" id="Wjq-pk-IiB"/>
                         <outlet property="indicator" destination="h9R-sK-zX0" id="cZI-2G-g10"/>
                         <outlet property="lMask" destination="dYR-gV-j3w" id="1JB-A0-kox"/>
                         <outlet property="lPanel" destination="lCB-bn-NBt" id="hRa-IP-Aiq"/>
@@ -146,6 +198,11 @@
                 <panGestureRecognizer minimumNumberOfTouches="1" id="tQ3-vI-FP8">
                     <connections>
                         <action selector="pan:" destination="ElZ-Vg-pkr" id="cfd-BQ-3lS"/>
+                    </connections>
+                </panGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="Le4-CF-Et9">
+                    <connections>
+                        <action selector="pan:" destination="ElZ-Vg-pkr" id="04k-H1-rNu"/>
                     </connections>
                 </panGestureRecognizer>
             </objects>

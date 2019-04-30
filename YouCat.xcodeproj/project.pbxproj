@@ -93,6 +93,8 @@
 		4BDCF867747000828440DF7E /* Pods_YouCatTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D76547DA6CCEE139A5F6E084 /* Pods_YouCatTests.framework */; };
 		83A6F551E87BF929BB599A40 /* Pods_YouCat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F17FB4EF2FA68C8A2CD9B94 /* Pods_YouCat.framework */; };
 		951F7E7822567DE00066589F /* YCAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 951F7E7722567DE00066589F /* YCAssets.xcassets */; };
+		952318012277FA940092B8B4 /* QCMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952317FF2277FA940092B8B4 /* QCMethod.swift */; };
+		952318022277FA940092B8B4 /* CircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952318002277FA940092B8B4 /* CircleProgressView.swift */; };
 		9529EC8A225676BF006E0CC4 /* YCPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC86225676BE006E0CC4 /* YCPreviewViewController.swift */; };
 		9529EC8B225676BF006E0CC4 /* YCImagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC87225676BE006E0CC4 /* YCImagePickerViewController.swift */; };
 		9529EC8C225676BF006E0CC4 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC88225676BE006E0CC4 /* CameraController.swift */; };
@@ -291,6 +293,8 @@
 		581287F3A5F73B04B2906D2F /* Pods-YouCatTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCatTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCatTests/Pods-YouCatTests.release.xcconfig"; sourceTree = "<group>"; };
 		7EA9D9DE110AC0A34E1D6FE9 /* Pods-YouCat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCat.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCat/Pods-YouCat.release.xcconfig"; sourceTree = "<group>"; };
 		951F7E7722567DE00066589F /* YCAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = YCAssets.xcassets; sourceTree = "<group>"; };
+		952317FF2277FA940092B8B4 /* QCMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCMethod.swift; sourceTree = "<group>"; };
+		952318002277FA940092B8B4 /* CircleProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleProgressView.swift; sourceTree = "<group>"; };
 		9529EC86225676BE006E0CC4 /* YCPreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCPreviewViewController.swift; sourceTree = "<group>"; };
 		9529EC87225676BE006E0CC4 /* YCImagePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCImagePickerViewController.swift; sourceTree = "<group>"; };
 		9529EC88225676BE006E0CC4 /* CameraController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
@@ -611,6 +615,8 @@
 			isa = PBXGroup;
 			children = (
 				9529EC88225676BE006E0CC4 /* CameraController.swift */,
+				952318002277FA940092B8B4 /* CircleProgressView.swift */,
+				952317FF2277FA940092B8B4 /* QCMethod.swift */,
 				9529EC89225676BF006E0CC4 /* YCCaptureViewController.swift */,
 				9529EC87225676BE006E0CC4 /* YCImagePickerViewController.swift */,
 				9529EC86225676BE006E0CC4 /* YCPreviewViewController.swift */,
@@ -1003,6 +1009,7 @@
 				2530525A2147FB0600BB9624 /* MediaModel.swift in Sources */,
 				257E895A21C394990084944E /* CommentListViewController.swift in Sources */,
 				253052582147FA2900BB9624 /* UserModel.swift in Sources */,
+				952318022277FA940092B8B4 /* CircleProgressView.swift in Sources */,
 				25B878A82154F8B200E30C91 /* UserManager.swift in Sources */,
 				9529EC8A225676BF006E0CC4 /* YCPreviewViewController.swift in Sources */,
 				252B900E21B03A5A00E41842 /* LanguageHelper.swift in Sources */,
@@ -1010,6 +1017,7 @@
 				252B901821B533D800E41842 /* UploadModel.swift in Sources */,
 				252B901F21B5397B00E41842 /* UploadAction.swift in Sources */,
 				253052502147D50B00BB9624 /* BaseDomain.swift in Sources */,
+				952318012277FA940092B8B4 /* QCMethod.swift in Sources */,
 				2538AD2721B948F30021F245 /* CommentViewController.swift in Sources */,
 				953EF1792270CF88001D8D86 /* YCClipViewController.swift in Sources */,
 				256299CD2185A049005FDDFC /* SliderView.swift in Sources */,

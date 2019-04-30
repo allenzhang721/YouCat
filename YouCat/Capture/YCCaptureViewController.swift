@@ -13,10 +13,19 @@ import AVFoundation
 class YCCaptureViewController: UIViewController {
     
     private let mediaType: YCMediaType
+    private let maxDuration: TimeInterval
     private let camera = CameraController()
+    
+    private var captureShaperLayer: CAShapeLayer?
+    private var circleProgressView: CircleProgressView?
     
     init(mediaType: YCMediaType) {
         self.mediaType = mediaType
+        switch mediaType {
+        case let .video(maxDuration, _, _):
+            self.maxDuration = maxDuration
+        }
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -87,6 +96,10 @@ class YCCaptureViewController: UIViewController {
             }
         }
         
+        circleProgressView?.addProgressAnimation(totalDuration: maxDuration, completionBlock: { (finished) in
+            
+        })
+        
         guard camera.isRecording == false else {return}
         camera.startVideoCapture {[weak self] (url) in
             let asset = AVAsset(url: url)
@@ -126,9 +139,10 @@ class YCCaptureViewController: UIViewController {
 //            present(imagePicker, animated: true, completion: nil)
             
             let photos = YCPhotosViewController.viewController {[weak self] (vc, type) in
+                guard let sf = self else {return}
                 switch type {
                 case .done(let asset):
-                    if (asset.duration.seconds <= 10) {
+                    if (asset.duration.seconds <= sf.maxDuration) {
                         self?.previewVideo(asset: asset)
                     } else {
                         self?.clipVideo(asset: asset)
@@ -153,6 +167,7 @@ class YCCaptureViewController: UIViewController {
         navigationController?.pushViewController(preview, animated: false)
         
         captureShaperLayer?.removeAllAnimations()
+        circleProgressView?.removeAllAnimations()
         for tag in  [1001, 1002, 1003] {
             self.view.viewWithTag(tag)?.alpha = 1
         }
@@ -161,7 +176,7 @@ class YCCaptureViewController: UIViewController {
     private func clipVideo(asset: AVAsset) {
         navigationController?.setToolbarHidden(false, animated: false)
         navigationController?.toolbar.barStyle = .blackTranslucent
-        let clip = YCClipViewController.viewController(asset: asset, done: {[weak self] (vc, url) in
+        let clip = YCClipViewController.viewController(asset: asset, maxDuration: maxDuration, done: {[weak self] (vc, url) in
             vc.removeFromParent()
             self?.navigationController?.setToolbarHidden(true, animated: false)
             let asset = AVAsset(url: url)
@@ -174,7 +189,7 @@ class YCCaptureViewController: UIViewController {
         navigationController?.pushViewController(clip, animated: true)
     }
     
-    var captureShaperLayer: CAShapeLayer?
+    
     private func setup() {
         view.backgroundColor = .white
         
@@ -216,13 +231,14 @@ class YCCaptureViewController: UIViewController {
         libraryContainerView.tag = 1001
         libraryContainerView.backgroundColor = .clear
         libraryContainerView.translatesAutoresizingMaskIntoConstraints = false
+        let libraryContainerCenterX = NSLayoutConstraint(item: libraryContainerView, attribute: .centerX, relatedBy: .equal, toItem: captureContainerView, attribute: .centerX, multiplier: 1.5, constant: 22)
         view.addSubview(libraryContainerView)
         if #available(iOS 11.0, *) {
             NSLayoutConstraint.activate([
                 libraryContainerView.widthAnchor.constraint(equalToConstant: 44),
                 libraryContainerView.heightAnchor.constraint(equalToConstant: 44),
                 libraryContainerView.centerYAnchor.constraint(equalTo: captureContainerView.centerYAnchor),
-                libraryContainerView.leadingAnchor.constraint(equalTo: captureContainerView.trailingAnchor, constant: 32),
+                libraryContainerCenterX
                 ])
         } else {
             // Fallback on earlier versions
@@ -233,13 +249,15 @@ class YCCaptureViewController: UIViewController {
         cancelContainerView.tag = 1002
         cancelContainerView.backgroundColor = .clear
         cancelContainerView.translatesAutoresizingMaskIntoConstraints = false
+        let cancelContainerCenterX = NSLayoutConstraint(item: cancelContainerView, attribute: .centerX, relatedBy: .equal, toItem: captureContainerView, attribute: .left, multiplier: 0.5, constant: 0)
         view.addSubview(cancelContainerView)
         if #available(iOS 11.0, *) {
             NSLayoutConstraint.activate([
                 cancelContainerView.widthAnchor.constraint(equalToConstant: 44),
                 cancelContainerView.heightAnchor.constraint(equalToConstant: 44),
                 cancelContainerView.centerYAnchor.constraint(equalTo: captureContainerView.centerYAnchor),
-                cancelContainerView.rightAnchor.constraint(equalTo: captureContainerView.leftAnchor, constant: -32),
+                cancelContainerCenterX
+//                cancelContainerView.rightAnchor.constraint(equalTo: captureContainerView.leftAnchor, constant: -32),
                 ])
         } else {
             // Fallback on earlier versions
@@ -306,6 +324,11 @@ class YCCaptureViewController: UIViewController {
         } else {
             // Fallback on earlier versions
         }
+        
+        let progressView = CircleProgressView(frame: CGRect(x: 0, y: 0, width: 132, height: 132))
+        progressView.backgroundColor = .clear
+        captureBlurView.contentView.addSubview(progressView)
+        self.circleProgressView = progressView
         
         
         
