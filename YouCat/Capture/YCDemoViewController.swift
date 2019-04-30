@@ -44,7 +44,8 @@ class YCDemoViewController: UIViewController {
     
     @IBAction func imagePickerClick(_ sender: Any) {
         let picker = YCImagePickerViewController()
-        picker.mediaType = .video(maxDuration: 10, dynamicDuration: 3, snapshotSize: CGSize.zero)
+        picker.maxDuration = 5 // Min maxDuration is 10 by Allen
+//        picker.mediaType = .video(maxDuration: 10, dynamicDuration: 3, snapshotSize: CGSize.zero)
         picker.pickerDelegate = self
         present(picker, animated: true, completion: nil)
     }
