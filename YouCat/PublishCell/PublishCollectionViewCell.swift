@@ -92,12 +92,12 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
         self.userIcon = UIImageView();
         self.addSubview(self.userIcon)
         self.userIcon.snp.makeConstraints { (make) in
-            make.left.equalTo(self.bgView).offset(8)
-            make.top.equalTo(self.publishView.snp.bottom).offset(-22)
-            make.width.equalTo(44)
-            make.height.equalTo(44)
+            make.left.equalTo(self.bgView).offset(6)
+            make.top.equalTo(self.publishView.snp.bottom).offset(-8)
+            make.width.equalTo(32)
+            make.height.equalTo(32)
         }
-        self.cropImageCircle(self.userIcon, 22)
+        self.cropImageCircle(self.userIcon, 16)
         self.userIcon.image = UIImage(named: "default_icon")
         
         self.iconBg = UIView()
@@ -105,10 +105,10 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
         self.insertSubview(self.iconBg, belowSubview: self.userIcon)
         self.iconBg.snp.makeConstraints { (make) in
             make.center.equalTo(self.userIcon).offset(0)
-            make.width.equalTo(46)
-            make.height.equalTo(46)
+            make.width.equalTo(34)
+            make.height.equalTo(34)
         }
-        self.cropImageCircle(self.iconBg, 23)
+        self.cropImageCircle(self.iconBg, 17)
         
         self.contentLabel = UILabel();
         self.contentLabel.numberOfLines = 3
@@ -116,17 +116,17 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
         self.contentLabel.snp.makeConstraints { (make) in
             make.left.equalTo(self.bgView).offset(5)
             make.right.equalTo(self.bgView).offset(-5)
-            make.top.equalTo(self.publishView.snp.bottom).offset(32)
+            make.top.equalTo(self.publishView.snp.bottom).offset(28)
         }
         self.contentLabel.textColor = YCStyleColor.blackGray
-        self.contentLabel.font = UIFont.systemFont(ofSize: 16)
+        self.contentLabel.font = UIFont.systemFont(ofSize: 14)
         self.contentLabel.text = ""
-        
+    
         self.likeCountLabel = UILabel();
         self.addSubview(self.likeCountLabel)
         self.likeCountLabel.snp.makeConstraints { (make) in
             make.right.equalTo(self.bgView).offset(-10)
-            make.top.equalTo(self.publishView.snp.bottom).offset(8)
+            make.top.equalTo(self.publishView.snp.bottom).offset(5)
         }
         self.likeCountLabel.numberOfLines = 1
         self.likeCountLabel.textColor = YCStyleColor.gray
@@ -247,7 +247,6 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
                         var rate: Float = 1.0
                         if videoW != 0 && videoH != 0 {
                             rate = videoH/videoW;
-                            
                         }
                         self.publishView.snp.remakeConstraints { (make) in
                             make.top.equalTo(self.bgView)
@@ -334,14 +333,17 @@ extension YCPublishCollectionViewCellDelegate {
                 }
             }
             let content = self.getContentString(content: publish.content)
-            let label = UILabel(frame: CGRect(x: 9, y: 0, width: CGFloat(cellW-12), height: 22))
+            let label = UILabel(frame: CGRect(x: 0, y: 0, width: CGFloat(cellW-10), height: 22))
             label.numberOfLines = 3
             label.textColor = YCStyleColor.black
-            label.font = UIFont.systemFont(ofSize: 16)
+            label.font = UIFont.systemFont(ofSize: 14)
             label.text = content
             label.sizeToFit();
-            let contentH = Float(label.frame.height)
-            cellH = mediaH + contentH + 45
+            var contentH = Float(label.frame.height)
+            if contentH > 5 {
+                contentH = contentH + 5
+            }
+            cellH = mediaH + contentH + 30
             let size = CGSize(width: CGFloat(cellW), height: CGFloat(cellH))
             return size
         }

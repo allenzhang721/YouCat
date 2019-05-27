@@ -517,9 +517,12 @@ extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLogi
                     alertArray.append(["title":YCLanguageHelper.getString(key: "WeChatFriendLabel")])
                     alertArray.append(["title":YCLanguageHelper.getString(key: "WeChatEmoticonLabel")])
                     alertArray.append(["title":YCLanguageHelper.getString(key: "WeChatMomentsLabel")])
-                    alertArray.append(["title":YCLanguageHelper.getString(key: "WeiboLabel")])
+                    alertArray.append(["title":YCLanguageHelper.getString(key:
+                        "WeiboLabel")])
+                    alertArray.append(["title":YCLanguageHelper.getString(key:
+                        "SavePhotoLabel")])
                     self.showSheetAlert(nil, alertMessage: YCLanguageHelper.getString(key: "ShareToTitle"), okAlertArray: alertArray, cancelAlertLabel: YCLanguageHelper.getString(key: "CancelLabel"), view: self) { (index) in
-                        if index != -1 {
+                        if index != -1 && index != 4 {
                             let thumbImage = view.getSnap()
                             self.showLoadingView()
                             var dateW:Float = 1280
@@ -565,6 +568,25 @@ extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLogi
                                     }
                                 }
                             })
+                        }else if index == 4 {
+                            if let img = (view as! YCImageView).img?.image {
+                                
+                                YCPhotoAlbumUtil.saveImageInAlbum(image: img, albumName: YCLanguageHelper.getString(key: "DefaultName"), completion: { (result) in
+                                    switch result{
+                                    case .success:
+                                        let showMessage = YCLanguageHelper.getString(key:
+                                            "SavePhotoSuccessLabel")
+                                        self.showTempAlert("", alertMessage: showMessage, view: self, completionBlock: nil)
+                                    case .denied:
+                                        gotoSetting(title: "", mesage: YCLanguageHelper.getString(key: "LibraryAccessTitle"), view: self)
+                                    case .error:
+                                        let showMessage = YCLanguageHelper.getString(key:
+                                            "SavePhotoErrorLabel")
+                                        self.showTempAlert("", alertMessage: showMessage, view: self, completionBlock: nil)
+                                    }
+                                })
+//                                UIImageWriteToSavedPhotosAlbum(img, self, #selector(self.savePhoteHandler), nil)
+                            }
                         }
                     }
                 }else if view is YCVideoView {

@@ -80,6 +80,8 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
     
     let footerFresh = MJRefreshAutoNormalFooter()
     
+    var delegate: YCUserViewControllerDelegate?
+    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = true
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
@@ -226,14 +228,14 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
         let postLabel = UILabel(frame: CGRect(x:0, y:25, width: operateW, height: 22))
         self.postView.addSubview(postLabel)
         postLabel.textColor = YCStyleColor.gray
-        postLabel.font = UIFont.systemFont(ofSize: 12)
+        postLabel.font = UIFont.systemFont(ofSize: 10)
         postLabel.textAlignment = .center
         postLabel.text = YCLanguageHelper.getString(key: "PublishLabel")
         
         self.followersView = UIView()
         self.topView.addSubview(self.followersView)
         self.followersView.snp.makeConstraints { (make) in
-            make.left.equalTo(followBtX+15+operateW)
+            make.left.equalTo(followBtX+25+2*operateW)
             make.centerY.equalTo(self.postView).offset(0)
             make.width.equalTo(operateW)
             make.height.equalTo(50)
@@ -246,14 +248,18 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
         let followersLabel = UILabel(frame: CGRect(x:0, y:25, width: operateW, height: 22))
         self.followersView.addSubview(followersLabel)
         followersLabel.textColor = YCStyleColor.gray
-        followersLabel.font = UIFont.systemFont(ofSize: 12)
+        followersLabel.font = UIFont.systemFont(ofSize: 10)
         followersLabel.textAlignment = .center
         followersLabel.text = YCLanguageHelper.getString(key: "FollowersLabel")
+        
+        let followersTap = UITapGestureRecognizer(target: self, action: #selector(self.followersTapHandler))
+        self.followersView.isUserInteractionEnabled = true
+        self.followersView.addGestureRecognizer(followersTap)
         
         self.followingView = UIView()
         self.topView.addSubview(self.followingView)
         self.followingView.snp.makeConstraints { (make) in
-            make.left.equalTo(followBtX+25+2*operateW)
+            make.left.equalTo(followBtX+15+operateW)
             make.centerY.equalTo(self.postView).offset(0)
             make.width.equalTo(operateW)
             make.height.equalTo(50)
@@ -266,9 +272,14 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
         let followingLabel = UILabel(frame: CGRect(x:0, y:25, width: operateW, height: 22))
         self.followingView.addSubview(followingLabel)
         followingLabel.textColor = YCStyleColor.gray
-        followingLabel.font = UIFont.systemFont(ofSize: 12)
+        followingLabel.font = UIFont.systemFont(ofSize: 10)
         followingLabel.textAlignment = .center
         followingLabel.text = YCLanguageHelper.getString(key: "FollowingLabel")
+        
+        let followingTap = UITapGestureRecognizer(target: self, action: #selector(self.followingTapHandler))
+        self.followingView.isUserInteractionEnabled = true
+        self.followingView.addGestureRecognizer(followingTap)
+        
         
         self.postButton = YCSelectedButton(fontText: YCLanguageHelper.getString(key: "PostLabel"), fontSize: 16)
         self.topView.addSubview(self.postButton)
@@ -299,9 +310,10 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
         let rect:CGRect = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
         self.collectionLayout = YCCollectionViewWaterfallLayout()
         self.collectionLayout.minimumLineSpacing = 10
-        self.collectionLayout.minimumInteritemSpacing = 14
+        self.collectionLayout.minimumInteritemSpacing = 8
         self.collectionLayout.columnCount = 2
-        self.collectionLayout.sectionInset = UIEdgeInsets(top: 20, left: 15, bottom: 10, right: 15)
+        let bottom = YCScreen.safeArea.bottom == 0 ? 10 : YCScreen.safeArea.bottom
+        self.collectionLayout.sectionInset = UIEdgeInsets(top: 10, left: 9, bottom: bottom, right: 9)
         self.collectionLayout.headerReferenceSize = CGSize(width: bounds.width, height: bounds.width)
         
         self.collectionView = UICollectionView(frame: rect, collectionViewLayout: self.collectionLayout)
@@ -505,6 +517,9 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
     }
     
     @objc func backButtonClick(){
+        if let delegate = self.delegate, let relationUser = self.userModel as? YCRelationUserModel {
+            delegate.backUser(user: relationUser)
+        }
         self.navigationController?.popViewController(animated: true)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             self.resetViewController()
@@ -550,6 +565,7 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
         self.loginUserType = .Default
         self.postButton.status = .Selected
         self.likeButton.status = .Default
+        self.delegate = nil
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("LoginUserChange"), object: nil)
     }
 }
@@ -733,6 +749,25 @@ extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProt
                     }
                 }
             }
+        }
+    }
+    
+    @objc func followersTapHandler() {
+        let userList = YCUserListViewController.getInstance()
+        userList.userModel = self.userDetailModel
+        userList.userListType = .Followers
+        if let nav = self.navigationController {
+            nav.pushViewController(userList, animated: true)
+        }
+    }
+    
+    @objc func followingTapHandler() {
+        let userList = YCUserListViewController.getInstance()
+        userList.userModel = self.userDetailModel
+        userList.userListType = .Following
+        
+        if let nav = self.navigationController {
+            nav.pushViewController(userList, animated: true)
         }
     }
     
@@ -925,3 +960,9 @@ extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProt
         }
     }
 }
+
+protocol YCUserViewControllerDelegate {
+    func backUser(user: YCRelationUserModel?)
+}
+
+

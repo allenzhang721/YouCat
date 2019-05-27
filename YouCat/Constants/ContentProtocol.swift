@@ -54,11 +54,11 @@ extension YCContentStringProtocol {
                 let b = uuid.index(uuid.startIndex, offsetBy: 6)
                 let first = uuid[a..<b]
                 
-                return YCLanguageHelper.getString(key: "DefaultName")+String(first)
+                return YCLanguageHelper.getString(key: "DefaultUserName")+String(first)
             }
             return nikename
         }else {
-            return YCLanguageHelper.getString(key: "DefaultName")
+            return YCLanguageHelper.getString(key: "DefaultUserName")
         }
     }
     

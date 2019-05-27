@@ -147,11 +147,12 @@ class YCThemeTableViewCell: UITableViewCell, YCImageProtocol, YCContentStringPro
                 if rate > 4/3 {
                     rate = 4/3
                 }
+                let imageH = YCScreen.bounds.width * rate
                 self.themeCover.snp.remakeConstraints { (make) in
                     make.left.equalTo(0-wGap)
                     make.top.equalTo(0-YCScreen.safeArea.top)
                     make.width.equalTo(YCScreen.bounds.width)
-                    make.height.equalTo(YCScreen.bounds.width).multipliedBy(rate)
+                    make.height.equalTo(imageH)
                 }
                 self.themeCover.loadSnapImage(cover, snapShot: false)
             }

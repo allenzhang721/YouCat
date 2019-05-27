@@ -17,7 +17,7 @@
 "LikeLabel" = "Like";
 
 "EnterCommentLabel" = "Comment";
-"DefaultName" = "User_";
+"DefaultUserName" = "User_";
 "NicknameLabel" = "Name";
 "NicknamePlaceholder" = "Enter your nickname";
 "BioLabel" = "Bio";
@@ -91,6 +91,9 @@
 "WeChatEmoticonLabel" = "WeChat Emoji";
 "WeChatMomentsLabel" = "Moments";
 "WeiboLabel" = "Weibo";
+"SavePhotoLabel" = "Save Photo";
+"SavePhotoSuccessLabel" = "Save Success";
+"SavePhotoErrorLabel" = "Save Failed";
 
 "JustNowLabel" = "Just Now";
 "YesterdayLabel" = "Yesterday";

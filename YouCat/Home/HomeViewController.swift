@@ -170,8 +170,15 @@ class YCHomeViewController: UIViewController, YCImageProtocol {
                     if self.updatePublishDate(modelList: modelList) {
                         self.tableView.reloadData()
                     }
+                    if modelList.count == 0 {
+                        self.footerFresh.endRefreshingWithNoMoreData()
+                        self.footerFresh.isHidden = true
+                    }else{
+                        self.footerFresh.endRefreshing()
+                    }
+                }else {
+                    self.footerFresh.endRefreshing()
                 }
-                self.footerFresh.endRefreshing()
             }else {
                 self.footerFresh.endRefreshing()
             }

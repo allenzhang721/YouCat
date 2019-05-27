@@ -15,7 +15,6 @@ func gotoSetting(title: String, mesage: String, view: UIViewController) {
         if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
             if #available(iOS 10.0, *) {
                 UIApplication.shared.open(url, options: [:], completionHandler: { (ist) in
-                    
                 })
             } else {
                 // Fallback on earlier versions
@@ -62,7 +61,6 @@ struct YCSocialConfigs {
     }
     
     struct SMS {
-        
         static let appID = "3be50064be3b1dfa024b327c9be3eae9"
         static let appKey = "10a95e4bb9b32"
     }
@@ -465,7 +463,7 @@ enum ParameterKey: CustomStringConvertible{
         case .weiboUser:
             return "WeiboUser"
         case .followersCount:
-            return "FollowerCount"
+            return "FollowersCount"
         case .followingCount:
             return "FollowingCount"
         case .likeCount:

@@ -182,7 +182,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             make.bottom.equalTo(self.contentPageController.snp.top).offset(5)
         }
         self.contentLabel.textColor = YCStyleColor.white
-        self.contentLabel.font = UIFont.systemFont(ofSize: 18)
+        self.contentLabel.font = UIFont.systemFont(ofSize: 14)
         self.contentLabel.text = ""
         self.contentLabel.shadowColor = YCStyleColor.black
         self.contentLabel.shadowOffset = CGSize(width: 0, height: 0.5)
@@ -610,7 +610,6 @@ extension YCPublishDetailViewCell {
                 UIView.animate(withDuration: 0.5, animations: {
                     
                 })
-                
                 UIView.animate(withDuration: 0.5, animations: {
                     self.followButton.alpha = 0
                 }, completion: { (_) in

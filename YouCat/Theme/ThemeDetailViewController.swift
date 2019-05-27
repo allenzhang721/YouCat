@@ -166,11 +166,11 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         let bounds = YCScreen.bounds
         let rect:CGRect = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
         self.collectionLayout = YCCollectionViewWaterfallLayout()
-        self.collectionLayout.minimumLineSpacing = 16
-        self.collectionLayout.minimumInteritemSpacing = 14
+        self.collectionLayout.minimumLineSpacing = 10
+        self.collectionLayout.minimumInteritemSpacing = 8
         self.collectionLayout.columnCount = 2
         let bottom = YCScreen.safeArea.bottom == 0 ? 10 : YCScreen.safeArea.bottom
-        self.collectionLayout.sectionInset = UIEdgeInsets(top: 20, left: 15, bottom: bottom, right: 15)
+        self.collectionLayout.sectionInset = UIEdgeInsets(top: 10, left: 9, bottom: bottom, right: 9)
         self.collectionLayout.headerReferenceSize = CGSize(width: bounds.width, height: bounds.width)
         self.collectionView = UICollectionView(frame: rect, collectionViewLayout: self.collectionLayout)
         self.view.addSubview(self.collectionView)

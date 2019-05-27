@@ -17,7 +17,7 @@
 "LikeLabel" = "喜欢";
 
 "EnterCommentLabel" = "输入评论";
-"DefaultName" = "用户";
+"DefaultUserName" = "用户";
 "NicknameLabel" = "昵称";
 "NicknamePlaceholder" = "请输入你的昵称";
 "BioLabel" = "签名";
@@ -73,7 +73,7 @@
 "CodeLoginLabel" = "免密登录";
 "SendCodeLabel" = "获取验证码";
 "ResendCodelLabel" = "重新发送";
-"LoginOtherAccountLabel" = "其他账号登录";
+"LoginOtherAccountLabel" = "第三方账号登录";
 
 "ReplyLabel" = "回复 ";
 "CommentSuccessLabel" = "评论成功";
@@ -92,6 +92,9 @@
 "WeChatEmoticonLabel" = "微信表情";
 "WeChatMomentsLabel" = "朋友圈";
 "WeiboLabel" = "微博";
+"SavePhotoLabel" = "保存图片";
+"SavePhotoSuccessLabel" = "保存成功";
+"SavePhotoErrorLabel" = "保存失败";
 
 "JustNowLabel" = "刚刚";
 "YesterdayLabel" = "昨天";
