@@ -1240,7 +1240,7 @@
 					"$(PROJECT_DIR)/ShareSDK/ShareSDK/Support/PlatformSDK/SinaWeiboSDK",
 					"$(PROJECT_DIR)/ShareSDK/ShareSDK/Support/PlatformSDK/WeChatSDK",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.botai.YouCat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.botai.YouCat2;
 				PRODUCT_NAME = "喵萌";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/YouCat/Header/YouCat-Bridging-Header.h";
@@ -1278,7 +1278,7 @@
 					"$(PROJECT_DIR)/ShareSDK/ShareSDK/Support/PlatformSDK/SinaWeiboSDK",
 					"$(PROJECT_DIR)/ShareSDK/ShareSDK/Support/PlatformSDK/WeChatSDK",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.botai.YouCat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.botai.YouCat2;
 				PRODUCT_NAME = "喵萌";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/YouCat/Header/YouCat-Bridging-Header.h";

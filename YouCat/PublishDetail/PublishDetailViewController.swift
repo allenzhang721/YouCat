@@ -9,6 +9,7 @@
 import UIKit
 import MJRefresh
 import SnapKit
+import AVKit
 
 enum YCPublishDetailType: String{
     case HOME = "home"
@@ -36,6 +37,8 @@ class YCPublishDetailViewController: UIViewController {
     static func addInstance(instace: YCPublishDetailViewController) {
         _instaceArray.append(instace)
     }
+    
+    var videoMedias: [YCMediaViewModel] = []
     
     let refreshCount = 20
     var isFirstShow: Bool = true
@@ -89,6 +92,9 @@ class YCPublishDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initView()
+        for _ in 0..<6 {
+            self.videoMedias.append(YCMediaViewModel(publishID: ""))
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -190,6 +196,7 @@ class YCPublishDetailViewController: UIViewController {
                     break
                 }
             }
+            self.loadMediaResouse(mediaIndex: publishIndex)
             var rect = self.collectionView.frame
             rect.origin.y = CGFloat(publishIndex)*bounds.height
             self.collectionView.scrollRectToVisible(rect, animated: false)
@@ -271,6 +278,9 @@ class YCPublishDetailViewController: UIViewController {
                 }
             }
         }
+        if isChange, let index = self.contentIndexPath {
+            self.loadMediaResouse(mediaIndex: index.item)
+        }
         return isChange
     }
     
@@ -285,6 +295,10 @@ class YCPublishDetailViewController: UIViewController {
         self.contentIndex = 0
         self.collectionView.reloadData()
         self.isFirstShow = true
+        for mediaModel in self.videoMedias.filter({$0.unUsed == false}) {
+            self.releaseMediaViewModel(mediaModel: mediaModel)
+        }
+//        self.videoMedias.removeAll()
     }
 }
 
@@ -401,8 +415,117 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
             self.contentModel = contents[row]
             self.contentIndexPath = indexPath
         }
-        if let index = self.contentIndexPath, let currentCell = self.collectionView.cellForItem(at: index) as? YCPublishDetailViewCell{
+        if let index = self.contentIndexPath, let currentCell = self.collectionView.cellForItem(at: index) as? YCPublishDetailViewCell, let current = currentCell.publishModel{
+            self.loadMediaResouse(mediaIndex: indexPath.item)
+            let medias = self.videoMedias.filter {$0.publishID == current.publishID}
+            if medias.count > 0 {
+                currentCell.mediaModel = medias[0]
+            }
+            
             currentCell.displayView()
+        }
+    }
+    
+    func loadMediaResouse(mediaIndex: Int) {
+        if let contents = self.contents {
+            let top = min(mediaIndex, 2)
+            let bottom = min((contents.count - 1) - mediaIndex, 2)
+            let start = mediaIndex - top
+            let end = mediaIndex + bottom
+            let subContents = contents[start...end]
+            for mediaView in self.videoMedias.filter({$0.unUsed == false}) {
+                var isHave = false
+                for subContent in subContents {
+                    if mediaView.publishID == subContent.publishID{
+                        isHave = true
+                        break
+                    }
+                }
+                if !isHave {
+                    self.releaseMediaViewModel(mediaModel: mediaView)
+//                    if let index = self.videoMedias.firstIndex(where: {$0.publishID == mediaView.publishID}) {
+//                        self.videoMedias.remove(at: index)
+//                    }
+                }
+            }
+            for subContent in subContents {
+                if subContent.contentType == 2 {
+                    var isHave = false
+                    for mediaView in self.videoMedias {
+                        if mediaView.publishID == subContent.publishID {
+                            isHave = true
+                            break
+                        }
+                    }
+                    if !isHave, subContent.medias.count > 0, let videoModel = subContent.medias[0] as? YCVideoModel, let videoURL = URL(string: videoModel.videoPath) {
+                        let playerItem = AVPlayerItem(url: videoURL)
+                        let _ = self.initMediaViewModel(publishID: subContent.publishID, playerItem: playerItem)
+                    }
+                }
+            }
+        }
+    }
+    
+    func releaseMediaViewModel(mediaModel: YCMediaViewModel){
+        if !mediaModel.unUsed {
+            if let playerItem = mediaModel.videoPlayerItem {
+                playerItem.removeObserver(self, forKeyPath: "loadedTimeRanges")
+                playerItem.removeObserver(self, forKeyPath: "status")
+                NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
+            }
+            mediaModel.videoPlayerItem = nil
+            mediaModel.videoPlayer = nil
+            mediaModel.videoPlayComplete = nil
+            mediaModel.videoStatusChange = nil
+            mediaModel.publishID = ""
+            mediaModel.unUsed = true
+        }
+    }
+    
+    func initMediaViewModel(publishID: String, playerItem: AVPlayerItem) -> YCMediaViewModel? {
+        playerItem.addObserver(self, forKeyPath: "loadedTimeRanges", options: .new, context: nil)
+        playerItem.addObserver(self, forKeyPath: "status", options: .new, context: nil)
+        NotificationCenter.default.addObserver(self, selector:  #selector(self.videoDidPlayToEnd(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
+        let freeMedias = self.videoMedias.filter{$0.unUsed == true}
+        if freeMedias.count > 0{
+            let mediaModel = freeMedias[0]
+            mediaModel.publishID = publishID
+            if let player = mediaModel.videoPlayer {
+                player.replaceCurrentItem(with: playerItem)
+            }else {
+                mediaModel.videoPlayer = AVPlayer(playerItem: playerItem)
+            }
+            mediaModel.videoPlayerItem = playerItem
+            mediaModel.videoPlayComplete = nil
+            mediaModel.videoStatusChange = nil
+            mediaModel.unUsed = false
+            return mediaModel
+        }else {
+            return nil
+        }
+    }
+    
+    @objc func videoDidPlayToEnd(_ notify: Notification) {
+        if let playerItem = notify.object as? AVPlayerItem {
+            let mediaModels = self.videoMedias.filter {$0.videoPlayerItem == playerItem}
+            if  mediaModels.count > 0{
+                let mediaModel = mediaModels[0]
+                if let videoPlayComplete = mediaModel.videoPlayComplete {
+                    videoPlayComplete(playerItem)
+                }
+            }
+            
+        }
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        guard let playerItem = object as? AVPlayerItem else { return }
+        let mediaModels  = self.videoMedias.filter {$0.videoPlayerItem == playerItem}
+        if  mediaModels.count > 0{
+            let mediaModel = mediaModels[0]
+            if let videoStatusChange = mediaModel.videoStatusChange {
+                videoStatusChange(keyPath, playerItem)
+            }
         }
     }
     

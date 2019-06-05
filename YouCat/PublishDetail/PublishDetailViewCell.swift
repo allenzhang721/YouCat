@@ -39,6 +39,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
     
     var tapTime: DispatchSourceTimer?
     
+    
     var publishModel: YCPublishModel? {
         didSet{
             if let old = oldValue {
@@ -51,6 +52,8 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             }
         }
     }
+    
+    var mediaModel: YCMediaViewModel?
     
     var contentIndex = 0
     var delegate:YCPublishDetailViewCellDelegate?
@@ -169,7 +172,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         self.contentPageController.snp.makeConstraints { (make) in
             make.left.equalTo(20)
             make.right.equalTo(-20)
-            make.bottom.equalTo(self.shareBtn.snp.top).offset(15)
+            make.bottom.equalTo(self.shareBtn.snp.top).offset(20)
         }
         self.contentPageController.isUserInteractionEnabled = false
         
@@ -179,7 +182,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         self.contentLabel.snp.makeConstraints { (make) in
             make.left.equalTo(20)
             make.right.equalTo(-20)
-            make.bottom.equalTo(self.contentPageController.snp.top).offset(5)
+            make.bottom.equalTo(self.contentPageController.snp.top).offset(10)
         }
         self.contentLabel.textColor = YCStyleColor.white
         self.contentLabel.font = UIFont.systemFont(ofSize: 14)
@@ -279,7 +282,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
     func displayView() {
         if let _ = self.publishModel {
             if !self.isDisplaying {
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.5, execute: {
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.2, execute: {
                     if self.isDisplaying {
                         self.loadContent()
                     }
@@ -312,6 +315,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             view.clean()
             view.removeFromSuperview()
         }
+        self.mediaModel = nil
         self.contentViews.removeAll()
         self.contentIndex = 0
         self.isDisplaying = false
@@ -393,7 +397,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
                     self.contentIndex = 0
                 }
                 let contentW = bound.width+CGFloat(self.contentGap*2)
-                let bottomH = YCScreen.safeArea.bottom == 0 ? 64:YCScreen.safeArea.bottom+50
+                let bottomH = YCScreen.safeArea.bottom == 0 ? 64:YCScreen.safeArea.bottom+44
                 let contentH = bound.height - bottomH
                 let contentRect = CGRect(x: 0, y: 0, width: contentW, height: contentH).insetBy(dx: CGFloat(self.contentGap), dy: 0)
                 self.addPublishContent(model: model, frame: contentRect, index: self.contentIndex)
@@ -417,7 +421,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             let mediasCount = medias.count
             let bound = self.frame
             let contentW = bound.width+CGFloat(self.contentGap*2)
-            let bottomH = YCScreen.safeArea.bottom == 0 ? 64:YCScreen.safeArea.bottom+50
+            let bottomH = YCScreen.safeArea.bottom == 0 ? 64:YCScreen.safeArea.bottom+44
             let contentH = bound.height - bottomH
             for (index,model) in medias.enumerated() {
                 let contentRect = CGRect(x: contentW*CGFloat(index), y: 0, width: contentW, height: contentH).insetBy(dx: CGFloat(self.contentGap), dy: 0)
@@ -444,7 +448,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             let offset = CGPoint(x: contentW * CGFloat(self.contentIndex), y: 0)
             self.contentScrollView.setContentOffset(offset, animated: false)
             for view in self.contentViews {
-                view.loadMedia()
+                view.loadMedia(self.mediaModel)
                 if view.contentIndex == self.contentIndex {
                     view.play()
                 }else {
