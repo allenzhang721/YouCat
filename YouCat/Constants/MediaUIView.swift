@@ -487,50 +487,56 @@ class YCAnimationView: YCBaseView {
     
     override func getMediaData(_ width:Float = 1280, _ height:Float = 960, completionBlock: @escaping (Data?) -> Void) {
         if let img = self.img, self.isloadComplete{
-            img.thumbWidth = CGFloat(width);
-            img.thumbHeight = CGFloat(height);
-            if let frames = img.animationFrames, let imgModel = self.imageModel{
+            img.ycFrameSize = CGSize(width: CGFloat(width), height:  CGFloat(height))
+            if let imgModel = self.imageModel{
                 let queue = DispatchQueue(label: "mediaData")
                 queue.async {
-                    let destination: CGImageDestination
-                    let document: [String] = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)
-                    let documentStr = document[0]
-                    let fileManager = FileManager.default
-                    let tempDirectory = NSString(string: documentStr).appendingPathComponent("gif")
-                    do {
-                        try fileManager.createDirectory(atPath: tempDirectory, withIntermediateDirectories: true, attributes: nil)
-                    } catch {
-                        completionBlock(nil)
-                        return
-                    }
-                    let gifName = imgModel.imageID+".gif"
-                    let path = NSString(string: tempDirectory).appendingPathComponent(gifName)
-                    let url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, path as CFString, .cfurlposixPathStyle, false)
-                    destination = CGImageDestinationCreateWithURL(url!, kUTTypeGIF, frames.count, nil)!
-                    
-                    let gifProperties = [
-                        kCGImagePropertyGIFDictionary as String : [
-                            kCGImagePropertyGIFLoopCount as String : 0
-                        ]
-                    ]
-                    for (_, frame) in frames.enumerated() {
-                        if let img = frame.image {
-                            let delay = frame.duration
-                            let frameProperties: [String: Any] = [
-                                kCGImagePropertyGIFDictionary as String : [
-                                    kCGImagePropertyGIFDelayTime as String :delay
-                                ]
-                            ]
-                            CGImageDestinationAddImage(destination, img.cgImage!, frameProperties as CFDictionary)
+                    let frames = img.ycAllAnimationFrames
+                    if frames.count == 0 {
+                        DispatchQueue.main.async {
+                            completionBlock(nil)
                         }
-                    }
-                    CGImageDestinationSetProperties(destination, gifProperties as CFDictionary)
-                    CGImageDestinationFinalize(destination)
-                    
-                    let fileUrl = URL(fileURLWithPath: path)
-                    let data = try? Data(contentsOf: fileUrl)
-                    DispatchQueue.main.async {
-                        completionBlock(data)
+                    }else {
+                        let destination: CGImageDestination
+                        let document: [String] = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)
+                        let documentStr = document[0]
+                        let fileManager = FileManager.default
+                        let tempDirectory = NSString(string: documentStr).appendingPathComponent("gif")
+                        do {
+                            try fileManager.createDirectory(atPath: tempDirectory, withIntermediateDirectories: true, attributes: nil)
+                        } catch {
+                            completionBlock(nil)
+                            return
+                        }
+                        let gifName = imgModel.imageID+".gif"
+                        let path = NSString(string: tempDirectory).appendingPathComponent(gifName)
+                        let url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, path as CFString, .cfurlposixPathStyle, false)
+                        destination = CGImageDestinationCreateWithURL(url!, kUTTypeGIF, frames.count, nil)!
+                        
+                        let gifProperties = [
+                            kCGImagePropertyGIFDictionary as String : [
+                                kCGImagePropertyGIFLoopCount as String : 0
+                            ]
+                        ]
+                        for (_, frame) in frames.enumerated() {
+                            if let img = frame.image {
+                                let delay = frame.duration
+                                let frameProperties: [String: Any] = [
+                                    kCGImagePropertyGIFDictionary as String : [
+                                        kCGImagePropertyGIFDelayTime as String :delay
+                                    ]
+                                ]
+                                CGImageDestinationAddImage(destination, img.cgImage!, frameProperties as CFDictionary)
+                            }
+                        }
+                        CGImageDestinationSetProperties(destination, gifProperties as CFDictionary)
+                        CGImageDestinationFinalize(destination)
+                        
+                        let fileUrl = URL(fileURLWithPath: path)
+                        let data = try? Data(contentsOf: fileUrl)
+                        DispatchQueue.main.async {
+                            completionBlock(data)
+                        }
                     }
                 }
             }
