@@ -239,7 +239,7 @@ class YCBaseRequest{
                 let dataStr = String(nsStr)
                 return [ParameterKey.data.description : dataStr]
             }else {
-                print("\(errorMessage) data String is error")
+                print("data String is error")
                 return [ParameterKey.data.description : ""]
             }
         } catch let error {

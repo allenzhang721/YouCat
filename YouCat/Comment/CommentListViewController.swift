@@ -139,6 +139,7 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
             self.commentBordView.backgroundColor = YCStyleColor.white
             self.commentLabel.textColor = YCStyleColor.gray
             self.commentViewLine.backgroundColor = YCStyleColor.grayWhite
+            self.loadingView.style = .INSIDE
         }else if self.listStyle == .Dark {
             self.commentBg.backgroundColor = YCStyleColor.blackAlpha
             self.commentBg.layer.borderColor = YCStyleColor.grayWhiteAlpha.cgColor
@@ -153,6 +154,7 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
             self.commentBordView.backgroundColor = YCStyleColor.grayWhiteAlpha
             self.commentLabel.textColor = YCStyleColor.grayWhite
             self.commentViewLine.backgroundColor = YCStyleColor.grayWhiteAlpha
+            self.loadingView.style = .INSIDEWhite
         }
     }
     
@@ -197,10 +199,10 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
         self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.register(YCCommentListViewCell.self, forCellReuseIdentifier: "YCCommentListCell")
         
-        self.loadingView = YCLoadingView(style: .INSIDE)
+        self.loadingView = YCLoadingView(style: .INSIDEWhite)
         self.commentBg.addSubview(self.loadingView)
         self.loadingView.snp.makeConstraints { (make) in
-            make.centerX.equalTo(self.view).offset(0)
+            make.centerX.equalTo(self.commentBg).offset(0)
             make.top.equalTo(headerHeight+15)
         }
         
@@ -354,63 +356,75 @@ extension YCCommentListViewController: YCLoginProtocol {
     }
     
     func refreshPageCompleteHandler(modelList: YCDomainListModel?) {
-        if let list = modelList, list.result{
-            let total = list.totoal
-            if let modelList = list.modelArray{
-                self.commentes.removeAll()
-                self.viewCommentes.removeAll()
-                if self.updatePublishDate(modelList: modelList) {
-                    self.tableView.reloadData()
+        if let list = modelList {
+            if list.result{
+                let total = list.totoal
+                if let modelList = list.modelArray{
+                    self.commentes.removeAll()
+                    self.viewCommentes.removeAll()
+                    if self.updatePublishDate(modelList: modelList) {
+                        self.tableView.reloadData()
+                    }
+                    if modelList.count == 0 || modelList.count < self.refreshCount {
+                        self.footerFresh.endRefreshingWithNoMoreData()
+                        self.footerFresh.isHidden = true
+                    }else{
+                        self.footerFresh.resetNoMoreData()
+                        self.footerFresh.isHidden = false
+                    }
                 }
-                if modelList.count == 0 || modelList.count < self.refreshCount {
-                    self.footerFresh.endRefreshingWithNoMoreData()
-                    self.footerFresh.isHidden = true
-                }else{
-                    self.footerFresh.resetNoMoreData()
-                    self.footerFresh.isHidden = false
+                self.loadingView.stopAnimating()
+                switch self.listType {
+                case .Publish:
+                    if self.publishModel != nil {
+                        self.publishModel!.commentCount = total
+                        let commentCount = self.publishModel!.commentCount
+                        self.commentCountLabel.text = "\(commentCount)"
+                    }else {
+                        self.commentCountLabel.text = "\(total)"
+                    }
+                    break;
+                case .Theme:
+                    if self.themeModel != nil {
+                        
+                    }
+                    break;
+                case .User:
+                    if self.userModel != nil {
+                        
+                    }
+                    break
                 }
-            }
-            self.loadingView.stopAnimating()
-            switch self.listType {
-            case .Publish:
-                if self.publishModel != nil {
-                    self.publishModel!.commentCount = total
-                    let commentCount = self.publishModel!.commentCount
-                    self.commentCountLabel.text = "\(commentCount)"
-                }else {
-                     self.commentCountLabel.text = "\(total)"
-                }
-                break;
-            case .Theme:
-                if self.themeModel != nil {
-                    
-                }
-                break;
-            case .User:
-                if self.userModel != nil {
-                    
-                }
-                break
+            }else {
+                self.loadingView.stopAnimating()
+                self.showTempAlert("", alertMessage: YCLanguageHelper.getString(key: "WifiErrorShortMessage"), view: self, completionBlock: {
+                })
             }
         }else {
-           self.loadingView.stopAnimating()
+            self.loadingView.stopAnimating()
         }
     }
     
     func footerRefreshCompleteHandler(modelList: YCDomainListModel?){
-        if let list = modelList, list.result{
-            if let modelList = list.modelArray {
-                if self.updatePublishDate(modelList: modelList) {
-                    self.tableView.reloadData()
-                }
-                if modelList.count == 0 {
-                    self.footerFresh.endRefreshingWithNoMoreData()
-                    self.footerFresh.isHidden = true
-                }else{
+        if let list = modelList {
+            if list.result{
+                if let modelList = list.modelArray {
+                    if self.updatePublishDate(modelList: modelList) {
+                        self.tableView.reloadData()
+                    }
+                    if modelList.count == 0 {
+                        self.footerFresh.endRefreshingWithNoMoreData()
+                        self.footerFresh.isHidden = true
+                    }else{
+                        self.footerFresh.endRefreshing()
+                    }
+                }else {
                     self.footerFresh.endRefreshing()
                 }
             }else {
                 self.footerFresh.endRefreshing()
+                self.showTempAlert("", alertMessage: YCLanguageHelper.getString(key: "WifiErrorShortMessage"), view: self, completionBlock: {
+                })
             }
         }else {
             self.footerFresh.endRefreshing()

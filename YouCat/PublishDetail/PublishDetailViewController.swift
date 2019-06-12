@@ -67,10 +67,14 @@ class YCPublishDetailViewController: UIViewController {
         self.navigationController?.isNavigationBarHidden = true
         
         super.viewWillAppear(animated)
-        self.collectionView.reloadData()
-        self.collectionView.layoutIfNeeded()
         if self.isFirstShow {
+            self.collectionView.reloadData()
+            self.collectionView.layoutIfNeeded()
             self.showView()
+        }else {
+            if let index = self.contentIndexPath, let currentCell = self.collectionView.cellForItem(at: index) as? YCPublishDetailViewCell{
+                currentCell.displayView()
+            }
         }
     }
     
@@ -312,6 +316,18 @@ extension YCPublishDetailViewController: UICollectionViewDataSource {
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let removeCell = cell as? YCPublishDetailViewCell, let nowIndex = self.contentIndexPath, nowIndex.item == indexPath.item {
+            removeCell.displayView()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let removeCell = cell as? YCPublishDetailViewCell {
+            removeCell.disPlayViewEnd()
+        }
+    }
+    
 //    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
 //        let footerView = self.collectionView.dequeueReusableSupplementaryView(ofKind: YCCollectionViewWaterfallSectionFooter, withReuseIdentifier: "YCPublishDetailFooterView", for: indexPath)
 //        footerView.backgroundColor = YCStyleColor.red
@@ -358,14 +374,14 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        if(scrollView == self.collectionView){
-            let cells = self.collectionView.visibleCells
-            for cell in cells {
-                if let contentCell = cell as? YCPublishDetailViewCell{
-                    contentCell.displayPause()
-                }
-            }
-        }
+//        if(scrollView == self.collectionView){
+//            let cells = self.collectionView.visibleCells
+//            for cell in cells {
+//                if let contentCell = cell as? YCPublishDetailViewCell{
+//                    contentCell.displayPause()
+//                }
+//            }
+//        }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView){
@@ -421,7 +437,6 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
             if medias.count > 0 {
                 currentCell.mediaModel = medias[0]
             }
-            
             currentCell.displayView()
         }
     }

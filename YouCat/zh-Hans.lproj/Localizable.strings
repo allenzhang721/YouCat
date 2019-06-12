@@ -118,3 +118,9 @@
 "LoginFailedWeiboUninstall" = "未找到微博，暂时无法微博登录";
 "ShareFailedWeChatUninstall" = "你还没有安装微信，暂时无法分享到微信";
 "ShareFailedWeiboUninstall" = "你还没有安装微博，暂时无法分享到微博";
+
+
+"WifiErrorMessage" = "网络不太给力，请检测网络后重试";
+"WifiErrorShortMessage" = "网络不太给力";
+"RefreshButtonLabel" = "重试";
+

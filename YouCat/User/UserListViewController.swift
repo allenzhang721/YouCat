@@ -52,6 +52,8 @@ class YCUserListViewController: UIViewController{
     
     var isFirstShow = true
     
+    var errorView: YCWifiErrorView?
+    
     func initViewController(){
         
     }
@@ -207,21 +209,32 @@ class YCUserListViewController: UIViewController{
     }
     
     func refreshComplete(modelList: YCDomainListModel?) {
-        if let list = modelList, list.result{
-            if let modelList = list.modelArray {
-                self.userList.removeAll()
-                if self.updateUserListDate(modelList: modelList) {
-                    self.tableView.reloadData()
+        if let list = modelList {
+            if list.result{
+                if let modelList = list.modelArray {
+                    self.userList.removeAll()
+                    if self.updateUserListDate(modelList: modelList) {
+                        self.tableView.reloadData()
+                    }
+                    if self.userList.count < self.refreshCount/2 {
+                        self.footerFresh.endRefreshingWithNoMoreData()
+                        self.footerFresh.isHidden = true
+                    }else {
+                        self.footerFresh.resetNoMoreData()
+                        self.footerFresh.isHidden = false
+                    }
                 }
-                if self.userList.count < self.refreshCount/2 {
-                    self.footerFresh.endRefreshingWithNoMoreData()
-                    self.footerFresh.isHidden = true
+                self.headerFresh.endRefreshing()
+                self.hideWifiErrorView()
+            }else {
+                self.headerFresh.endRefreshing()
+                if self.userList.count == 0 {
+                    self.showWifiErrorView()
                 }else {
-                    self.footerFresh.resetNoMoreData()
-                    self.footerFresh.isHidden = false
+                    self.showTempAlert("", alertMessage: YCLanguageHelper.getString(key: "WifiErrorShortMessage"), view: self, completionBlock: {
+                    })
                 }
             }
-            self.headerFresh.endRefreshing()
         }else {
             self.headerFresh.endRefreshing()
         }
@@ -242,19 +255,25 @@ class YCUserListViewController: UIViewController{
     }
     
     func footerRefreshComplete(modelList: YCDomainListModel?) {
-        if let list = modelList, list.result{
-            if let modelList = list.modelArray {
-                if self.updateUserListDate(modelList: modelList) {
-                    self.tableView.reloadData()
-                }
-                if modelList.count == 0 {
-                    self.footerFresh.endRefreshingWithNoMoreData()
-                    self.footerFresh.isHidden = true
-                }else{
+        if let list = modelList {
+            if list.result{
+                if let modelList = list.modelArray {
+                    if self.updateUserListDate(modelList: modelList) {
+                        self.tableView.reloadData()
+                    }
+                    if modelList.count == 0 {
+                        self.footerFresh.endRefreshingWithNoMoreData()
+                        self.footerFresh.isHidden = true
+                    }else{
+                        self.footerFresh.endRefreshing()
+                    }
+                }else {
                     self.footerFresh.endRefreshing()
                 }
             }else {
                 self.footerFresh.endRefreshing()
+                self.showTempAlert("", alertMessage: YCLanguageHelper.getString(key: "WifiErrorShortMessage"), view: self, completionBlock: {
+                })
             }
         }else {
             self.footerFresh.endRefreshing()
@@ -284,6 +303,28 @@ class YCUserListViewController: UIViewController{
             }
         }
         return isChange
+    }
+    
+    func showWifiErrorView() {
+        if self.errorView == nil {
+            self.errorView = YCWifiErrorView(refreshComplete: {
+                self.headerFresh.beginRefreshing()
+            })
+            self.view.addSubview(self.errorView!)
+            self.errorView!.snp.makeConstraints { (make) in
+                make.width.equalTo(self.view)
+                make.height.equalTo(220)
+                make.centerX.equalTo(self.view).offset(0)
+                make.centerY.equalTo(self.view).offset(0)
+            }
+        }
+    }
+    
+    func hideWifiErrorView() {
+        if self.errorView != nil {
+            self.errorView!.removeFromSuperview()
+            self.errorView = nil
+        }
     }
 }
 
@@ -318,7 +359,7 @@ extension YCUserListViewController: UITableViewDelegate {
     }
 }
 
-extension YCUserListViewController: UIGestureRecognizerDelegate, YCUserTableViewCellDelegate, YCNumberStringProtocol, YCUserViewControllerDelegate{
+extension YCUserListViewController: UIGestureRecognizerDelegate, YCUserTableViewCellDelegate, YCNumberStringProtocol, YCUserViewControllerDelegate, YCAlertProtocol{
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool{
         return true

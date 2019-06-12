@@ -21,7 +21,7 @@ extension YCAlertProtocol {
     func showTempAlert(_ alertTile: String?, alertMessage: String?, view: UIViewController, completionBlock: (() -> Void)?){
         let alert = UIAlertController(title: alertTile, message: alertMessage, preferredStyle: .alert)
         view.present(alert, animated: true, completion:nil)
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             alert.dismiss(animated: true, completion: {
                 if let complete = completionBlock {
                     complete()

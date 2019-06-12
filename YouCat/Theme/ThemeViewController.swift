@@ -35,6 +35,8 @@ class YCThemeViewController: UIViewController, YCImageProtocol {
     
     let refreshCount = 20
     
+    var errorView: YCWifiErrorView?
+    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = true
         super.viewWillAppear(animated)
@@ -150,16 +152,27 @@ class YCThemeViewController: UIViewController, YCImageProtocol {
     
     @objc func refreshPage() {
         YCThemeDomain().topThemeList(start: 0, count: refreshCount) { (modelList) in
-            if let list = modelList, list.result{
-                if let modelList = list.modelArray {
-                    self.themes.removeAll()
-                    if self.updateThemeDate(modelList: modelList) {
-                        self.tableView.reloadData()
-                        self.footerFresh.resetNoMoreData()
-                        self.footerFresh.isHidden = false
-                        let _ = YCDateManager.saveModelListDate(modelList: self.themes, account: LocalManager.theme)
+            if let list = modelList {
+                if list.result{
+                    if let modelList = list.modelArray {
+                        self.themes.removeAll()
+                        if self.updateThemeDate(modelList: modelList) {
+                            self.tableView.reloadData()
+                            self.footerFresh.resetNoMoreData()
+                            self.footerFresh.isHidden = false
+                            let _ = YCDateManager.saveModelListDate(modelList: self.themes, account: LocalManager.theme)
+                        }
                     }
                     self.headerFresh.endRefreshing()
+                    self.hideWifiErrorView()
+                }else {
+                    self.headerFresh.endRefreshing()
+                    if self.themes.count == 0 {
+                        self.showWifiErrorView()
+                    }else {
+                        self.showTempAlert("", alertMessage: YCLanguageHelper.getString(key: "WifiErrorShortMessage"), view: self, completionBlock: {
+                        })
+                    }
                 }
             }else {
                 self.headerFresh.endRefreshing()
@@ -169,19 +182,25 @@ class YCThemeViewController: UIViewController, YCImageProtocol {
     
     @objc func footerRefresh() {
         YCThemeDomain().topThemeList(start: self.themes.count, count: refreshCount) { (modelList) in
-            if let list = modelList, list.result{
-                if let modelList = list.modelArray {
-                    if self.updateThemeDate(modelList: modelList) {
-                        self.tableView.reloadData()
-                    }
-                    if modelList.count == 0 {
-                        self.footerFresh.endRefreshingWithNoMoreData()
-                        self.footerFresh.isHidden = true
-                    }else{
+            if let list = modelList {
+                if list.result{
+                    if let modelList = list.modelArray {
+                        if self.updateThemeDate(modelList: modelList) {
+                            self.tableView.reloadData()
+                        }
+                        if modelList.count == 0 {
+                            self.footerFresh.endRefreshingWithNoMoreData()
+                            self.footerFresh.isHidden = true
+                        }else{
+                            self.footerFresh.endRefreshing()
+                        }
+                    }else {
                         self.footerFresh.endRefreshing()
                     }
                 }else {
                     self.footerFresh.endRefreshing()
+                    self.showTempAlert("", alertMessage: YCLanguageHelper.getString(key: "WifiErrorShortMessage"), view: self, completionBlock: {
+                    })
                 }
             }else {
                 self.footerFresh.endRefreshing()
@@ -212,6 +231,28 @@ class YCThemeViewController: UIViewController, YCImageProtocol {
             }
         }
         return isChange
+    }
+    
+    func showWifiErrorView() {
+        if self.errorView == nil {
+            self.errorView = YCWifiErrorView(refreshComplete: {
+                self.headerFresh.beginRefreshing()
+            })
+            self.view.addSubview(self.errorView!)
+            self.errorView!.snp.makeConstraints { (make) in
+                make.width.equalTo(self.view)
+                make.height.equalTo(220)
+                make.centerX.equalTo(self.view).offset(0)
+                make.centerY.equalTo(self.view).offset(0)
+            }
+        }
+    }
+    
+    func hideWifiErrorView() {
+        if self.errorView != nil {
+            self.errorView!.removeFromSuperview()
+            self.errorView = nil
+        }
     }
 
 }
@@ -248,7 +289,7 @@ extension YCThemeViewController: UITableViewDelegate {
     }
 }
 
-extension YCThemeViewController: YCLoginProtocol {
+extension YCThemeViewController: YCLoginProtocol, YCAlertProtocol {
     
     @objc func loginUserChange(_ notify: Notification) {
         self.isFirstLoad = true

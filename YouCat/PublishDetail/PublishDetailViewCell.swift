@@ -76,7 +76,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         viewDoubleTap.numberOfTapsRequired = 2
         self.addGestureRecognizer(viewDoubleTap)
         
-        let buttonBottom = YCScreen.safeArea.bottom == 0 ? 10:YCScreen.safeArea.bottom
+        let buttonBottom = YCScreen.safeArea.bottom == 0 ? 10:(YCScreen.safeArea.bottom-5)
         self.contentScrollView = UIScrollView()
         self.addSubview(self.contentScrollView)
         self.contentScrollView.snp.makeConstraints { (make) in
@@ -280,6 +280,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
     }
     
     func displayView() {
+        print("displayView")
         if let _ = self.publishModel {
             if !self.isDisplaying {
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.2, execute: {
@@ -311,6 +312,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
     }
     
     func displayRelease() {
+        print("displayRelease")
         for view in self.contentViews {
             view.clean()
             view.removeFromSuperview()
@@ -397,7 +399,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
                     self.contentIndex = 0
                 }
                 let contentW = bound.width+CGFloat(self.contentGap*2)
-                let bottomH = YCScreen.safeArea.bottom == 0 ? 64:YCScreen.safeArea.bottom+44
+                let bottomH = YCScreen.safeArea.bottom == 0 ? 54:YCScreen.safeArea.bottom+44
                 let contentH = bound.height - bottomH
                 let contentRect = CGRect(x: 0, y: 0, width: contentW, height: contentH).insetBy(dx: CGFloat(self.contentGap), dy: 0)
                 self.addPublishContent(model: model, frame: contentRect, index: self.contentIndex)
@@ -421,7 +423,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             let mediasCount = medias.count
             let bound = self.frame
             let contentW = bound.width+CGFloat(self.contentGap*2)
-            let bottomH = YCScreen.safeArea.bottom == 0 ? 64:YCScreen.safeArea.bottom+44
+            let bottomH = YCScreen.safeArea.bottom == 0 ? 54:YCScreen.safeArea.bottom+44
             let contentH = bound.height - bottomH
             for (index,model) in medias.enumerated() {
                 let contentRect = CGRect(x: contentW*CGFloat(index), y: 0, width: contentW, height: contentH).insetBy(dx: CGFloat(self.contentGap), dy: 0)

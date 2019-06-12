@@ -463,20 +463,26 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
     }
     
     func refreshPageEnd(_ listModel: YCDomainListModel?) {
-        if let list = listModel, list.result{
-            if let modelList = list.modelArray {
-                self.publishes.removeAll()
-                let _ = self.updatePublishDate(modelList: modelList)
-                self.collectionView.reloadData()
-                if self.publishes.count > 0{
-                    self.footerFresh.resetNoMoreData()
-                    self.footerFresh.isHidden = false
-                }else {
-                    self.footerFresh.endRefreshingWithNoMoreData()
-                    self.footerFresh.isHidden = true
+        if let list = listModel {
+            if list.result{
+                if let modelList = list.modelArray {
+                    self.publishes.removeAll()
+                    let _ = self.updatePublishDate(modelList: modelList)
+                    self.collectionView.reloadData()
+                    if self.publishes.count > 0{
+                        self.footerFresh.resetNoMoreData()
+                        self.footerFresh.isHidden = false
+                    }else {
+                        self.footerFresh.endRefreshingWithNoMoreData()
+                        self.footerFresh.isHidden = true
+                    }
                 }
+                self.loadingView.stopAnimating()
+            }else {
+                self.loadingView.stopAnimating()
+                self.showTempAlert("", alertMessage: YCLanguageHelper.getString(key: "WifiErrorShortMessage"), view: self, completionBlock: {
+                })
             }
-            self.loadingView.stopAnimating()
         }else {
             self.loadingView.stopAnimating()
         }
@@ -497,19 +503,25 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
     }
     
     func footerFreshEnd(_ modelList: YCDomainListModel?) {
-        if let list = modelList, list.result{
-            if let modelList = list.modelArray {
-                if self.updatePublishDate(modelList: modelList) {
-                    self.collectionView.reloadData()
-                }
-                if modelList.count == 0 {
-                    self.footerFresh.endRefreshingWithNoMoreData()
-                    self.footerFresh.isHidden = true
-                }else{
+        if let list = modelList {
+            if list.result{
+                if let modelList = list.modelArray {
+                    if self.updatePublishDate(modelList: modelList) {
+                        self.collectionView.reloadData()
+                    }
+                    if modelList.count == 0 {
+                        self.footerFresh.endRefreshingWithNoMoreData()
+                        self.footerFresh.isHidden = true
+                    }else{
+                        self.footerFresh.endRefreshing()
+                    }
+                }else {
                     self.footerFresh.endRefreshing()
                 }
             }else {
                 self.footerFresh.endRefreshing()
+                self.showTempAlert("", alertMessage: YCLanguageHelper.getString(key: "WifiErrorShortMessage"), view: self, completionBlock: {
+                })
             }
         }else {
             self.footerFresh.endRefreshing()

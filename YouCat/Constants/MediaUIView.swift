@@ -650,8 +650,19 @@ class YCVideoView: YCBaseView {
             var videoTop:CGFloat = 0
             var videoLeft:CGFloat = 0
             
+//            if vH/vW > 3/2 {
+//                videoW = CGFloat(vW / vH) * bounds.height
+//            }else {
+//                videoH = CGFloat(vH / vW) * bounds.width
+//            }
             if vH/vW > 3/2 {
-                videoW = CGFloat(vW / vH) * bounds.height
+                let vRate = CGFloat(vW / vH)
+                let videoRate =  CGFloat(bounds.width / bounds.height)
+                if vRate > videoRate {
+                    videoW = CGFloat(vW / vH) * bounds.height
+                }else {
+                    videoH = CGFloat(vH / vW) * bounds.width
+                }
             }else {
                 videoH = CGFloat(vH / vW) * bounds.width
             }
@@ -669,6 +680,7 @@ class YCVideoView: YCBaseView {
 //                    videoTop = YCScreen.safeArea.top + (viewH - YCScreen.safeArea.top - videoH)/2
 //                }
 //            }
+            self.clipsToBounds = true
             self.videoView = UIView()
             self.addSubview(self.videoView!)
             self.videoView?.snp.makeConstraints { (make) in
@@ -753,7 +765,13 @@ class YCVideoView: YCBaseView {
             var videoH = bounds.height
             var videoW = bound.width
             if vH/vW > 3/2 {
-                videoW = CGFloat(vW / vH) * bound.height
+                let vRate = CGFloat(vW / vH)
+                let videoRate =  CGFloat(bound.width / bound.height)
+                if vRate > videoRate {
+                    videoW = CGFloat(vW / vH) * bound.height
+                }else {
+                    videoH = CGFloat(vH / vW) * bound.width
+                }
             }else {
                 videoH = CGFloat(vH / vW) * bound.width
             }
@@ -982,7 +1000,7 @@ class YCVideoView: YCBaseView {
     
     func stopHander() {
         if let playButton = self.playButton {
-            playButton.isHidden = false
+            playButton.isHidden = true
         }
         if self.isloadComplete {
             if let loading = self.loadingView {

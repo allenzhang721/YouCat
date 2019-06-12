@@ -50,6 +50,8 @@ class YCFavoriteViewController: UIViewController, YCImageProtocol, YCContentStri
     
     let refreshCount = 20
     
+    var errorView: YCWifiErrorView?
+    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
         super.viewWillAppear(animated)
@@ -186,16 +188,27 @@ class YCFavoriteViewController: UIViewController, YCImageProtocol, YCContentStri
     
     @objc func refreshPage() {
         YCPublishDomain().topPublishList(start: 0, count: refreshCount) { (modelList) in
-            if let list = modelList, list.result{
-                if let modelList = list.modelArray {
-                    self.publishes.removeAll()
-                    if self.updatePublishDate(modelList: modelList) {
-                        self.collectionView.reloadData()
-                        self.footerFresh.isHidden = false
-                        let _ = YCDateManager.saveModelListDate(modelList: self.publishes, account: LocalManager.home)
+            if let list = modelList {
+                if list.result {
+                    if let modelList = list.modelArray {
+                        self.publishes.removeAll()
+                        if self.updatePublishDate(modelList: modelList) {
+                            self.collectionView.reloadData()
+                            self.footerFresh.isHidden = false
+                            let _ = YCDateManager.saveModelListDate(modelList: self.publishes, account: LocalManager.home)
+                        }
+                    }
+                    self.headerFresh.endRefreshing()
+                    self.hideWifiErrorView()
+                }else {
+                    self.headerFresh.endRefreshing()
+                    if self.publishes.count == 0 {
+                        self.showWifiErrorView()
+                    }else {
+                        self.showTempAlert("", alertMessage: YCLanguageHelper.getString(key: "WifiErrorShortMessage"), view: self, completionBlock: {
+                        })
                     }
                 }
-                self.headerFresh.endRefreshing()
             }else {
                 self.headerFresh.endRefreshing()
             }
@@ -204,13 +217,19 @@ class YCFavoriteViewController: UIViewController, YCImageProtocol, YCContentStri
     
     @objc func footerRefresh() {
         YCPublishDomain().topPublishList(start: self.publishes.count, count: refreshCount) { (modelList) in
-            if let list = modelList, list.result{
-                if let modelList = list.modelArray {
-                    if self.updatePublishDate(modelList: modelList) {
-                        self.collectionView.reloadData()
+            if let list = modelList {
+                if list.result {
+                    if let modelList = list.modelArray {
+                        if self.updatePublishDate(modelList: modelList) {
+                            self.collectionView.reloadData()
+                        }
                     }
+                    self.footerFresh.endRefreshing()
+                }else {
+                    self.footerFresh.endRefreshing()
+                    self.showTempAlert("", alertMessage: YCLanguageHelper.getString(key: "WifiErrorShortMessage"), view: self, completionBlock: {
+                    })
                 }
-                self.footerFresh.endRefreshing()
             }else {
                 self.footerFresh.endRefreshing()
             }
@@ -246,6 +265,28 @@ class YCFavoriteViewController: UIViewController, YCImageProtocol, YCContentStri
     }
     
     func resetViewController() {
+    }
+    
+    func showWifiErrorView() {
+        if self.errorView == nil {
+            self.errorView = YCWifiErrorView(refreshComplete: {
+                self.headerFresh.beginRefreshing()
+            })
+            self.view.addSubview(self.errorView!)
+            self.errorView!.snp.makeConstraints { (make) in
+                make.width.equalTo(self.view)
+                make.height.equalTo(220)
+                make.centerX.equalTo(self.view).offset(0)
+                make.centerY.equalTo(self.view).offset(0)
+            }
+        }
+    }
+    
+    func hideWifiErrorView() {
+        if self.errorView != nil {
+            self.errorView!.removeFromSuperview()
+            self.errorView = nil
+        }
     }
 }
 

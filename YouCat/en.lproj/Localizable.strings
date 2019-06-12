@@ -117,3 +117,8 @@
 "LoginFailedWeiboUninstall" = "Not find Weibo, Can't login with Weibo";
 "ShareFailedWeChatUninstall" = "weChat is not installed, Can't share to weChat";
 "ShareFailedWeiboUninstall" = "Weibo is not installed, Can't share to Weibo";
+
+"WifiErrorMessage" = "Please check your network connection and try again later";
+"WifiErrorShortMessage" = "Unstable network";
+"RefreshButtonLabel" = "Refresh";
+

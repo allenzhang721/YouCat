@@ -51,6 +51,7 @@
 		25562C6222760DBB004F1BD6 /* PhotoAlbumUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25562C6122760DBB004F1BD6 /* PhotoAlbumUtil.swift */; };
 		25562C6A22772C96004F1BD6 /* UserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25562C6922772C96004F1BD6 /* UserListViewController.swift */; };
 		25562C6D22773604004F1BD6 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25562C6C22773604004F1BD6 /* UserTableViewCell.swift */; };
+		255846C122B1354300782021 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 255846C022B1354300782021 /* ErrorView.swift */; };
 		255BBF3221FB510F007067E0 /* Kingfisher.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 255BBF2221FB50EF007067E0 /* Kingfisher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		256299C0217DEB41005FDDFC /* PublishCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256299BF217DEB41005FDDFC /* PublishCollectionViewCell.swift */; };
 		256299C221802589005FDDFC /* PublishCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256299C121802589005FDDFC /* PublishCollectionViewLayout.swift */; };
@@ -235,6 +236,7 @@
 		25562C6122760DBB004F1BD6 /* PhotoAlbumUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumUtil.swift; sourceTree = "<group>"; };
 		25562C6922772C96004F1BD6 /* UserListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListViewController.swift; sourceTree = "<group>"; };
 		25562C6C22773604004F1BD6 /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
+		255846C022B1354300782021 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		255BBF1721FB50EF007067E0 /* Kingfisher.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Kingfisher.xcodeproj; path = Submodules/Kingfisher/Kingfisher.xcodeproj; sourceTree = "<group>"; };
 		256299BF217DEB41005FDDFC /* PublishCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishCollectionViewCell.swift; sourceTree = "<group>"; };
 		256299C121802589005FDDFC /* PublishCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishCollectionViewLayout.swift; sourceTree = "<group>"; };
@@ -481,6 +483,7 @@
 				25288ED521B67D7100A333E6 /* LoadingView.swift */,
 				254C9C3021EF025C0057A023 /* ShareProtocol.swift */,
 				25562C6122760DBB004F1BD6 /* PhotoAlbumUtil.swift */,
+				255846C022B1354300782021 /* ErrorView.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -1001,6 +1004,7 @@
 				256299CD2185A049005FDDFC /* SliderView.swift in Sources */,
 				256299CF21870608005FDDFC /* PublishDetailViewCell.swift in Sources */,
 				25D0CCCA2179EF8600809D3D /* DateManager.swift in Sources */,
+				255846C122B1354300782021 /* ErrorView.swift in Sources */,
 				252B900621B0000000E41842 /* AlertProtocol.swift in Sources */,
 				25307942213EA50F002DC02D /* Constants.swift in Sources */,
 				25305260214A759200BB9624 /* ThemeModel.swift in Sources */,

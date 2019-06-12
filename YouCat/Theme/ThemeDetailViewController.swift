@@ -273,7 +273,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         self.topLineView.frame.origin.y = topH - 1
         self.collectionLayout.headerReferenceSize = CGSize(width: bounds.width, height: topH)
         self.loadingView.snp.updateConstraints { (make) in
-            make.top.equalTo(topH+10)
+            make.top.equalTo(topH+15)
         }
     }
     
@@ -320,16 +320,22 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         if let theme = self.themeModel {
             self.loadingView.startAnimating()
             YCPublishDomain().themePublishList(themeID: theme.themeID, type: self.themeType, start: 0, count: self.refreshCount, completionBlock: { (modelList) in
-                if let list = modelList, list.result{
-                    if let modelList = list.modelArray {
-                        self.publishes.removeAll()
-                        if self.updatePublishDate(modelList: modelList) {
-                            self.collectionView.reloadData()
-                            self.footerFresh.resetNoMoreData()
-                            self.footerFresh.isHidden = false
+                if let list = modelList {
+                    if list.result{
+                        if let modelList = list.modelArray {
+                            self.publishes.removeAll()
+                            if self.updatePublishDate(modelList: modelList) {
+                                self.collectionView.reloadData()
+                                self.footerFresh.resetNoMoreData()
+                                self.footerFresh.isHidden = false
+                            }
                         }
+                        self.loadingView.stopAnimating()
+                    }else {
+                        self.loadingView.stopAnimating()
+                        self.showTempAlert("", alertMessage: YCLanguageHelper.getString(key: "WifiErrorShortMessage"), view: self, completionBlock: {
+                        })
                     }
-                    self.loadingView.stopAnimating()
                 }else {
                     self.loadingView.stopAnimating()
                 }
@@ -340,19 +346,25 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     @objc func footerRefresh() {
         if let theme = self.themeModel {
             YCPublishDomain().themePublishList(themeID: theme.themeID, type: self.themeType, start: self.publishes.count, count: self.refreshCount, completionBlock: { (modelList) in
-                if let list = modelList, list.result{
-                    if let modelList = list.modelArray {
-                        if self.updatePublishDate(modelList: modelList) {
-                            self.collectionView.reloadData()
-                        }
-                        if modelList.count == 0 {
-                            self.footerFresh.endRefreshingWithNoMoreData()
-                            self.footerFresh.isHidden = true
-                        }else{
+                if let list = modelList {
+                    if list.result{
+                        if let modelList = list.modelArray {
+                            if self.updatePublishDate(modelList: modelList) {
+                                self.collectionView.reloadData()
+                            }
+                            if modelList.count == 0 {
+                                self.footerFresh.endRefreshingWithNoMoreData()
+                                self.footerFresh.isHidden = true
+                            }else{
+                                self.footerFresh.endRefreshing()
+                            }
+                        }else {
                             self.footerFresh.endRefreshing()
                         }
                     }else {
                         self.footerFresh.endRefreshing()
+                        self.showTempAlert("", alertMessage: YCLanguageHelper.getString(key: "WifiErrorShortMessage"), view: self, completionBlock: {
+                        })
                     }
                 }else {
                     self.footerFresh.endRefreshing()

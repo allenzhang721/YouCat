@@ -10,7 +10,7 @@ import UIKit
 
 public extension UIButton{
     
-    public struct AssociatedKeys{
+    struct AssociatedKeys{
         static var defaultInterval : TimeInterval = 1 //间隔时间
         static var A_customInterval = "customInterval"
         static var A_ignoreInterval = "ignoreInterval"
@@ -39,7 +39,7 @@ public extension UIButton{
         }
     }
     
-    public class func initializeMethod(){
+    class func initializeMethod(){
         if self == UIButton.self{
             let systemSel = #selector(UIButton.sendAction(_:to:for:))
             let sSel = #selector(UIButton.mySendAction(_: to: for:))
@@ -97,7 +97,6 @@ class YCFollowButton: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.initView()
-        self.isUserInteractionEnabled = true
     }
     
     init(fontSize: Int) {
@@ -114,6 +113,8 @@ class YCFollowButton: UIView {
     }
     
     func initView(){
+        self.isUserInteractionEnabled = true
+
         self.bgView = UIView()
         self.addSubview(self.bgView)
         self.bgView.snp.makeConstraints { (make) in
