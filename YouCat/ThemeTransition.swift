@@ -10,7 +10,7 @@
 
 import UIKit
 
-class ThemeTransition: NSObject, UIViewControllerTransitioningDelegate {
+class YCThemeTransition: NSObject, UIViewControllerTransitioningDelegate {
     
     var startPresentY: CGFloat?
     var startPresentMaskFrame: CGRect?

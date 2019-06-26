@@ -289,7 +289,7 @@ extension YCThemeViewController: UITableViewDelegate {
         transitionDelegate.startPresentY = startFrame.minY
         let wGap = YCScreen.bounds.width * 0.06
         print("startFrame =", startFrame)
-        transitionDelegate.startPresentMaskFrame = CGRect(x: wGap, y: wGap * 2, width: cellFrame.width - 2 * wGap, height: cellFrame.height - 20)
+        transitionDelegate.startPresentMaskFrame = CGRect(x: wGap, y: wGap * 2, width: cellFrame.width - 2 * wGap, height: cellFrame.height - 30)
         transitionDelegate.startPresentHandler = {
             themeDetail.updateInitalViews()
         }
@@ -299,7 +299,7 @@ extension YCThemeViewController: UITableViewDelegate {
         }
         
         transitionDelegate.finalDismissY = startFrame.minY
-        transitionDelegate.finalDismissMaskFrame = CGRect(x: wGap, y: wGap * 2, width: cellFrame.width - 2 * wGap, height: cellFrame.height - 20)
+        transitionDelegate.finalDismissMaskFrame = CGRect(x: wGap, y: wGap * 2, width: cellFrame.width - 2 * wGap, height: cellFrame.height - 30)
         transitionDelegate.startDismissHandler = {
             themeDetail.updateFinalViews()
         }

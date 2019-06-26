@@ -141,28 +141,28 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     }
     
     func updateInitalViews() {
+        if self.isFirstShow {
+            self.setValue(themeModel: self.themeModel)
+        }
         let wGap = YCScreen.bounds.width * 0.06
         let offset: CGFloat = wGap
         let bounds = YCScreen.bounds
-        self.themeNameLabel.frame = CGRect(x:offset + 20, y: 0, width: bounds.width - 120, height: 36)
-        self.themeDescLabel.frame = CGRect(x:offset + 20, y: 0, width: bounds.width - 40, height: 22)
-        self.followButton.frame = CGRect(x:bounds.width - 100 - offset, y:self.coverImg.frame.height - self.followButton.frame.height - 10 - 20, width: 90, height: 32)
+        self.themeNameLabel.frame.origin.x = offset + 20
+        self.themeDescLabel.frame.origin.x = offset + 20
+        self.followButton.frame.origin.x = bounds.width - 100 - offset
         self.followButton.alpha = 0
-//        self.themeNameLabel.alpha = 0
-//        self.themeDescLabel.alpha = 0
-//        self.maskView.frame = CGRect(x: offset, y: offset, width: bounds.width - offset * 2, height: bounds.width - offset * 2)
     }
     
     func updateFinalViews() {
+        if self.isFirstShow {
+            self.setValue(themeModel: self.themeModel)
+        }
         let offset: CGFloat = 0
         let bounds = YCScreen.bounds
-        self.themeNameLabel.frame = CGRect(x:offset + 20, y:0, width: bounds.width - 120, height: 36)
-        self.themeDescLabel.frame = CGRect(x:offset + 20, y:0, width: bounds.width - 40, height: 22)
-        self.followButton.frame = CGRect(x:bounds.width - 100 - offset, y:self.coverImg.frame.height - self.followButton.frame.height - 10, width: 90, height: 32)
+        self.themeNameLabel.frame.origin.x = offset + 20
+        self.themeDescLabel.frame.origin.x = offset + 20
+        self.followButton.frame.origin.x = bounds.width - 100 - offset
         self.followButton.alpha = 1
-//        self.themeNameLabel.alpha = 1
-//        self.themeDescLabel.alpha = 1
-//        self.maskView.frame = bounds
     }
     
     func initTopView(){
