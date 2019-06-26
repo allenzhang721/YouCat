@@ -116,6 +116,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     
     func initOperateButton() {
         let closeButton=UIButton()
+        closeButton.tag = 100
         closeButton.setImage(UIImage(named: "close_black"), for: .normal)
         closeButton.setImage(UIImage(named: "close_black"), for: .highlighted)
         closeButton.addTarget(self, action: #selector(self.closeButtonClick), for: .touchUpInside)
@@ -128,6 +129,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         }
         
         let operateButton=UIButton()
+        operateButton.tag = 101
         operateButton.setImage(UIImage(named: "operate_black"), for: .normal)
         operateButton.setImage(UIImage(named: "operate_black"), for: .highlighted)
         operateButton.addTarget(self, action: #selector(self.operateButtonClick), for: .touchUpInside)
@@ -151,6 +153,8 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         self.themeDescLabel.frame.origin.x = offset + 20
         self.followButton.frame.origin.x = bounds.width - 100 - offset
         self.followButton.alpha = 0
+        view.viewWithTag(100)?.alpha = 0
+        view.viewWithTag(101)?.alpha = 0
     }
     
     func updateFinalViews() {
@@ -163,6 +167,8 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         self.themeDescLabel.frame.origin.x = offset + 20
         self.followButton.frame.origin.x = bounds.width - 100 - offset
         self.followButton.alpha = 1
+        view.viewWithTag(100)?.alpha = 1
+        view.viewWithTag(101)?.alpha = 1
     }
     
     func initTopView(){

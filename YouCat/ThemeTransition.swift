@@ -16,8 +16,10 @@ class YCThemeTransition: NSObject, UIViewControllerTransitioningDelegate {
     var startPresentMaskFrame: CGRect?
     var startPresentHandler:(()->())?
     var finalPresentHandler:(()->())?
+    var presentDidEndHanlder:(()->())?
     var startDismissHandler:(()->())?
     var finalDismissHandler:(()->())?
+    var dismissDidEndHanlder:(()->())?
     var finalDismissY: CGFloat?
     var finalDismissMaskFrame: CGRect?
     
@@ -28,6 +30,7 @@ class YCThemeTransition: NSObject, UIViewControllerTransitioningDelegate {
         animator.finalPresentHandler = finalPresentHandler
         animator.startPresentY = startPresentY
         animator.startPresentMaskFrame = startPresentMaskFrame
+        animator.presentDidEndHanlder = presentDidEndHanlder
         
         return animator
     }
@@ -39,6 +42,7 @@ class YCThemeTransition: NSObject, UIViewControllerTransitioningDelegate {
         animator.finalDismissHandler = finalDismissHandler
         animator.finalDismissY = finalDismissY
         animator.finalDismissMaskFrame = finalDismissMaskFrame
+        animator.dismissDidEndHanlder = dismissDidEndHanlder
         
         return animator
     }
@@ -51,8 +55,10 @@ class ThemeTransitionAnimator:NSObject, UIViewControllerAnimatedTransitioning {
     var startPresentMaskFrame: CGRect?
     var startPresentHandler:(()->())?
     var finalPresentHandler:(()->())?
+    var presentDidEndHanlder:(()->())?
     var startDismissHandler:(()->())?
     var finalDismissHandler:(()->())?
+    var dismissDidEndHanlder:(()->())?
     var finalDismissY: CGFloat?
     var finalDismissMaskFrame: CGRect?
     
@@ -63,7 +69,7 @@ class ThemeTransitionAnimator:NSObject, UIViewControllerAnimatedTransitioning {
     }
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.3;
+        return 0.7;
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -112,16 +118,30 @@ class ThemeTransitionAnimator:NSObject, UIViewControllerAnimatedTransitioning {
         
         startPresentHandler?()
         
+        
+        
         // Animate using the animator's own duration value.
         let duration = self.transitionDuration(using: context)
-        UIView.animate(withDuration: duration, animations: {
+        
+//        UIView.animate(withDuration: duration, animations: {
+//            toView.frame = toViewFinalFrame
+//            toView.mask?.frame = toView.bounds
+//            toView.mask?.layer.cornerRadius = 0
+//            self.finalPresentHandler?()
+//        }) { (finished) in
+//            context.completeTransition(true)
+//        }
+        
+        UIView.animate(withDuration: duration, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: [.curveEaseOut], animations: {
             toView.frame = toViewFinalFrame
             toView.mask?.frame = toView.bounds
             toView.mask?.layer.cornerRadius = 0
             self.finalPresentHandler?()
         }) { (finished) in
+            self.presentDidEndHanlder?()
             context.completeTransition(true)
         }
+        
     }
     
     private func dismiss(context: UIViewControllerContextTransitioning) {
@@ -154,21 +174,33 @@ class ThemeTransitionAnimator:NSObject, UIViewControllerAnimatedTransitioning {
         let wGap = YCScreen.bounds.width * 0.06
         let finalFrame = finalDismissMaskFrame!
         let finalFrameY = finalDismissY ?? fromViewFinalFrame.minY
-        UIView.animate(withDuration: duration, animations: {
-
+//        UIView.animate(withDuration: duration, animations: {
+//
+//            fromView.frame.origin.y = finalFrameY
+//            if let mask = fromView.mask {
+//                mask.frame = finalFrame
+//                mask.layer.cornerRadius = 14
+//            }
+//            self.finalDismissHandler?()
+//
+//        }) { (finished) in
+//            let success = context.transitionWasCancelled
+////            if (presenting && !success) || (!presenting && success) {
+//                fromView.removeFromSuperview()
+////            }
+//
+//            context.completeTransition(true)
+//        }
+        
+        UIView.animate(withDuration: duration, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: [.curveEaseOut], animations: {
             fromView.frame.origin.y = finalFrameY
             if let mask = fromView.mask {
                 mask.frame = finalFrame
                 mask.layer.cornerRadius = 14
             }
             self.finalDismissHandler?()
-
         }) { (finished) in
-            let success = context.transitionWasCancelled
-//            if (presenting && !success) || (!presenting && success) {
-                fromView.removeFromSuperview()
-//            }
-
+            self.dismissDidEndHanlder?()
             context.completeTransition(true)
         }
     }

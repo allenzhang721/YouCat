@@ -291,6 +291,7 @@ extension YCThemeViewController: UITableViewDelegate {
         print("startFrame =", startFrame)
         transitionDelegate.startPresentMaskFrame = CGRect(x: wGap, y: wGap * 2, width: cellFrame.width - 2 * wGap, height: cellFrame.height - 30)
         transitionDelegate.startPresentHandler = {
+            cell.isHidden = true
             themeDetail.updateInitalViews()
         }
         
@@ -306,6 +307,10 @@ extension YCThemeViewController: UITableViewDelegate {
 
         transitionDelegate.finalDismissHandler = {
             themeDetail.updateInitalViews()
+        }
+        
+        transitionDelegate.dismissDidEndHanlder = {
+            cell.isHidden = false
         }
         
         let navigationController = UINavigationController(rootViewController: themeDetail)
