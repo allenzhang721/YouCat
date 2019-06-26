@@ -50,6 +50,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     var themeDescLabel: UILabel!
     var followButton: YCFollowButton!
     var topLineView: UIView!
+    var maskView: UIView!
     
     var loadingView: YCLoadingView!
     
@@ -105,6 +106,12 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
             make.centerX.equalTo(self.view).offset(0)
             make.top.equalTo(0)
         }
+        
+//        self.maskView = UIView(frame: view.bounds)
+//        maskView.backgroundColor = .blue
+//        view.mask = maskView
+//        
+//        print(maskView.frame)
     }
     
     func initOperateButton() {
@@ -133,26 +140,55 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         }
     }
     
+    func updateInitalViews() {
+        let wGap = YCScreen.bounds.width * 0.06
+        let offset: CGFloat = wGap
+        let bounds = YCScreen.bounds
+        self.themeNameLabel.frame = CGRect(x:offset + 20, y: 0, width: bounds.width - 120, height: 36)
+        self.themeDescLabel.frame = CGRect(x:offset + 20, y: 0, width: bounds.width - 40, height: 22)
+        self.followButton.frame = CGRect(x:bounds.width - 100 - offset, y:self.coverImg.frame.height - self.followButton.frame.height - 10 - 20, width: 90, height: 32)
+        self.followButton.alpha = 0
+//        self.themeNameLabel.alpha = 0
+//        self.themeDescLabel.alpha = 0
+//        self.maskView.frame = CGRect(x: offset, y: offset, width: bounds.width - offset * 2, height: bounds.width - offset * 2)
+    }
+    
+    func updateFinalViews() {
+        let offset: CGFloat = 0
+        let bounds = YCScreen.bounds
+        self.themeNameLabel.frame = CGRect(x:offset + 20, y:0, width: bounds.width - 120, height: 36)
+        self.themeDescLabel.frame = CGRect(x:offset + 20, y:0, width: bounds.width - 40, height: 22)
+        self.followButton.frame = CGRect(x:bounds.width - 100 - offset, y:self.coverImg.frame.height - self.followButton.frame.height - 10, width: 90, height: 32)
+        self.followButton.alpha = 1
+//        self.themeNameLabel.alpha = 1
+//        self.themeDescLabel.alpha = 1
+//        self.maskView.frame = bounds
+    }
+    
     func initTopView(){
+        
+        let offset: CGFloat = 0
+        
         let bounds = YCScreen.bounds
         self.topView = UIView(frame: CGRect(x:0, y:0, width: bounds.width, height: bounds.width))
         self.topView.backgroundColor = YCStyleColor.white
         
         self.coverImg = YCImageView(frame: CGRect(x:0, y:0, width: bounds.width, height: bounds.width))
+        coverImg.contentMode = .scaleAspectFill
         self.topView.addSubview(self.coverImg)
         
-        self.themeNameLabel = UILabel(frame: CGRect(x:20, y:0, width: bounds.width - 120, height: 36))
+        self.themeNameLabel = UILabel(frame: CGRect(x:offset + 20, y:0, width: bounds.width - 120, height: 36))
         self.topView.addSubview(self.themeNameLabel)
         self.themeNameLabel.textColor = YCStyleColor.black
         self.themeNameLabel.font = UIFont.boldSystemFont(ofSize: 36)
         
-        self.themeDescLabel = UILabel(frame: CGRect(x:20, y:0, width: bounds.width - 40, height: 22))
+        self.themeDescLabel = UILabel(frame: CGRect(x:offset + 20, y:0, width: bounds.width - 40, height: 22))
         self.topView.addSubview(self.themeDescLabel)
         self.themeDescLabel.textColor = YCStyleColor.gray
         self.themeDescLabel.font = UIFont.boldSystemFont(ofSize: 18)
         self.themeDescLabel.numberOfLines = 0
         
-        self.followButton = YCFollowButton(frame: CGRect(x:bounds.width - 100, y:0, width: 90, height: 32))
+        self.followButton = YCFollowButton(frame: CGRect(x:bounds.width - 100 - offset, y:0, width: 90, height: 32))
         self.topView.addSubview(self.followButton)
         let followTap = UITapGestureRecognizer(target: self, action: #selector(self.followButtonTap))
         self.followButton.addGestureRecognizer(followTap)

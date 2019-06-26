@@ -272,16 +272,45 @@ extension YCThemeViewController: UITableViewDataSource {
     }
 }
 
+let transitionDelegate = ThemeTransition()
+
 extension YCThemeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! YCThemeTableViewCell
         
+        let startFrame = cell.bgView.convert(cell.themeCover.frame, to: view)
+//        let y = cell.convert(cell.bgView.frame, to: view)
+        let cellFrame = tableView.convert(cell.frame, to: view)
         let row = indexPath.item
         let theme = self.themes[row]
         let themeDetail = YCThemeDetailViewController.getInstance()
         themeDetail.themeModel = theme
+        transitionDelegate.startPresentY = startFrame.minY
+        let wGap = YCScreen.bounds.width * 0.06
+        print("startFrame =", startFrame)
+        transitionDelegate.startPresentMaskFrame = CGRect(x: wGap, y: wGap * 2, width: cellFrame.width - 2 * wGap, height: cellFrame.height - 20)
+        transitionDelegate.startPresentHandler = {
+            themeDetail.updateInitalViews()
+        }
+        
+        transitionDelegate.finalPresentHandler = {
+            themeDetail.updateFinalViews()
+        }
+        
+        transitionDelegate.finalDismissY = startFrame.minY
+        transitionDelegate.finalDismissMaskFrame = CGRect(x: wGap, y: wGap * 2, width: cellFrame.width - 2 * wGap, height: cellFrame.height - 20)
+        transitionDelegate.startDismissHandler = {
+            themeDetail.updateFinalViews()
+        }
 
+        transitionDelegate.finalDismissHandler = {
+            themeDetail.updateInitalViews()
+        }
+        
         let navigationController = UINavigationController(rootViewController: themeDetail)
+        navigationController.transitioningDelegate = transitionDelegate
+        navigationController.modalPresentationStyle = .custom
         navigationController.isNavigationBarHidden = true
         self.present(navigationController, animated: true) {
             
