@@ -292,7 +292,7 @@
 		5536AD062810EA944BFD8DAA /* Pods_YouCatUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouCatUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		581287F3A5F73B04B2906D2F /* Pods-YouCatTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCatTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCatTests/Pods-YouCatTests.release.xcconfig"; sourceTree = "<group>"; };
 		7EA9D9DE110AC0A34E1D6FE9 /* Pods-YouCat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCat.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCat/Pods-YouCat.release.xcconfig"; sourceTree = "<group>"; };
-		959CE20922C0EDE600D683E7 /* ThemeTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTransition.swift; sourceTree = "<group>"; };
+		959CE20922C0EDE600D683E7 /* ThemeTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ThemeTransition.swift; path = YouCat/ThemeTransition.swift; sourceTree = SOURCE_ROOT; };
 		D76547DA6CCEE139A5F6E084 /* Pods_YouCatTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouCatTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E309D7DCD1368C5CF318F47C /* Pods-YouCatTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCatTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouCatTests/Pods-YouCatTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -548,7 +548,6 @@
 				2C35AC85203D8ACA002F0983 /* Home */,
 				2C35AC87203D8B63002F0983 /* Theme */,
 				2C3441F9203D89F3008BF439 /* AppDelegate.swift */,
-				959CE20922C0EDE600D683E7 /* ThemeTransition.swift */,
 				256299C321808002005FDDFC /* Assets.xcassets */,
 				25B878E9215A3A1D00E30C91 /* RootTabbarController.swift */,
 				256299CC2185A049005FDDFC /* SliderView.swift */,
@@ -602,6 +601,7 @@
 		2C35AC87203D8B63002F0983 /* Theme */ = {
 			isa = PBXGroup;
 			children = (
+				959CE20922C0EDE600D683E7 /* ThemeTransition.swift */,
 				2C827F47206F3EEB0035DCE2 /* ThemeViewController.swift */,
 				25368B75217A12EA00C3EB56 /* ThemeTableViewCell.swift */,
 				252E5266217DA3AE00C27826 /* ThemeDetailViewController.swift */,
