@@ -142,6 +142,27 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         }
     }
     
+    func updateInitStartView(){
+        updateInitalViews()
+    }
+    
+    func updateInitEndView(){
+        updateFinalViews()
+    }
+    
+    func updateDismissStartView(){
+        updateFinalViews()
+        let topH = self.topView.frame.height
+        if self.collectionView.contentOffset.y < (0-topH) {
+            self.collectionView.contentOffset.y = (0-topH)
+        }
+    }
+    
+    func updateDismissEndView(){
+        updateInitalViews()
+        self.collectionView.contentOffset.y = 0
+    }
+    
     func updateInitalViews() {
         if self.isFirstShow {
             self.setValue(themeModel: self.themeModel)
@@ -153,8 +174,10 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         self.themeDescLabel.frame.origin.x = offset + 20
         self.followButton.frame.origin.x = bounds.width - 100 - offset
         self.followButton.alpha = 0
+        self.topLineView.alpha = 0
         view.viewWithTag(100)?.alpha = 0
         view.viewWithTag(101)?.alpha = 0
+        
     }
     
     func updateFinalViews() {
@@ -167,6 +190,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         self.themeDescLabel.frame.origin.x = offset + 20
         self.followButton.frame.origin.x = bounds.width - 100 - offset
         self.followButton.alpha = 1
+        self.topLineView.alpha = 1
         view.viewWithTag(100)?.alpha = 1
         view.viewWithTag(101)?.alpha = 1
     }
@@ -515,10 +539,12 @@ extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLo
     }
     
     @objc func closeButtonClick(){
-        self.navigationController?.dismiss(animated: true, completion: { () -> Void in
-            self.resetViewController()
-            YCThemeDetailViewController.addInstance(instace: self)
-        })
+//        self.navigationController?.dismiss(animated: true, completion: { () -> Void in
+//            self.resetViewController()
+//            YCThemeDetailViewController.addInstance(instace: self)
+//        })
+        
+        self.navigationController?.popViewController(animated: true)
     }
     
     @objc func operateButtonClick(){

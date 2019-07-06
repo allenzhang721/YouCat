@@ -273,6 +273,7 @@ extension YCThemeViewController: UITableViewDataSource {
 }
 
 let transitionDelegate = YCThemeTransition()
+let navigationTransitionDelegate = ThemeNavigationTransition()
 
 extension YCThemeViewController: UITableViewDelegate {
     
@@ -286,40 +287,49 @@ extension YCThemeViewController: UITableViewDelegate {
         let theme = self.themes[row]
         let themeDetail = YCThemeDetailViewController.getInstance()
         themeDetail.themeModel = theme
-        transitionDelegate.startPresentY = startFrame.minY
+        navigationTransitionDelegate.startPresentY = startFrame.minY
         let wGap = YCScreen.bounds.width * 0.06
         print("startFrame =", startFrame)
-        transitionDelegate.startPresentMaskFrame = CGRect(x: wGap, y: wGap * 2, width: cellFrame.width - 2 * wGap, height: cellFrame.height - 30)
-        transitionDelegate.startPresentHandler = {
+        
+        navigationTransitionDelegate.startPresentMaskFrame = CGRect(x: wGap, y: YCScreen.safeArea.top, width: cellFrame.width - 2 * wGap, height: cellFrame.height - 30)
+        navigationTransitionDelegate.startPresentHandler = {
             cell.isHidden = true
             themeDetail.updateInitalViews()
         }
         
-        transitionDelegate.finalPresentHandler = {
+        navigationTransitionDelegate.finalPresentHandler = {
             themeDetail.updateFinalViews()
         }
         
-        transitionDelegate.finalDismissY = startFrame.minY
-        transitionDelegate.finalDismissMaskFrame = CGRect(x: wGap, y: wGap * 2, width: cellFrame.width - 2 * wGap, height: cellFrame.height - 30)
-        transitionDelegate.startDismissHandler = {
-            themeDetail.updateFinalViews()
+        navigationTransitionDelegate.finalDismissY = startFrame.minY
+        navigationTransitionDelegate.finalDismissMaskFrame = CGRect(x: wGap, y: YCScreen.safeArea.top, width: cellFrame.width - 2 * wGap, height: cellFrame.height - 30)
+        navigationTransitionDelegate.startDismissHandler = {
+//            themeDetail.updateFinalViews()
+            themeDetail.updateDismissStartView()
         }
 
-        transitionDelegate.finalDismissHandler = {
-            themeDetail.updateInitalViews()
+        navigationTransitionDelegate.finalDismissHandler = {
+//            themeDetail.updateInitalViews()
+            themeDetail.updateDismissEndView()
         }
         
-        transitionDelegate.dismissDidEndHanlder = {
+        navigationTransitionDelegate.dismissDidEndHanlder = {
             cell.isHidden = false
         }
         
-        let navigationController = UINavigationController(rootViewController: themeDetail)
-        navigationController.transitioningDelegate = transitionDelegate
-        navigationController.modalPresentationStyle = .custom
-        navigationController.isNavigationBarHidden = true
-        self.present(navigationController, animated: true) {
-            
-        }
+//        let navigationController = UINavigationController(rootViewController: themeDetail)
+//        navigationController.transitioningDelegate = transitionDelegate
+//        navigationController.modalPresentationStyle = .custom
+//        navigationController.isNavigationBarHidden = true
+//        self.present(navigationController, animated: true) {
+//
+//        }
+        self.navigationController?.delegate = navigationTransitionDelegate
+        
+//        navigationController?.setNavigationBarHidden(true, animated: false)
+        
+        self.navigationController?.pushViewController(themeDetail, animated: true)
+//        self.navigationController?.delegate = nil
     }
 }
 

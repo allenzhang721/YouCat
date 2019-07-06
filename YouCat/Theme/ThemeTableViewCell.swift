@@ -36,14 +36,21 @@ class YCThemeTableViewCell: UITableViewCell, YCImageProtocol, YCContentStringPro
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.2) {
             self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
         }
         super.touchesBegan(touches, with: event)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.2) {
+            self.transform = .identity
+        }
+        super.touchesEnded(touches, with: event)
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        UIView.animate(withDuration: 0.2) {
             self.transform = .identity
         }
         super.touchesEnded(touches, with: event)

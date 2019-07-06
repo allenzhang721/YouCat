@@ -87,7 +87,10 @@ class ThemeTransitionAnimator:NSObject, UIViewControllerAnimatedTransitioning {
         // Get the set of relevant objects.
         let containerView = context.containerView
         let toVC = context.viewController(forKey: .to)!
+        let fromVC = context.viewController(forKey: .from)!
         let toView = context.view(forKey: .to)!
+        
+//        let tabbarView = fromVC.parent?.tabBarController?.tabBar.snapshotView(afterScreenUpdates: true)!
         
         // Set up some variables for the animation.
         let containerFrame = containerView.frame
@@ -107,6 +110,8 @@ class ThemeTransitionAnimator:NSObject, UIViewControllerAnimatedTransitioning {
         // And it doesn't hurt to set its start frame.
         containerView.addSubview(toView);
         toView.frame = toViewStartFrame;
+        
+//        containerView.addSubview(tabbarView!)
         
         if let st = startPresentMaskFrame {
 //            let wGap = YCScreen.bounds.width * 0.06
@@ -136,6 +141,8 @@ class ThemeTransitionAnimator:NSObject, UIViewControllerAnimatedTransitioning {
             toView.frame = toViewFinalFrame
             toView.mask?.frame = toView.bounds
             toView.mask?.layer.cornerRadius = 0
+            fromVC.tabBarController?.tabBar.transform = CGAffineTransform(translationX: 0, y: 100)
+            
             self.finalPresentHandler?()
         }) { (finished) in
             self.presentDidEndHanlder?()
@@ -147,8 +154,9 @@ class ThemeTransitionAnimator:NSObject, UIViewControllerAnimatedTransitioning {
     private func dismiss(context: UIViewControllerContextTransitioning) {
         // Get the set of relevant objects.
         let containerView = context.containerView
-        let fromVC = context.viewController(forKey: .from)!
+        let fromVC = context.viewController(forKey: .from)! as! YCThemeDetailViewController
         let fromView = context.view(forKey: .from)!
+        let toView = context.view(forKey: .to)!
 
         // Set up some variables for the animation.
         let containerFrame = containerView.frame
@@ -171,7 +179,7 @@ class ThemeTransitionAnimator:NSObject, UIViewControllerAnimatedTransitioning {
 
         // Animate using the animator's own duration value.
         let duration = self.transitionDuration(using: context)
-        let wGap = YCScreen.bounds.width * 0.06
+//        let wGap = YCScreen.bounds.width * 0.06
         let finalFrame = finalDismissMaskFrame!
         let finalFrameY = finalDismissY ?? fromViewFinalFrame.minY
 //        UIView.animate(withDuration: duration, animations: {
@@ -191,17 +199,57 @@ class ThemeTransitionAnimator:NSObject, UIViewControllerAnimatedTransitioning {
 //
 //            context.completeTransition(true)
 //        }
+        containerView.insertSubview(toView, at: 0)
         
-        UIView.animate(withDuration: duration, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: [.curveEaseOut], animations: {
+        let v = UIView(frame: fromViewStartFrame)
+        v.backgroundColor = UIColor.white
+        v.layer.cornerRadius = 14
+        v.layer.shadowOffset = CGSize(width: 0, height: 4)
+        v.layer.shadowColor = YCStyleColor.black.cgColor
+        v.layer.shadowOpacity = 0.1
+        v.layer.shadowRadius = 8
+        
+        let v1 = UIView(frame: fromViewStartFrame)
+        v1.backgroundColor = UIColor.white
+        v1.layer.cornerRadius = 14
+        v1.layer.shadowOffset = CGSize(width: 0, height: 15)
+        v1.layer.shadowColor = YCStyleColor.black.cgColor
+        v1.layer.shadowOpacity = 0.2
+        v1.layer.shadowRadius = 8
+        
+        containerView.insertSubview(v1, aboveSubview: toView)
+        containerView.insertSubview(v, aboveSubview: v1)
+        
+//        let topview = fromVC.topView
+//        topview.removeFromSuperview()
+        
+        
+        UIView.animate(withDuration: duration, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: [.curveLinear], animations: {
             fromView.frame.origin.y = finalFrameY
             if let mask = fromView.mask {
                 mask.frame = finalFrame
                 mask.layer.cornerRadius = 14
+                
             }
+            v.frame.origin.y = finalFrameY + finalFrame.origin.y
+            v.frame.origin.x = finalFrame.origin.x
+            v.frame.size = finalFrame.size
+            
+            v1.frame = v.frame.insetBy(dx: v.frame.width * 0.05, dy: v.frame.width * 0.05)
+            
+            fromVC.tabBarController?.tabBar.transform = .identity
+//            fromVC.topView.frame.origin.y = finalFrame.origin.y
             self.finalDismissHandler?()
         }) { (finished) in
+            v1.removeFromSuperview()
+            v.removeFromSuperview()
             self.dismissDidEndHanlder?()
+            
             context.completeTransition(true)
         }
+    }
+    
+    func animationEnded(_ transitionCompleted: Bool) {
+        print(#function)
     }
 }

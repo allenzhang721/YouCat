@@ -98,6 +98,7 @@
 		4BDCF867747000828440DF7E /* Pods_YouCatTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D76547DA6CCEE139A5F6E084 /* Pods_YouCatTests.framework */; };
 		83A6F551E87BF929BB599A40 /* Pods_YouCat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F17FB4EF2FA68C8A2CD9B94 /* Pods_YouCat.framework */; };
 		959CE20A22C0EDE600D683E7 /* ThemeTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 959CE20922C0EDE600D683E7 /* ThemeTransition.swift */; };
+		95C175CB22D0912A006DE231 /* ThemeNavigationTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C175CA22D0912A006DE231 /* ThemeNavigationTransition.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -293,6 +294,7 @@
 		581287F3A5F73B04B2906D2F /* Pods-YouCatTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCatTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCatTests/Pods-YouCatTests.release.xcconfig"; sourceTree = "<group>"; };
 		7EA9D9DE110AC0A34E1D6FE9 /* Pods-YouCat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCat.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCat/Pods-YouCat.release.xcconfig"; sourceTree = "<group>"; };
 		959CE20922C0EDE600D683E7 /* ThemeTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ThemeTransition.swift; path = YouCat/ThemeTransition.swift; sourceTree = SOURCE_ROOT; };
+		95C175CA22D0912A006DE231 /* ThemeNavigationTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeNavigationTransition.swift; sourceTree = "<group>"; };
 		D76547DA6CCEE139A5F6E084 /* Pods_YouCatTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouCatTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E309D7DCD1368C5CF318F47C /* Pods-YouCatTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCatTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouCatTests/Pods-YouCatTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -602,6 +604,7 @@
 			isa = PBXGroup;
 			children = (
 				959CE20922C0EDE600D683E7 /* ThemeTransition.swift */,
+				95C175CA22D0912A006DE231 /* ThemeNavigationTransition.swift */,
 				2C827F47206F3EEB0035DCE2 /* ThemeViewController.swift */,
 				25368B75217A12EA00C3EB56 /* ThemeTableViewCell.swift */,
 				252E5266217DA3AE00C27826 /* ThemeDetailViewController.swift */,
@@ -1016,6 +1019,7 @@
 				252B902321B5707400E41842 /* UpdateUserViewController.swift in Sources */,
 				2529087E21C9193300300D44 /* CommentListViewCell.swift in Sources */,
 				25562C6A22772C96004F1BD6 /* UserListViewController.swift in Sources */,
+				95C175CB22D0912A006DE231 /* ThemeNavigationTransition.swift in Sources */,
 				252B900421AFDEF100E41842 /* SettingViewController.swift in Sources */,
 				253052722150DFE000BB9624 /* ThemeDomain.swift in Sources */,
 				256299C221802589005FDDFC /* PublishCollectionViewLayout.swift in Sources */,
