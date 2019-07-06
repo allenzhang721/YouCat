@@ -305,15 +305,16 @@ extension YCThemeViewController: UITableViewDelegate {
         navigationTransitionDelegate.finalDismissMaskFrame = CGRect(x: wGap, y: YCScreen.safeArea.top, width: cellFrame.width - 2 * wGap, height: cellFrame.height - 30)
         navigationTransitionDelegate.startDismissHandler = {
 //            themeDetail.updateFinalViews()
-            themeDetail.updateDismissStartView()
+            themeDetail.updatestartDismiss()
         }
 
         navigationTransitionDelegate.finalDismissHandler = {
 //            themeDetail.updateInitalViews()
-            themeDetail.updateDismissEndView()
+            themeDetail.updatefinalDismiss()
         }
         
         navigationTransitionDelegate.dismissDidEndHanlder = {
+            themeDetail.updateDidDismissed()
             cell.isHidden = false
         }
         

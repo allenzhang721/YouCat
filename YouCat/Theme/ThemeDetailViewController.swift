@@ -45,6 +45,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     var collectionLayout: YCCollectionViewWaterfallLayout!
     
     var topView: UIView!
+    var topHeight: CGFloat = 0
     var coverImg: YCImageView!
     var themeNameLabel: UILabel!
     var themeDescLabel: UILabel!
@@ -150,17 +151,28 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         updateFinalViews()
     }
     
-    func updateDismissStartView(){
+    var snapView: UIView?
+    
+    func updatestartDismiss(){
         updateFinalViews()
-        let topH = self.topView.frame.height
-        if self.collectionView.contentOffset.y < (0-topH) {
-            self.collectionView.contentOffset.y = (0-topH)
+//        let topH = self.topView.bounds.height
+        if self.collectionView.contentOffset.y > self.topHeight {
+            snapView = view.snapshotView(afterScreenUpdates: false)
+            view.addSubview(snapView!)
+            self.collectionView.contentOffset.y = self.topHeight
         }
     }
     
-    func updateDismissEndView(){
+    func updatefinalDismiss(){
         updateInitalViews()
         self.collectionView.contentOffset.y = 0
+        if snapView != nil {
+            snapView!.transform = CGAffineTransform(translationX: 0, y: topHeight)
+        }
+    }
+    
+    func updateDidDismissed() {
+        snapView?.removeFromSuperview()
     }
     
     func updateInitalViews() {
@@ -334,7 +346,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         default:
             break;
         }
-        
+        self.topHeight = topH
         self.topView.frame.size.height = topH
         self.topLineView.frame.origin.y = topH - 1
         self.collectionLayout.headerReferenceSize = CGSize(width: bounds.width, height: topH)
@@ -548,6 +560,11 @@ extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLo
     }
     
     @objc func operateButtonClick(){
+        
+//        snapView = view.snapshotView(afterScreenUpdates: true)
+//        view.addSubview(snapView!)
+//        return
+        
         if self.followButton.status != .Loading {
             var alertArray:Array<[String : Any]> = []
             alertArray.append(["title":YCLanguageHelper.getString(key: "ShareLabel")])
