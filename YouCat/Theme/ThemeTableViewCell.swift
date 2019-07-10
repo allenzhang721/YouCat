@@ -127,7 +127,7 @@ class YCThemeTableViewCell: UITableViewCell, YCImageProtocol, YCContentStringPro
         }
         self.titleLabel.numberOfLines = 0
         self.titleLabel.textColor = YCStyleColor.black
-        self.titleLabel.font = UIFont.boldSystemFont(ofSize: 36)
+        self.titleLabel.font = UIFont.boldSystemFont(ofSize: 32)
         self.titleLabel.text = ""
         
         self.descLabel = UILabel();
@@ -135,11 +135,11 @@ class YCThemeTableViewCell: UITableViewCell, YCImageProtocol, YCContentStringPro
         self.addSubview(self.descLabel)
         self.descLabel.snp.makeConstraints { (make) in
             make.left.equalTo(self.bgView).offset(20)
-            make.right.equalTo(self.bgView).offset(0)
+            make.right.equalTo(self.bgView).offset(-20)
             make.top.equalTo(self.titleLabel.snp.bottom).offset(10)
         }
         self.descLabel.textColor = YCStyleColor.gray
-        self.descLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        self.descLabel.font = UIFont.systemFont(ofSize: 16)
         self.descLabel.text = ""
         
         self.lineLabel = UILabel();
