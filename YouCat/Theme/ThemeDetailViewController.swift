@@ -542,6 +542,20 @@ extension YCThemeDetailViewController: YCCollectionViewWaterfallLayoutDelegate {
             
         }
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (scrollView.isDragging) {
+            self.view.viewWithTag(100)?.alpha = (scrollView.contentOffset.y + 100.0)/100.0
+            self.view.viewWithTag(101)?.alpha = (scrollView.contentOffset.y + 100.0)/100.0
+        }
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        print("contentOffset.y = \(scrollView.contentOffset.y)")
+        if (scrollView.contentOffset.y <= -100) {
+            closeButtonClick()
+        }
+    }
 }
 
 extension YCThemeDetailViewController: UIScrollViewDelegate {
