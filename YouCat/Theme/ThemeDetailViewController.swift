@@ -58,7 +58,6 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     let footerFresh = MJRefreshAutoNormalFooter()
     
     var isFirstShow: Bool = true
-    var isScroll: Bool = false
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = true
@@ -108,12 +107,6 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
             make.centerX.equalTo(self.view).offset(0)
             make.top.equalTo(0)
         }
-        
-//        self.maskView = UIView(frame: view.bounds)
-//        maskView.backgroundColor = .blue
-//        view.mask = maskView
-//        
-//        print(maskView.frame)
     }
     
     func initOperateButton() {
@@ -145,18 +138,21 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     }
     
     func updateInitStartView(){
-        updateInitalViews()
+        self.updateInitalViews()
     }
     
     func updateInitEndView(){
-        updateFinalViews()
+        self.updateFinalViews()
     }
     
     var snapView: UIView?
     
     func updatestartDismiss(){
-        updateFinalViews()
+        self.updateFinalViews()
 //        let topH = self.topView.bounds.height
+        if self.collectionView.isDecelerating {
+            self.killScroll()
+        }
         if self.collectionView.contentOffset.y > self.topHeight {
             self.snapView = self.view.snapshotView(afterScreenUpdates: false)
             self.view.addSubview(self.snapView!)
@@ -558,25 +554,6 @@ extension YCThemeDetailViewController: YCCollectionViewWaterfallLayoutDelegate {
     }
 }
 
-extension YCThemeDetailViewController: UIScrollViewDelegate {
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        self.isScroll = false
-    }
-    
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.isScroll = true
-    }
-    
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        self.isScroll = true
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-         self.isScroll = false
-    }
-}
-
 extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLoginProtocol, YCShareProtocol {
     
     @objc func loginUserChange(_ notify: Notification) {
@@ -589,7 +566,7 @@ extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLo
 //            YCThemeDetailViewController.addInstance(instace: self)
 //        })
         
-        if self.isScroll {
+        if self.collectionView.isDecelerating {
             self.killScroll()
         }else {
             self.navigationController?.popViewController(animated: true)
@@ -597,7 +574,7 @@ extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLo
     }
     
     @objc func operateButtonClick(){
-        if self.isScroll {
+        if self.collectionView.isDecelerating {
             self.killScroll()
         }
         
@@ -630,7 +607,6 @@ extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLo
         var offset = self.collectionView.contentOffset
         offset.y -= 1.0
         self.collectionView.setContentOffset(offset, animated: false)
-        self.isScroll = false
     }
     
     func shareHandler() {
