@@ -39,6 +39,7 @@ class YCThemeViewController: UIViewController, YCImageProtocol {
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = true
+        UIApplication.shared.setStatusBarStyle(.default, animated: true)
         super.viewWillAppear(animated)
         self.setUserIcon()
     }

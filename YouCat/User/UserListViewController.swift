@@ -129,7 +129,7 @@ class YCUserListViewController: UIViewController{
             make.centerY.equalTo(backButton).offset(0)
         }
         self.titleLabel.textColor = YCStyleColor.black
-        self.titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        self.titleLabel.font = UIFont.boldSystemFont(ofSize: 14)
         self.titleLabel.text = ""
         self.titleLabel.textAlignment = .center
         
@@ -140,7 +140,7 @@ class YCUserListViewController: UIViewController{
             make.left.equalTo(0)
             make.right.equalTo(0)
             make.top.equalTo(topHeight-1)
-            make.height.equalTo(1)
+            make.height.equalTo(0.5)
         }
         
         self.tableView = UITableView()

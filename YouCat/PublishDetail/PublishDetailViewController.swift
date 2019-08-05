@@ -57,19 +57,21 @@ class YCPublishDetailViewController: UIViewController {
     
     var isLoading = false
     var loadingView: YCLoadingView!
-//    var isFocus = false
-    
+    var loadResourceIndex = -1
+
     override var prefersStatusBarHidden: Bool {
         return true
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+        return .lightContent;
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = true
-        
+        UIApplication.shared.setStatusBarStyle(.lightContent, animated: true)
         super.viewWillAppear(animated)
         if self.isFirstShow {
-            self.collectionView.reloadData()
-            self.collectionView.layoutIfNeeded()
             self.showView()
         }else {
             if let index = self.contentIndexPath, let currentCell = self.collectionView.cellForItem(at: index) as? YCPublishDetailViewCell{
@@ -80,21 +82,25 @@ class YCPublishDetailViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if self.isFirstShow {
-            if self.contentType == .HOME {
-                self.footerRefresh()
-            }
-        }
         if let index = self.contentIndexPath {
             self.setCurrentCell(indexPath: index)
         }else {
             self.setCurrentCell(indexPath: IndexPath(item: 0, section: 0))
+        }
+        if self.isFirstShow {
+            if self.contentType == .HOME {
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.7) {
+                    self.footerRefresh()
+                }
+            }
         }
         self.isFirstShow = false
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        
         self.initView()
         for _ in 0..<6 {
             self.videoMedias.append(YCMediaViewModel(publishID: ""))
@@ -147,11 +153,23 @@ class YCPublishDetailViewController: UIViewController {
 
     func initOperateButton() {
         let closeButton=UIButton()
-        closeButton.setImage(UIImage(named: "close_white"), for: .normal)
-        closeButton.setImage(UIImage(named: "close_white"), for: .highlighted)
+        closeButton.setImage(UIImage(named: "back_white"), for: .normal)
+        closeButton.setImage(UIImage(named: "back_white"), for: .highlighted)
         closeButton.addTarget(self, action: #selector(self.closeButtonClick), for: .touchUpInside)
         self.view.addSubview(closeButton)
         closeButton.snp.makeConstraints { (make) in
+            make.left.equalTo(10)
+            make.top.equalTo(YCScreen.safeArea.top)
+            make.width.equalTo(44)
+            make.height.equalTo(44)
+        }
+        
+        let operatorButton = UIButton()
+        operatorButton.setImage(UIImage(named: "operate_white"), for: .normal)
+        operatorButton.setImage(UIImage(named: "operate_white"), for: .highlighted)
+        operatorButton.addTarget(self, action: #selector(self.operateButtonClick), for: .touchUpInside)
+        self.view.addSubview(operatorButton)
+        operatorButton.snp.makeConstraints { (make) in
             make.right.equalTo(-10)
             make.top.equalTo(YCScreen.safeArea.top)
             make.width.equalTo(44)
@@ -200,9 +218,10 @@ class YCPublishDetailViewController: UIViewController {
                     break
                 }
             }
-            self.loadMediaResouse(mediaIndex: publishIndex)
             var rect = self.collectionView.frame
             rect.origin.y = CGFloat(publishIndex)*bounds.height
+            self.collectionView.reloadData()
+            self.collectionView.layoutIfNeeded()
             self.collectionView.scrollRectToVisible(rect, animated: false)
             self.contentIndexPath = IndexPath(item: publishIndex, section: 0)
         }
@@ -210,6 +229,17 @@ class YCPublishDetailViewController: UIViewController {
     
     @objc func closeButtonClick(){
         self.viewCloseHander()
+    }
+    
+    @objc func operateButtonClick(){
+        var alertArray:Array<[String : Any]> = []
+        //        alertArray.append(["title":YCLanguageHelper.getString(key: "ContentLinkLabel")])
+        alertArray.append(["title":YCLanguageHelper.getString(key: "ReportLabel"), "textColor":YCStyleColor.red])
+        self.showSheetAlert(nil, alertMessage: nil, okAlertArray: alertArray, cancelAlertLabel: YCLanguageHelper.getString(key: "CancelLabel"), view: self) { (index) in
+            if index == 0, let index = self.contentIndexPath, let cell = self.collectionView.cellForItem(at: index) as? YCPublishDetailViewCell {
+                self.reportHandler(cell)
+            }
+        }
     }
     
     func footerRefresh() {
@@ -299,6 +329,7 @@ class YCPublishDetailViewController: UIViewController {
         self.contentIndex = 0
         self.collectionView.reloadData()
         self.isFirstShow = true
+        self.loadResourceIndex = -1
         for mediaModel in self.videoMedias.filter({$0.unUsed == false}) {
             self.releaseMediaViewModel(mediaModel: mediaModel)
         }
@@ -317,8 +348,8 @@ extension YCPublishDetailViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let removeCell = cell as? YCPublishDetailViewCell, let nowIndex = self.contentIndexPath, nowIndex.item == indexPath.item {
-            removeCell.displayView()
+        if let displayCell = cell as? YCPublishDetailViewCell, let nowIndex = self.contentIndexPath, nowIndex.item == indexPath.item {
+            displayCell.displayView()
         }
     }
     
@@ -352,6 +383,7 @@ extension YCPublishDetailViewController: UICollectionViewDataSource {
             }else {
                 cell.willDisplayView(contentIndex: -1)
             }
+            self.resolvePopGesture(scrollView: cell.contentScrollView)
         }
         return cell
     }
@@ -443,6 +475,7 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
     
     func loadMediaResouse(mediaIndex: Int) {
         if let contents = self.contents {
+            self.loadResourceIndex = mediaIndex
             let top = min(mediaIndex, 2)
             let bottom = min((contents.count - 1) - mediaIndex, 2)
             let start = mediaIndex - top
@@ -484,6 +517,8 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
     func releaseMediaViewModel(mediaModel: YCMediaViewModel){
         if !mediaModel.unUsed {
             if let playerItem = mediaModel.videoPlayerItem {
+                playerItem.cancelPendingSeeks()
+                playerItem.asset.cancelLoading()
                 playerItem.removeObserver(self, forKeyPath: "loadedTimeRanges")
                 playerItem.removeObserver(self, forKeyPath: "status")
                 NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
@@ -498,9 +533,6 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
     }
     
     func initMediaViewModel(publishID: String, playerItem: AVPlayerItem) -> YCMediaViewModel? {
-        playerItem.addObserver(self, forKeyPath: "loadedTimeRanges", options: .new, context: nil)
-        playerItem.addObserver(self, forKeyPath: "status", options: .new, context: nil)
-        NotificationCenter.default.addObserver(self, selector:  #selector(self.videoDidPlayToEnd(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
         let freeMedias = self.videoMedias.filter{$0.unUsed == true}
         if freeMedias.count > 0{
             let mediaModel = freeMedias[0]
@@ -510,6 +542,9 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
             }else {
                 mediaModel.videoPlayer = AVPlayer(playerItem: playerItem)
             }
+            playerItem.addObserver(self, forKeyPath: "loadedTimeRanges", options: .new, context: nil)
+            playerItem.addObserver(self, forKeyPath: "status", options: .new, context: nil)
+            NotificationCenter.default.addObserver(self, selector:  #selector(self.videoDidPlayToEnd(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
             mediaModel.videoPlayerItem = playerItem
             mediaModel.videoPlayComplete = nil
             mediaModel.videoStatusChange = nil
@@ -529,7 +564,6 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
                     videoPlayComplete(playerItem)
                 }
             }
-            
         }
     }
     
@@ -555,10 +589,11 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
     }
     
     func viewCloseHander() {
-        self.navigationController?.dismiss(animated: true, completion: { () -> Void in
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
             self.resetViewController()
             YCPublishDetailViewController.addInstance(instace: self)
-        })
+        }
+        self.navigationController?.popViewController(animated: true)
     }
 }
 
@@ -801,18 +836,6 @@ extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLogi
         }
     }
     
-    func cellOperateButtonClick(_ cell: YCPublishDetailViewCell?) {
-        var alertArray:Array<[String : Any]> = []
-//        alertArray.append(["title":YCLanguageHelper.getString(key: "ContentLinkLabel")])
-        alertArray.append(["title":YCLanguageHelper.getString(key: "ReportLabel"), "textColor":YCStyleColor.red])
-        self.showSheetAlert(nil, alertMessage: nil, okAlertArray: alertArray, cancelAlertLabel: YCLanguageHelper.getString(key: "CancelLabel"), view: self) { (index) in
-            if index == 0 {
-                self.reportHandler(cell)
-            }
-        }
-    }
-    
-    
     func cellDidPlayToEnd(cell: YCPublishDetailViewCell?) {
         if let cell = cell, let index = self.collectionView.indexPath(for: cell), let contents = self.contents {
             let row = index.item
@@ -906,7 +929,7 @@ extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLogi
     
     func showCommentView(cell: YCPublishDetailViewCell?) {
         if let ce = cell{
-            let commentView = YCCommentViewController(style: .Dark, keyboardWillShow: nil) { (content) in
+            let commentView = YCCommentViewController(style: .Default, keyboardWillShow: nil) { (content) in
                 if let publish = ce.publishModel, content != "" {
                     YCCommentDomain().commentPublish(publishID: publish.publishID, content: content, contentImages: nil, completionBlock: { (modelMode) in
                         if let model = modelMode{
@@ -941,4 +964,18 @@ extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLogi
             }
         }
     }
+}
+
+extension YCPublishDetailViewController: UIGestureRecognizerDelegate{
+    
+    func resolvePopGesture(scrollView: UIScrollView) {
+        if let gestures = self.navigationController?.view.gestureRecognizers {
+            for gesture in gestures {
+                if gesture.isKind(of: UIScreenEdgePanGestureRecognizer.self) {
+                    scrollView.panGestureRecognizer.require(toFail: gesture)
+                }
+            }
+        }
+    }
+    
 }

@@ -66,3 +66,26 @@ extension YCRootTabbarController: UITabBarControllerDelegate{
     }
 }
 
+extension UINavigationController{
+    
+    override open var childForStatusBarStyle: UIViewController? {
+        return self.topViewController
+    }
+    
+    override open var childForStatusBarHidden: UIViewController?{
+        return self.topViewController
+    }
+}
+
+
+class YCNavigationController: UINavigationController{
+    
+    override var childForStatusBarStyle: UIViewController? {
+        return self.topViewController
+    }
+    
+    override var childForStatusBarHidden: UIViewController?{
+        return self.topViewController
+    }
+}
+

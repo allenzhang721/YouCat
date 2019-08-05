@@ -46,7 +46,6 @@ class YCThemeTransition: NSObject, UIViewControllerTransitioningDelegate {
         
         return animator
     }
-    
 }
 
 class ThemeTransitionAnimator:NSObject, UIViewControllerAnimatedTransitioning {
@@ -69,18 +68,16 @@ class ThemeTransitionAnimator:NSObject, UIViewControllerAnimatedTransitioning {
     }
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 1;
+        return 0.7;
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        
         switch presenting {
         case true:
             present(context: transitionContext)
         default:
             dismiss(context: transitionContext)
         }
-        
     }
     
     private func present(context: UIViewControllerContextTransitioning) {
@@ -141,7 +138,8 @@ class ThemeTransitionAnimator:NSObject, UIViewControllerAnimatedTransitioning {
             toView.frame = toViewFinalFrame
             toView.mask?.frame = toView.bounds
             toView.mask?.layer.cornerRadius = 0
-            fromVC.tabBarController?.tabBar.transform = CGAffineTransform(translationX: 0, y: 100)
+            fromVC.tabBarController?.tabBar.frame.origin.y = YCScreen.bounds.height
+//            fromVC.tabBarController?.tabBar.transform = CGAffineTransform(translationX: 0, y: 100)
             
             self.finalPresentHandler?()
         }) { (finished) in
@@ -237,8 +235,10 @@ class ThemeTransitionAnimator:NSObject, UIViewControllerAnimatedTransitioning {
             
             v1.frame = v.frame.insetBy(dx: v.frame.width * 0.05, dy: v.frame.width * 0.05)
             
-            fromVC.tabBarController?.tabBar.transform = .identity
-//            fromVC.topView.frame.origin.y = finalFrame.origin.y
+//            fromVC.tabBarController?.tabBar.transform = .identity
+            if let tabBar = fromVC.tabBarController?.tabBar{
+                tabBar.frame.origin.y = YCScreen.bounds.height - tabBar.frame.height
+            }
             self.finalDismissHandler?()
         }) { (finished) in
             v1.removeFromSuperview()

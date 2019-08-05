@@ -54,6 +54,7 @@ class YCFavoriteViewController: UIViewController, YCImageProtocol, YCContentStri
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
+        UIApplication.shared.setStatusBarStyle(.default, animated: true)
         super.viewWillAppear(animated)
         self.setUserIcon()
     }
@@ -193,6 +194,11 @@ class YCFavoriteViewController: UIViewController, YCImageProtocol, YCContentStri
                     if let modelList = list.modelArray {
                         self.publishes.removeAll()
                         if self.updatePublishDate(modelList: modelList) {
+                            for cell in self.collectionView.visibleCells {
+                                if let ce = cell as? YCPublishCollectionViewCell{
+                                    ce.releaseCell()
+                                }
+                            }
                             self.collectionView.reloadData()
                             self.footerFresh.isHidden = false
                             let _ = YCDateManager.saveModelListDate(modelList: self.publishes, account: LocalManager.home)
@@ -341,6 +347,19 @@ extension YCFavoriteViewController: UICollectionViewDataSource {
         cell.publishModel = publishModel
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let cell = cell as? YCPublishCollectionViewCell{
+            cell.endDisplayCell()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let cell = cell as? YCPublishCollectionViewCell{
+            cell.willDisplayCell()
+        }
+    }
+    
 }
 
 extension YCFavoriteViewController: YCCollectionViewWaterfallLayoutDelegate {
@@ -363,12 +382,14 @@ extension YCFavoriteViewController: YCCollectionViewWaterfallLayoutDelegate {
         publishDetail.contentIndex = 0
         publishDetail.contents = [publish]
         publishDetail.contentID = publish.publishID
-        
-        let navigationController = UINavigationController(rootViewController: publishDetail)
-        navigationController.isNavigationBarHidden = true
-        self.present(navigationController, animated: true) {
-            
-        }
+ //       self.navigationController?.pushViewController(publishDetail, animated: true)
+       NotificationCenter.default.post(name: NSNotification.Name("RootPushPublishView"), object: publishDetail)
+
+//        let navigationController = UINavigationController(rootViewController: publishDetail)
+//        navigationController.isNavigationBarHidden = true
+//        self.present(navigationController, animated: true) {
+//
+//        }
     }
 }
 

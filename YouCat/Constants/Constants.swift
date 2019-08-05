@@ -45,6 +45,7 @@ struct FilePath {
 struct YCScreen {
     static var bounds = CGRect(x: 0, y: 0, width: 0, height: 0)
     static var safeArea = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    static var fullScreenArea = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 }
 
 struct YCSocialConfigs {
@@ -72,7 +73,7 @@ enum RequestHost: CustomStringConvertible {
     var description: String {
         switch self {
         case .debug:
-            return "http://192.168.1.104:9909"
+            return "http://0.0.0.0:9909"
         case .production:
             return "http://www.youcat.cn"
         }
@@ -345,7 +346,8 @@ enum ParameterKey: CustomStringConvertible{
     
     case data, code, status, start, count, total, model, list, loginUserID, deviceID, deviceType, deviceModel, deviceVersion, deviceSystem, systemVersion, softVersion, softLanguage
     case imageID, imagePath, snapShotPath, imageType, imageIndex, imageWidth, imageHeight
-    case videoID, videoPath, videoURL, videoCover, videoWidth, videoHeight, videoTime
+    case videoID, videoPath, videoURL, videoCover, videoDynamic, videoWidth, videoHeight, videoTime
+    case dynamicID, dynamicStartTime, dynamicDuration, dynamicPath, dynamicWidth, dynamicHeight, dynamicType, dynamicIndex
     case userID, uuid, uniqueID, nikeName, signature, gender, birthday, province, city, icon, relation
     case areaCode, phone, active, setPassword, weiboUser, password, newPassword
     case followersCount, followingCount
@@ -420,12 +422,30 @@ enum ParameterKey: CustomStringConvertible{
             return "VideoURL"
         case .videoCover:
             return "VideoCover"
+        case .videoDynamic:
+            return "VideoDynamic"
         case .videoWidth:
             return "VideoWidth"
         case .videoHeight:
             return "VideoHeight"
         case .videoTime:
             return "VideoTime"
+        case .dynamicID:
+            return "DynamicID"
+        case .dynamicStartTime:
+            return "DynamicStartTime"
+        case .dynamicDuration:
+            return "DynamicDuration"
+        case .dynamicPath:
+            return "DynamicPath"
+        case .dynamicType:
+            return "DynamicType"
+        case .dynamicIndex:
+            return "DynamicIndex"
+        case .dynamicWidth:
+            return "DynamicWidth"
+        case .dynamicHeight:
+            return "DynamicHeight"
         case .userID:
             return "UserID"
         case .uuid:

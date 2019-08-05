@@ -59,8 +59,19 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     
     var isFirstShow: Bool = true
     
+    var maxScrollHeight: CGFloat = 44
+
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+        return .lightContent;
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = true
+        UIApplication.shared.setStatusBarStyle(.lightContent, animated: true)
         super.viewWillAppear(animated)
         if self.isFirstShow {
            self.setValue(themeModel: self.themeModel)
@@ -69,6 +80,10 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if let bar = self.navigationController?.navigationBar{
+            self.maxScrollHeight = bar.frame.height
+        }
+        self.maxScrollHeight = YCScreen.safeArea.top + self.maxScrollHeight
         if self.isFirstShow {
             self.themeDetail()
             self.refreshPage()
@@ -112,8 +127,8 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     func initOperateButton() {
         let closeButton=UIButton()
         closeButton.tag = 100
-        closeButton.setImage(UIImage(named: "close_black"), for: .normal)
-        closeButton.setImage(UIImage(named: "close_black"), for: .highlighted)
+        closeButton.setImage(UIImage(named: "close_white"), for: .normal)
+        closeButton.setImage(UIImage(named: "close_white"), for: .highlighted)
         closeButton.addTarget(self, action: #selector(self.closeButtonClick), for: .touchUpInside)
         self.view.addSubview(closeButton)
         closeButton.snp.makeConstraints { (make) in
@@ -125,8 +140,8 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         
         let operateButton=UIButton()
         operateButton.tag = 101
-        operateButton.setImage(UIImage(named: "operate_black"), for: .normal)
-        operateButton.setImage(UIImage(named: "operate_black"), for: .highlighted)
+        operateButton.setImage(UIImage(named: "operate_white"), for: .normal)
+        operateButton.setImage(UIImage(named: "operate_white"), for: .highlighted)
         operateButton.addTarget(self, action: #selector(self.operateButtonClick), for: .touchUpInside)
         self.view.addSubview(operateButton)
         operateButton.snp.makeConstraints { (make) in
@@ -148,8 +163,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     var snapView: UIView?
     
     func updatestartDismiss(){
-        self.updateFinalViews()
-//        let topH = self.topView.bounds.height
+//        self.updateFinalViews()
         if self.collectionView.isDecelerating {
             self.killScroll()
         }
@@ -161,8 +175,8 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     }
     
     func updatefinalDismiss(){
-        self.updateInitalViews()
         self.collectionView.contentOffset.y = 0
+        self.updateInitalViews()
         if self.snapView != nil {
             self.snapView!.transform = CGAffineTransform(translationX: 0, y: self.topHeight+20)
         }
@@ -179,14 +193,13 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         let wGap = YCScreen.bounds.width * 0.06
         let offset: CGFloat = wGap
         let bounds = YCScreen.bounds
-        self.themeNameLabel.frame.origin.x = offset + 20
-        self.themeDescLabel.frame.origin.x = offset + 20
+        self.themeNameLabel.frame.origin.x = offset + 25
+        self.themeDescLabel.frame.origin.x = offset + 25
         self.followButton.frame.origin.x = bounds.width - 100 - offset
         self.followButton.alpha = 0
         self.topLineView.alpha = 0
-        view.viewWithTag(100)?.alpha = 0
-        view.viewWithTag(101)?.alpha = 0
-        
+        self.view.viewWithTag(100)?.alpha = 0
+        self.view.viewWithTag(101)?.alpha = 0
     }
     
     func updateFinalViews() {
@@ -195,13 +208,13 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         }
         let offset: CGFloat = 0
         let bounds = YCScreen.bounds
-        self.themeNameLabel.frame.origin.x = offset + 20
-        self.themeDescLabel.frame.origin.x = offset + 20
+        self.themeNameLabel.frame.origin.x = offset + 25
+        self.themeDescLabel.frame.origin.x = offset + 25
         self.followButton.frame.origin.x = bounds.width - 100 - offset
         self.followButton.alpha = 1
         self.topLineView.alpha = 1
-        view.viewWithTag(100)?.alpha = 1
-        view.viewWithTag(101)?.alpha = 1
+        self.view.viewWithTag(100)?.alpha = 1
+        self.view.viewWithTag(101)?.alpha = 1
     }
     
     func initTopView(){
@@ -223,7 +236,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         self.themeNameLabel.textColor = YCStyleColor.black
         self.themeNameLabel.font = UIFont.boldSystemFont(ofSize: 32)
         
-        self.themeDescLabel = UILabel(frame: CGRect(x:offset + 20, y:0, width: bounds.width - wGap*2 - 40, height: 22))
+        self.themeDescLabel = UILabel(frame: CGRect(x:offset + 25, y:0, width: bounds.width - wGap*2 - 50, height: 22))
         self.topView.addSubview(self.themeDescLabel)
         self.themeDescLabel.textColor = YCStyleColor.gray
         self.themeDescLabel.font = UIFont.systemFont(ofSize: 16)
@@ -307,10 +320,10 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         var topH:CGFloat = 1
         switch stypleType {
         case 1:
-            self.themeNameLabel.frame.origin.x = 20
+            self.themeNameLabel.frame.origin.x = 25
             self.themeNameLabel.frame.origin.y = self.coverImg.frame.height + 10
             self.themeDescLabel.frame.origin.y = self.themeNameLabel.frame.origin.y +  self.themeNameLabel.frame.height + 10
-            self.themeDescLabel.frame.origin.x = 20
+            self.themeDescLabel.frame.origin.x = 25
             self.followButton.frame.origin.y = self.themeNameLabel.frame.origin.y - (self.followButton.frame.height - self.themeNameLabel.frame.height)/2
             topH = self.themeDescLabel.frame.origin.y + self.themeDescLabel.frame.height + 11
             self.themeNameLabel.textColor = YCStyleColor.black
@@ -318,10 +331,10 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
             self.topLineView.isHidden = false
             break;
         case 2:
-            self.themeNameLabel.frame.origin.x = 20
-            self.themeNameLabel.frame.origin.y = YCScreen.safeArea.top + 20
+            self.themeNameLabel.frame.origin.x = 25
+            self.themeNameLabel.frame.origin.y = YCScreen.safeArea.top + 40
             self.themeDescLabel.frame.origin.y = self.themeNameLabel.frame.origin.y +  self.themeNameLabel.frame.height + 10
-            self.themeDescLabel.frame.origin.x = 20
+            self.themeDescLabel.frame.origin.x = 25
             self.followButton.frame.origin.y = self.coverImg.frame.height - self.followButton.frame.height - 10
             topH = self.coverImg.frame.height
             self.themeNameLabel.textColor = YCStyleColor.white
@@ -329,10 +342,10 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
             self.topLineView.isHidden = true
             break;
         case 3:
-            self.themeNameLabel.frame.origin.x = 20
-            self.themeNameLabel.frame.origin.y = YCScreen.safeArea.top + 20
+            self.themeNameLabel.frame.origin.x = 25
+            self.themeNameLabel.frame.origin.y = YCScreen.safeArea.top + 40
             self.themeDescLabel.frame.origin.y = self.themeNameLabel.frame.origin.y +  self.themeNameLabel.frame.height + 10
-            self.themeDescLabel.frame.origin.x = 20
+            self.themeDescLabel.frame.origin.x = 25
             self.followButton.frame.origin.y = self.coverImg.frame.height - self.followButton.frame.height - 10
             topH = self.coverImg.frame.height
             self.themeNameLabel.textColor = YCStyleColor.black
@@ -476,6 +489,11 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         self.themeDetailModel = nil
         self.publishes.removeAll()
         self.publishSizes.removeAll()
+        for cell in self.collectionView.visibleCells {
+            if let ce = cell as? YCPublishCollectionViewCell{
+                ce.releaseCell()
+            }
+        }
         self.collectionView.reloadData()
         self.footerFresh.isHidden = true
         self.isFirstShow = true
@@ -503,8 +521,22 @@ extension YCThemeDetailViewController: UICollectionViewDataSource {
         let publishModel = self.publishes[row]
         cell.type = .THEME
         cell.publishModel = publishModel
+        print("init")
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let cell = cell as? YCPublishCollectionViewCell{
+            cell.endDisplayCell()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let cell = cell as? YCPublishCollectionViewCell{
+            cell.willDisplayCell()
+        }
+    }
+    
 }
 
 extension YCThemeDetailViewController: YCCollectionViewWaterfallLayoutDelegate {
@@ -532,23 +564,35 @@ extension YCThemeDetailViewController: YCCollectionViewWaterfallLayoutDelegate {
         }
         publishDetail.contentValue = ["ThemeType": self.themeType]
         
-        let navigationController = UINavigationController(rootViewController: publishDetail)
-        navigationController.isNavigationBarHidden = true
-        self.present(navigationController, animated: true) {
-            
-        }
+        NotificationCenter.default.post(name: NSNotification.Name("RootPushPublishView"), object: publishDetail)
+//        let navigationController = UINavigationController(rootViewController: publishDetail)
+//        navigationController.isNavigationBarHidden = true
+//        self.present(navigationController, animated: true) {
+//
+//        }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if (scrollView.isDragging) {
-            self.view.viewWithTag(100)?.alpha = (scrollView.contentOffset.y + 100.0)/100.0
-            self.view.viewWithTag(101)?.alpha = (scrollView.contentOffset.y + 100.0)/100.0
+        var alphaChange = (scrollView.contentOffset.y + self.maxScrollHeight)/self.maxScrollHeight
+        if alphaChange > 1 {
+            alphaChange = 1
+        }
+        if alphaChange < 0 {
+            alphaChange = 0
+        }
+        if let a = self.view.viewWithTag(100)?.alpha {
+            if abs((a - alphaChange)*10) < 5{
+                self.view.viewWithTag(100)?.alpha = alphaChange
+                self.view.viewWithTag(101)?.alpha = alphaChange
+            }
+        }else {
+            self.view.viewWithTag(100)?.alpha = alphaChange
+            self.view.viewWithTag(101)?.alpha = alphaChange
         }
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        print("contentOffset.y = \(scrollView.contentOffset.y)")
-        if (scrollView.contentOffset.y <= -100) {
+        if (scrollView.contentOffset.y <= -self.maxScrollHeight) {
             closeButtonClick()
         }
     }
@@ -570,6 +614,10 @@ extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLo
             self.killScroll()
         }else {
             self.navigationController?.popViewController(animated: true)
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.7) {
+                self.resetViewController()
+                YCThemeDetailViewController.addInstance(instace: self)
+            }
         }
     }
     

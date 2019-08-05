@@ -60,6 +60,7 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
     
     var commentBg: UIView!
     
+    var operateBg: UIView!
     var closeButton: UIButton!
     var commenButton: UIImageView!
     var commentCountLabel: UILabel!
@@ -85,7 +86,6 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
     let replyCount = 20
     
     let headerHeight = 44
-    let bottomHeight = 48 + YCScreen.safeArea.bottom
     
     var publishModel: YCPublishModel?
     var themeModel: YCThemeModel?
@@ -127,6 +127,7 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
     func initStyle() {
         if self.listStyle == .Default {
             self.commentBg.backgroundColor = YCStyleColor.white
+            self.operateBg.backgroundColor = YCStyleColor.white
             self.commentBg.layer.borderColor = YCStyleColor.grayWhite.cgColor
             self.closeButton.setImage(UIImage(named: "close_gray"), for: .normal)
             self.closeButton.setImage(UIImage(named: "close_gray"), for: .highlighted)
@@ -142,12 +143,13 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
             self.loadingView.style = .INSIDE
         }else if self.listStyle == .Dark {
             self.commentBg.backgroundColor = YCStyleColor.blackAlpha
-            self.commentBg.layer.borderColor = YCStyleColor.grayWhiteAlpha.cgColor
+            self.operateBg.backgroundColor = YCStyleColor.black
+//            self.commentBg.layer.borderColor = YCStyleColor.grayWhiteAlpha.cgColor
             self.closeButton.setImage(UIImage(named: "close_white"), for: .normal)
             self.closeButton.setImage(UIImage(named: "close_white"), for: .highlighted)
             self.commenButton.image = UIImage(named: "comment_white")
             self.commentCountLabel.textColor = YCStyleColor.white
-            self.headerLine.backgroundColor = YCStyleColor.grayWhiteAlpha
+            self.headerLine.backgroundColor = YCStyleColor.black
             
             self.commentView.backgroundColor = YCStyleColor.black
             self.commentBordView.layer.borderColor = YCStyleColor.black.cgColor
@@ -187,7 +189,7 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
         self.commentBg.addSubview(self.tableView)
         self.tableView.snp.makeConstraints { (make) in
             make.top.equalTo(self.headerHeight)
-            make.bottom.equalTo(0-self.bottomHeight)
+            make.bottom.equalTo(0-YCScreen.fullScreenArea.bottom)
             make.left.equalTo(0)
             make.right.equalTo(0)
         }
@@ -203,7 +205,7 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
         self.commentBg.addSubview(self.loadingView)
         self.loadingView.snp.makeConstraints { (make) in
             make.centerX.equalTo(self.commentBg).offset(0)
-            make.top.equalTo(headerHeight+15)
+            make.top.equalTo(headerHeight+20)
         }
         
         self.footerFresh.setRefreshingTarget(self, refreshingAction: #selector(self.footerRefresh))
@@ -218,30 +220,18 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
     }
     
     func initOperateView() {
-        let operateView = UIView()
-        self.commentBg.addSubview(operateView)
-        operateView.snp.makeConstraints { (make) in
+        self.operateBg = UIView()
+        self.commentBg.addSubview(self.operateBg)
+        self.operateBg.snp.makeConstraints { (make) in
             make.right.equalTo(0)
             make.left.equalTo(0)
             make.top.equalTo(0)
             make.height.equalTo(self.headerHeight)
         }
         
-        self.closeButton = UIButton()
-        self.closeButton.setImage(UIImage(named: "close_black"), for: .normal)
-        self.closeButton.setImage(UIImage(named: "close_black"), for: .highlighted)
-        self.closeButton.addTarget(self, action: #selector(self.closeButtonClick), for: .touchUpInside)
-        operateView.addSubview(self.closeButton)
-        self.closeButton.snp.makeConstraints { (make) in
-            make.right.equalTo(-10)
-            make.width.equalTo(44)
-            make.top.equalTo(0)
-            make.height.equalTo(44)
-        }
-        
         self.commenButton = UIImageView()
         self.commenButton.image = UIImage(named: "comment_black")
-        operateView.addSubview(self.commenButton)
+        self.operateBg.addSubview(self.commenButton)
         self.commenButton.snp.makeConstraints { (make) in
             make.left.equalTo(10)
             make.width.equalTo(44)
@@ -249,17 +239,29 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
             make.height.equalTo(44)
         }
         self.commentCountLabel = UILabel()
-        operateView.addSubview(self.commentCountLabel)
+        self.operateBg.addSubview(self.commentCountLabel)
         self.commentCountLabel.snp.makeConstraints { (make) in
-            make.left.equalTo(50)
+            make.left.equalTo(self.commenButton.snp.right).offset(0)
             make.centerY.equalTo(self.commenButton).offset(0)
         }
         self.commentCountLabel.textColor = YCStyleColor.black
-        self.commentCountLabel.font = UIFont.systemFont(ofSize: 16)
+        self.commentCountLabel.font = UIFont.systemFont(ofSize: 14)
         self.commentCountLabel.text = "12442"
         
+        self.closeButton = UIButton()
+        self.closeButton.setImage(UIImage(named: "close_black"), for: .normal)
+        self.closeButton.setImage(UIImage(named: "close_black"), for: .highlighted)
+        self.closeButton.addTarget(self, action: #selector(self.closeButtonClick), for: .touchUpInside)
+        self.operateBg.addSubview(self.closeButton)
+        self.closeButton.snp.makeConstraints { (make) in
+            make.right.equalTo(-10)
+            make.centerY.equalTo(self.commenButton).offset(0)
+            make.width.equalTo(36)
+            make.height.equalTo(36)
+        }
+        
         self.headerLine = UIView()
-        operateView.addSubview(self.headerLine)
+        self.operateBg.addSubview(self.headerLine)
         self.headerLine.snp.makeConstraints { (make) in
             make.bottom.equalTo(0)
             make.left.equalTo(0)
@@ -276,7 +278,7 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
             make.left.equalTo(0)
             make.right.equalTo(0)
             make.bottom.equalTo(0)
-            make.height.equalTo(self.bottomHeight)
+            make.height.equalTo(YCScreen.fullScreenArea.bottom)
         }
         self.commentView.backgroundColor = YCStyleColor.white
         
@@ -289,11 +291,12 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
         self.commentBordView.snp.makeConstraints { (make) in
             make.left.equalTo(10)
             make.right.equalTo(-10)
-            make.height.equalTo(35)
-            make.top.equalTo(7)
+            make.height.equalTo(32)
+            make.top.equalTo(8)
         }
         self.commentBordView.layer.borderWidth = 1
         self.commentBordView.layer.cornerRadius = 16
+        self.commentBordView.isHidden = true
         
         self.commentViewLine = UIView()
         self.commentView.addSubview(self.commentViewLine)
@@ -301,18 +304,28 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
             make.top.equalTo(0)
             make.left.equalTo(0)
             make.right.equalTo(0)
-            make.height.equalTo(1)
+            make.height.equalTo(0.5)
+        }
+        
+        let commentSignImg = UIImageView(image: UIImage(named: "comment_sign_gray"))
+        self.commentView.addSubview(commentSignImg)
+        commentSignImg.snp.makeConstraints { (make) in
+            make.height.equalTo(32)
+            make.width.equalTo(32)
+            make.left.equalTo(5)
+            make.centerY.equalTo(self.commentBordView).offset(0)
         }
         
         self.commentLabel = UILabel();
         self.commentView.addSubview(self.commentLabel)
         self.commentLabel.snp.makeConstraints { (make) in
-            make.left.equalTo(30)
+            make.left.equalTo(35)
             make.right.equalTo(30)
+            make.height.equalTo(32)
             make.centerY.equalTo(self.commentBordView).offset(0)
         }
         self.commentLabel.textColor = YCStyleColor.gray
-        self.commentLabel.font = UIFont.systemFont(ofSize: 16)
+        self.commentLabel.font = UIFont.systemFont(ofSize: 14)
         self.commentLabel.text = YCLanguageHelper.getString(key: "EnterCommentLabel")
     }
     
@@ -490,11 +503,7 @@ extension YCCommentListViewController: YCLoginProtocol {
     func showCommentView(cell: YCCommentListViewCell?) {
         if let ce = cell, let index = self.tableView.indexPath(for: ce), let comment = ce.commentModel{
             let oldOffY = self.tableView.contentOffset.y
-            var commStyle: YCCommentViewStyle = .Default
-            if self.listStyle == .Dark {
-                commStyle = .Dark
-            }
-            let commentView = YCCommentViewController(style: commStyle, keyboardWillShow: { (_, h) in
+            let commentView = YCCommentViewController(style: .Default, keyboardWillShow: { (_, h) in
                 let rect = self.tableView.rectForRow(at: index)
         
                 let offY = YCScreen.bounds.height - self.commentBgTop - CGFloat(self.headerHeight) - (rect.height + CGFloat(h) - 2)
@@ -506,7 +515,7 @@ extension YCCommentListViewController: YCLoginProtocol {
             }, complete: { (content) in
                 let contentH = self.tableView.contentSize.height
                 let offY = self.tableView.contentOffset.y
-                let tableH = YCScreen.bounds.height - (self.commentBgTop+CGFloat(self.headerHeight)+self.bottomHeight)
+                let tableH = YCScreen.bounds.height - (self.commentBgTop+CGFloat(self.headerHeight)+YCScreen.fullScreenArea.bottom)
                 if (offY+tableH) > contentH {
                     self.tableView.contentOffset.y = oldOffY
                 }

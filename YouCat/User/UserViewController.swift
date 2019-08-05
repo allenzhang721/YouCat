@@ -82,9 +82,15 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
     
     var delegate: YCUserViewControllerDelegate?
     
+    var topHeight: CGFloat = 44
+    let iconW:CGFloat = 88
+    var titleUserNameLabel: UILabel!
+    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = true
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        
+        UIApplication.shared.setStatusBarStyle(.default, animated: true)
         
         super.viewWillAppear(animated)
         if self.isFirstShow || self.isSetting {
@@ -104,7 +110,12 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let bar = self.navigationController?.navigationBar{
+            self.topHeight = bar.frame.height
+        }
+        self.topHeight = YCScreen.safeArea.top + self.topHeight
         self.initView()
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -114,7 +125,7 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
     
     func initView() {
         
-        self.view.backgroundColor = YCStyleColor.blue
+        self.view.backgroundColor = YCStyleColor.white
         
         self.initTopView()
         self.initCollectionView()
@@ -134,6 +145,15 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
     }
     
     func initOperateButton() {
+        let headerView = UIView()
+        self.view.addSubview(headerView)
+        headerView.snp.makeConstraints { (make) in
+            make.top.equalTo(0)
+            make.height.equalTo(self.topHeight)
+            make.left.equalTo(0)
+            make.right.equalTo(0)
+        }
+        
         let backButton=UIButton()
         backButton.setImage(UIImage(named: "back_black"), for: .normal)
         backButton.setImage(UIImage(named: "back_black"), for: .highlighted)
@@ -157,11 +177,33 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
             make.width.equalTo(44)
             make.height.equalTo(44)
         }
+        
+        self.titleUserNameLabel = UILabel()
+        self.titleUserNameLabel.numberOfLines = 1
+        headerView.addSubview(self.titleUserNameLabel)
+        self.titleUserNameLabel.snp.makeConstraints { (make) in
+            make.left.equalTo(64)
+            make.right.equalTo(-64)
+            make.centerY.equalTo(backButton).offset(0)
+        }
+        self.titleUserNameLabel.textColor = YCStyleColor.black
+        self.titleUserNameLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        self.titleUserNameLabel.textAlignment = .center
+        self.titleUserNameLabel.text = ""
+        self.titleUserNameLabel.alpha = 0
+        
+        let topLineView = UIView()
+        headerView.addSubview(topLineView)
+        topLineView.backgroundColor = YCStyleColor.grayWhite
+        topLineView.snp.makeConstraints { (make) in
+            make.left.equalTo(0)
+            make.right.equalTo(0)
+            make.top.equalTo(topHeight-1)
+            make.height.equalTo(0.5)
+        }
     }
     
     func initTopView(){
-        let iconW:CGFloat = 88
-        
         let bounds = YCScreen.bounds
         self.topView = UIView(frame: CGRect(x:0, y:0, width: bounds.width, height: bounds.width))
         self.topView.backgroundColor = YCStyleColor.white
@@ -170,18 +212,18 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
         self.topView.addSubview(self.userIcon)
         self.userIcon.snp.makeConstraints { (make) in
             make.left.equalTo(20)
-            make.top.equalTo(YCScreen.safeArea.top + 44)
-            make.width.equalTo(iconW)
-            make.height.equalTo(iconW)
+            make.top.equalTo(20)
+            make.width.equalTo(self.iconW)
+            make.height.equalTo(self.iconW)
         }
-        self.cropImageCircle(self.userIcon, iconW/2)
+        self.cropImageCircle(self.userIcon, self.iconW/2)
         self.userIcon.image = UIImage(named: "default_icon")
 //        self.userIcon.isUserInteractionEnabled = true
 //        let iconTap = UITapGestureRecognizer(target: self, action: #selector(self.iconTapHandler))
 //        self.userIcon.addGestureRecognizer(iconTap)
         
-        let followBtW:CGFloat = bounds.width - 60 - iconW
-        let followBtX:CGFloat = iconW+40
+        let followBtW:CGFloat = bounds.width - 60 - self.iconW
+        let followBtX:CGFloat = self.iconW+40
         self.followButton = YCFollowButton()
         self.topView.addSubview(self.followButton)
         self.followButton.snp.makeConstraints { (make) in
@@ -202,12 +244,12 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
             make.height.equalTo(36)
         }
         self.userNameLabel.textColor = YCStyleColor.black
-        self.userNameLabel.font = UIFont.systemFont(ofSize: 24)
+        self.userNameLabel.font = UIFont.boldSystemFont(ofSize: 20)
         
-        self.userSignLabel = UILabel(frame: CGRect(x:20, y:(YCScreen.safeArea.top + 90 + iconW), width: bounds.width - 40, height: 22))
+        self.userSignLabel = UILabel(frame: CGRect(x:20, y:(60 + self.iconW), width: bounds.width - 40, height: 22))
         self.topView.addSubview(self.userSignLabel)
         self.userSignLabel.textColor = YCStyleColor.gray
-        self.userSignLabel.font = UIFont.systemFont(ofSize: 16)
+        self.userSignLabel.font = UIFont.systemFont(ofSize: 14)
         self.userSignLabel.numberOfLines = 0
         
         let operateW = (followBtW - 30)/3
@@ -280,7 +322,6 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
         self.followingView.isUserInteractionEnabled = true
         self.followingView.addGestureRecognizer(followingTap)
         
-        
         self.postButton = YCSelectedButton(fontText: YCLanguageHelper.getString(key: "PostLabel"), fontSize: 16)
         self.topView.addSubview(self.postButton)
         self.postButton.snp.makeConstraints { (make) in
@@ -307,7 +348,7 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
     
     func initCollectionView(){
         let bounds = YCScreen.bounds
-        let rect:CGRect = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
+        let rect:CGRect = CGRect(x: 0, y: topHeight, width: bounds.width, height: (bounds.height-topHeight))
         self.collectionLayout = YCCollectionViewWaterfallLayout()
         self.collectionLayout.minimumLineSpacing = 10
         self.collectionLayout.minimumInteritemSpacing = 8
@@ -319,7 +360,7 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
         self.collectionView = UICollectionView(frame: rect, collectionViewLayout: self.collectionLayout)
         self.view.addSubview(self.collectionView)
         self.collectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(0)
+            make.top.equalTo(topHeight)
             make.bottom.equalTo(0)
             make.left.equalTo(0)
             make.right.equalTo(0)
@@ -364,11 +405,13 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
             }
             self.userNameLabel.text = self.getNicknameString(user: user)
             self.userSignLabel.text = self.getSignString(sign: user.signature)
+            self.titleUserNameLabel.text = self.getNicknameString(user: user)
         }else {
             self.userIcon.image = UIImage(named: "default_icon")
             self.userNameLabel.text = ""
             self.userSignLabel.text = ""
             self.followButton.status = .Unfollow
+            self.titleUserNameLabel.text = ""
         }
         self.userSignLabel.frame.origin.x = 20
         self.userSignLabel.frame.size.width = bounds.width - 40
@@ -385,7 +428,7 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
         self.collectionLayout.headerReferenceSize = CGSize(width: bounds.width, height: topH + 44)
 
         self.loadingView.snp.updateConstraints { (make) in
-            make.top.equalTo(topH+54)
+            make.top.equalTo(topH+64+self.topHeight)
         }
         
         if self.loginUserType == .Default && self.followButton.status == .EditProfile {
@@ -470,8 +513,13 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
                     let _ = self.updatePublishDate(modelList: modelList)
                     self.collectionView.reloadData()
                     if self.publishes.count > 0{
-                        self.footerFresh.resetNoMoreData()
-                        self.footerFresh.isHidden = false
+                        if modelList.count < self.refreshCount {
+                            self.footerFresh.endRefreshingWithNoMoreData()
+                            self.footerFresh.isHidden = true
+                        }else {
+                            self.footerFresh.resetNoMoreData()
+                            self.footerFresh.isHidden = false
+                        }
                     }else {
                         self.footerFresh.endRefreshingWithNoMoreData()
                         self.footerFresh.isHidden = true
@@ -567,7 +615,13 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
         self.userDetailModel = nil
         self.publishes.removeAll()
         self.publishSizes.removeAll()
+        for cell in self.collectionView.visibleCells {
+            if let ce = cell as? YCPublishCollectionViewCell{
+                ce.releaseCell()
+            }
+        }
         self.collectionView.reloadData()
+        self.titleUserNameLabel.alpha = 0
         self.footerFresh.isHidden = true
         self.isFirstShow = true
         self.isSetting = false
@@ -608,6 +662,19 @@ extension YCUserViewController: UICollectionViewDataSource {
         cell.publishModel = publishModel
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let cell = cell as? YCPublishCollectionViewCell{
+            cell.endDisplayCell()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let cell = cell as? YCPublishCollectionViewCell{
+            cell.willDisplayCell()
+        }
+    }
+    
 }
 
 extension YCUserViewController: YCCollectionViewWaterfallLayoutDelegate {
@@ -637,11 +704,31 @@ extension YCUserViewController: YCCollectionViewWaterfallLayoutDelegate {
         if let user = self.userModel {
             publishDetail.contentID = user.userID
         }
+        NotificationCenter.default.post(name: NSNotification.Name("RootPushPublishView"), object: publishDetail)
+//
+//        let navigationController = UINavigationController(rootViewController: publishDetail)
+//        navigationController.isNavigationBarHidden = true
+//        self.present(navigationController, animated: true) {
+//
+//        }
+    }
     
-        let navigationController = UINavigationController(rootViewController: publishDetail)
-        navigationController.isNavigationBarHidden = true
-        self.present(navigationController, animated: true) {
-            
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let topH = self.userSignLabel.frame.origin.y
+        let scrollY = scrollView.contentOffset.y
+        if scrollY > topH{
+            let changeValue = scrollY - topH
+            let changeTotal = self.userSignLabel.frame.height + 44
+            var alphaChange = changeValue/changeTotal
+            if alphaChange > 1 {
+                alphaChange = 1
+            }
+            if alphaChange < 0 {
+                alphaChange = 0
+            }
+            self.titleUserNameLabel.alpha = alphaChange
+        }else {
+            self.titleUserNameLabel.alpha = 0
         }
     }
 }

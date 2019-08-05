@@ -291,12 +291,14 @@ extension YCHomeViewController: YCPublishTableViewCellDelegate, YCAlertProtocol,
             publishDetail.contentIndex = contentIndex
             publishDetail.contents = [publish]
             publishDetail.contentID = publish.publishID
-            
-            let navigationController = UINavigationController(rootViewController: publishDetail)
-            navigationController.isNavigationBarHidden = true
-            self.present(navigationController, animated: true) {
-                
-            }
+
+            NotificationCenter.default.post(name: NSNotification.Name("RootPushPublishView"), object: publishDetail)
+
+//            let navigationController = UINavigationController(rootViewController: publishDetail)
+//            navigationController.isNavigationBarHidden = true
+//            self.present(navigationController, animated: true) {
+//
+//            }
         }
     }
     

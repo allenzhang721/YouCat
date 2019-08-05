@@ -27,11 +27,22 @@ class ViewController: UIViewController {
         self.addChild(navigationController)
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.rootPushUserViewNotification(_:)), name: NSNotification.Name("RootPushUserView"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.rootPushPublishViewNotification(_:)), name: NSNotification.Name("RootPushPublishView"), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    @objc func rootPushPublishViewNotification(_ notify: Notification){
+        if let publishDetail = notify.object as? YCPublishDetailViewController {
+            
+            if let nav = self.root.navigationController {
+                nav.pushViewController(publishDetail, animated: true)
+            }
+        }
     }
     
     @objc func rootPushUserViewNotification(_ notify: Notification){

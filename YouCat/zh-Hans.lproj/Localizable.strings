@@ -16,7 +16,7 @@
 "PostLabel" = "发布";
 "LikeLabel" = "喜欢";
 
-"EnterCommentLabel" = "输入评论";
+"EnterCommentLabel" = "说点什么~";
 "DefaultUserName" = "用户";
 "NicknameLabel" = "昵称";
 "NicknamePlaceholder" = "请输入你的昵称";

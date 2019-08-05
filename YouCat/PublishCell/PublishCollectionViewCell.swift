@@ -36,7 +36,11 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
     
     var publishModel: YCPublishModel? {
         didSet{
-            self.didSetPublishModel();
+            if let old = oldValue, let publish = publishModel, old.publishID == publish.publishID {
+                self.didSetPublishModel();
+            }else {
+                self.setCellValue();
+            }
         }
     }
     
@@ -49,6 +53,27 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.initView()
+    }
+    
+    func willDisplayCell() {
+        for view in self.contentViews {
+            view.willDisplayView()
+        }
+    }
+    
+    func endDisplayCell() {
+        for view in self.contentViews {
+            view.endDisplayView()
+        }
+    }
+    
+    func releaseCell() {
+        for view in self.contentViews {
+            view.clean()
+            view.removeFromSuperview()
+        }
+        self.contentViews.removeAll()
+        self.publishModel = nil
     }
  
     func initView() {
@@ -157,10 +182,6 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
     }
     
     func didSetPublishModel(){
-        self.setCellValue()
-    }
-    
-    func setCellValue(){
         if let publish = self.publishModel {
             if let user = publish.user{
                 if let icon = user.icon {
@@ -184,7 +205,21 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
                 self.userIcon.isHidden = false
                 self.iconBg.isHidden = false
             }
+            self.contentLabel.text = self.getContentString(content: publish.content)
+            self.likeCountLabel.text = self.getNumberString(number: publish.likeCount)
+            if publish.isLike == 1 {
+                self.likeImg.image = UIImage(named: "like_high")
+            }else {
+                self.likeImg.image = UIImage(named: "like_gray")
+            }
+        }
+    }
+    
+    func setCellValue(){
+        self.didSetPublishModel()
+        if let publish = self.publishModel {
             for view in self.contentViews {
+                view.clean()
                 view.removeFromSuperview()
             }
             self.contentViews.removeAll()
@@ -260,13 +295,6 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
                 for (index,view) in self.contentViews.enumerated() {
                     view.contentIndex = index
                 }
-            }
-            self.contentLabel.text = self.getContentString(content: publish.content)
-            self.likeCountLabel.text = self.getNumberString(number: publish.likeCount)
-            if publish.isLike == 1 {
-                self.likeImg.image = UIImage(named: "like_high")
-            }else {
-                self.likeImg.image = UIImage(named: "like_gray")
             }
             if medias.count > 1 {
                 self.publishMoreImg.isHidden = false
