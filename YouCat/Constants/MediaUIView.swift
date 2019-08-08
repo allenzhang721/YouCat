@@ -728,12 +728,20 @@ class YCVideoView: YCBaseView {
             var videoTop:CGFloat = 0
             var videoLeft:CGFloat = 0
             if CGFloat(vH/vW) > (viewH-topH)/viewW {
-                self.videoViewWidth = CGFloat(vW / vH) * viewH
-                videoTop = 0
-                videoLeft = (viewW - self.videoViewWidth)/2
+                let vRate = CGFloat(vW / vH)
+                let viewRate =  CGFloat(viewW / viewH)
+                if vRate > viewRate {
+                    self.videoViewWidth = CGFloat(vW / vH) * viewH
+                    videoTop = 0
+                    videoLeft = (viewW - self.videoViewWidth)/2
+                }else {
+                    self.videoViewHeight = CGFloat(vH / vW) * viewW
+                    videoLeft = 0
+                    videoTop = (viewH - self.videoViewHeight)/2
+                }
             }else {
                 self.videoViewHeight = CGFloat(vH / vW) * viewW
-                videoTop = YCScreen.safeArea.top + (viewH - self.videoViewHeight)/2
+                videoTop = YCScreen.safeArea.top + (viewH - YCScreen.safeArea.top - self.videoViewHeight)/2
                 videoLeft = 0
             }
             
@@ -776,17 +784,11 @@ class YCVideoView: YCBaseView {
             self.playButton?.image = UIImage(named: "play_button_black")
             self.playButton?.isHidden = true
             
-            self.loading = YCMediaLoadingView(frame: CGRect(x: 5, y: viewH, width: viewW-10, height: 1))
+            self.loading = YCMediaLoadingView(frame: CGRect(x: 0, y: viewH, width: viewW, height: 1))
             self.addSubview(self.loading!)
             
-            self.videoProgressView = UIView()
+            self.videoProgressView = UIView(frame: CGRect(x: 0, y: viewH, width: 0, height: 0.5))
             self.addSubview(self.videoProgressView!)
-            self.videoProgressView!.snp.makeConstraints { (make) in
-                make.top.equalTo(viewH)
-                make.left.equalTo(0)
-                make.width.equalTo(0)
-                make.height.equalTo(0.5)
-            }
             self.videoProgressView?.backgroundColor = YCStyleColor.white
             self.videoProgressView?.isHidden = true
         }
@@ -804,8 +806,13 @@ class YCVideoView: YCBaseView {
                     }else if let video = self.videoModel, let dynamic = video.videoDynamic {
                         if let videoURL = URL(string: dynamic.dynamicPath){
                             videoUIView.setVideo(with: YCVideoResource(videoURL), placeholder: nil, options: [.aotuPlay, .loop, .muted], loadedBlock: { (ready, error, url) in
-                                if ready {
-                                    self.cover!.isHidden = true
+                                if ready, let cover = self.cover {
+                                    UIView.animate(withDuration: 0.3, animations: {
+                                        cover.alpha = 0
+                                    }, completion: { (_) in
+                                        cover.isHidden = true
+                                        cover.alpha = 1
+                                    })
                                 }
                             }, playCompleteBlock: nil, progressBlock: nil)
                         }
@@ -868,9 +875,7 @@ class YCVideoView: YCBaseView {
             self.mediaModel?.videoPlayComplete = self.videoPlayComplete
             
             if let progress = self.videoProgressView {
-                progress.snp.updateConstraints({ (make) in
-                    make.width.equalTo(0)
-                })
+                progress.frame.size.width = 0
             }
             let interval = CMTime(seconds: 0.1,
                                   preferredTimescale: CMTimeScale(NSEC_PER_SEC))
@@ -882,11 +887,14 @@ class YCVideoView: YCBaseView {
                     if let videoPlayerItem = sf.mediaModel?.videoPlayerItem {
                         let current = videoPlayerItem.currentTime().seconds
                         let duration = videoPlayerItem.duration.seconds
-                        if let progress = sf.videoProgressView {
-                            let value = CGFloat(current/duration) * YCScreen.bounds.width
-                            progress.snp.updateConstraints({ (make) in
-                                make.width.equalTo(value)
-                            })
+                        if let progress = sf.videoProgressView, !current.isNaN, !duration.isNaN, duration != 0 {
+                            var value = CGFloat(current/duration) * YCScreen.bounds.width
+                            if !value.isNaN {
+                                if value < 0 {
+                                    value = 0
+                                }
+                                progress.frame.size.width = value
+                            }
                         }
                     }
                 }
@@ -1015,7 +1023,7 @@ class YCVideoView: YCBaseView {
         if let player = self.mediaModel?.videoPlayer, self.isloadComplete{
             player.pause()
             player.seek(to: CMTime(seconds: 0, preferredTimescale: 1))
-            if let token = self.progressToken {
+            if let token = self.progressToken, player.rate == 1.0 {
                 self.mediaModel?.videoPlayer?.removeTimeObserver(token)
             }
         }

@@ -313,7 +313,7 @@ class YCPublishDetailViewController: UIViewController {
             }
         }
         if isChange, let index = self.contentIndexPath {
-            self.loadMediaResouse(mediaIndex: index.item)
+            let _ = self.loadCurrentMediaResouse(mediaIndex: index.item)
         }
         return isChange
     }
@@ -463,21 +463,16 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
             self.contentModel = contents[row]
             self.contentIndexPath = indexPath
         }
-        if let index = self.contentIndexPath, let currentCell = self.collectionView.cellForItem(at: index) as? YCPublishDetailViewCell, let current = currentCell.publishModel{
-            self.loadMediaResouse(mediaIndex: indexPath.item)
-            let medias = self.videoMedias.filter {$0.publishID == current.publishID}
-            if medias.count > 0 {
-                currentCell.mediaModel = medias[0]
-            }
+        if let index = self.contentIndexPath, let currentCell = self.collectionView.cellForItem(at: index) as? YCPublishDetailViewCell{
             currentCell.displayView()
         }
     }
     
-    func loadMediaResouse(mediaIndex: Int) {
-        if let contents = self.contents {
+    func loadCurrentMediaResouse(mediaIndex: Int) -> YCMediaViewModel? {
+        if let contents = self.contents, mediaIndex > -1, mediaIndex < contents.count {
             self.loadResourceIndex = mediaIndex
-            let top = min(mediaIndex, 2)
-            let bottom = min((contents.count - 1) - mediaIndex, 2)
+            let top = min(mediaIndex, 3)
+            let bottom = min((contents.count - 1) - mediaIndex, 3)
             let start = mediaIndex - top
             let end = mediaIndex + bottom
             let subContents = contents[start...end]
@@ -491,27 +486,34 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
                 }
                 if !isHave {
                     self.releaseMediaViewModel(mediaModel: mediaView)
-//                    if let index = self.videoMedias.firstIndex(where: {$0.publishID == mediaView.publishID}) {
-//                        self.videoMedias.remove(at: index)
-//                    }
                 }
             }
-            for subContent in subContents {
-                if subContent.contentType == 2 {
-                    var isHave = false
-                    for mediaView in self.videoMedias {
-                        if mediaView.publishID == subContent.publishID {
-                            isHave = true
-                            break
-                        }
-                    }
-                    if !isHave, subContent.medias.count > 0, let videoModel = subContent.medias[0] as? YCVideoModel, let videoURL = URL(string: videoModel.videoPath) {
-                        let playerItem = AVPlayerItem(url: videoURL)
-                        let _ = self.initMediaViewModel(publishID: subContent.publishID, playerItem: playerItem)
-                    }
+            let currentContent = contents[mediaIndex]
+            let currentViewModel = loadPublishModeMedia(currentContent)
+            let loadContents = subContents.filter({$0.publishID != currentContent.publishID})
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+                for subContent in loadContents {
+                    let _ = self.loadPublishModeMedia(subContent)
                 }
+            }
+            return currentViewModel;
+        }
+        return nil
+    }
+    
+    func loadPublishModeMedia(_ publish: YCPublishModel) -> YCMediaViewModel?  {
+        if publish.contentType == 2 {
+            for mediaView in self.videoMedias {
+                if mediaView.publishID == publish.publishID {
+                    return mediaView
+                }
+            }
+            if publish.medias.count > 0, let videoModel = publish.medias[0] as? YCVideoModel,
+                let videoURL = URL(string: videoModel.videoPath) {
+                return self.initMediaViewModel(publishID: publish.publishID, videoURL: videoURL)
             }
         }
+        return nil
     }
     
     func releaseMediaViewModel(mediaModel: YCMediaViewModel){
@@ -532,10 +534,11 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
         }
     }
     
-    func initMediaViewModel(publishID: String, playerItem: AVPlayerItem) -> YCMediaViewModel? {
+    func initMediaViewModel(publishID: String, videoURL: URL) -> YCMediaViewModel? {
         let freeMedias = self.videoMedias.filter{$0.unUsed == true}
         if freeMedias.count > 0{
             let mediaModel = freeMedias[0]
+            let playerItem = AVPlayerItem(url: videoURL)
             mediaModel.publishID = publishID
             if let player = mediaModel.videoPlayer {
                 player.replaceCurrentItem(with: playerItem)
@@ -550,9 +553,8 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
             mediaModel.videoStatusChange = nil
             mediaModel.unUsed = false
             return mediaModel
-        }else {
-            return nil
         }
+        return nil
     }
     
     @objc func videoDidPlayToEnd(_ notify: Notification) {
@@ -598,6 +600,17 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
 }
 
 extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLoginProtocol, YCAlertProtocol, YCContentStringProtocol, YCShareProtocol {
+    
+    func cellLoadCellMedia(cell: YCPublishDetailViewCell?) -> [YCMediaViewModel]?{
+        if let cl = cell,  let indexPath = self.collectionView.indexPath(for: cl) {
+            let _ = self.loadCurrentMediaResouse(mediaIndex: indexPath.item)
+            if let current = cell?.publishModel {
+                let medias = self.videoMedias.filter {$0.publishID == current.publishID}
+                return medias
+            }
+        }
+        return nil
+    }
     
     func cellContentDoubleTap(_ cell: YCPublishDetailViewCell?, sender: UITapGestureRecognizer) {
         let pt = sender.location(in: self.view)

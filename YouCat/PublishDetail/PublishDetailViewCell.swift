@@ -49,8 +49,6 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         }
     }
     
-    var mediaModel: YCMediaViewModel?
-    
     var contentIndex = 0
     var delegate:YCPublishDetailViewCellDelegate?
         
@@ -366,7 +364,6 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             view.clean()
             view.removeFromSuperview()
         }
-        self.mediaModel = nil
         self.contentViews.removeAll()
         self.contentIndex = 0
         self.isDisplaying = false
@@ -506,14 +503,26 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
                                                         height: bounds.height)
             let offset = CGPoint(x: contentW * CGFloat(self.contentIndex), y: 0)
             self.contentScrollView.setContentOffset(offset, animated: false)
+            var mediaModels: [YCMediaViewModel]? = nil
+            if let delegate = self.delegate {
+                mediaModels = delegate.cellLoadCellMedia(cell: self)
+            }
+            var viewIndex = 0
             for view in self.contentViews {
-                view.loadMedia(self.mediaModel)
+                if mediaModels != nil {
+                    if viewIndex > -1, viewIndex < mediaModels!.count {
+                        view.loadMedia(mediaModels![viewIndex])
+                    }else if(mediaModels!.count > 0) {
+                        view.loadMedia(mediaModels![0])
+                    }
+                }
                 view.displayView()
                 if view.contentIndex == self.contentIndex {
                     view.play()
                 }else {
                     view.stop()
                 }
+                viewIndex = viewIndex + 1
             }
             self.contentPageController.numberOfPages = mediasCount
             self.contentPageController.currentPage = self.contentIndex
@@ -815,6 +824,7 @@ extension YCPublishDetailViewCell {
 
 
 protocol YCPublishDetailViewCellDelegate {
+    func cellLoadCellMedia(cell: YCPublishDetailViewCell?) -> [YCMediaViewModel]?
     func cellUserIconTap(cell: YCPublishDetailViewCell?)
     func cellDidPlayToEnd(cell: YCPublishDetailViewCell?)
     func cellCommentTap(_ cell: YCPublishDetailViewCell?)

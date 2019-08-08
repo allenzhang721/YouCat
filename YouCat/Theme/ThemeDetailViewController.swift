@@ -317,6 +317,9 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         }
         self.themeNameLabel.sizeToFit()
         self.themeDescLabel.sizeToFit()
+        let wGap = bounds.width * 0.06
+        self.themeNameLabel.frame.size.width = bounds.width - wGap*2 - 170
+        self.themeDescLabel.frame.size.width = bounds.width - wGap*2 - 50
         var topH:CGFloat = 1
         switch stypleType {
         case 1:

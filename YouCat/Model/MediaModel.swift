@@ -92,7 +92,6 @@ class YCVideoModel: YCMediaModel {
         }
         if videoDynamicJSON != nil {
             if let s = videoDynamicJSON!.rawString(), s != "", s != "null" {
-                print("aaa = \(s)")
                 self.videoDynamic = YCDynamicModel(videoDynamicJSON!)
             }else {
                 self.videoDynamic = nil;

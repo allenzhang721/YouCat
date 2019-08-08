@@ -106,10 +106,11 @@ class YCMediaLoadingView: UIView {
         let bgView = UIView(frame: CGRect(x: 0, y: 0, width: bounds.width, height: 0.5))
         self.addSubview(bgView)
         bgView.backgroundColor = YCStyleColor.grayWhiteAlpha
-        self.loadingView = UIView(frame: CGRect(x: (bounds.width-50)/2, y: 0, width: 50, height: 0.5))
+        self.loadingView = UIView(frame: CGRect(x: (bounds.width-50)/2, y: 0, width: 50, height: 1))
         self.addSubview(self.loadingView)
         self.loadingView.backgroundColor = YCStyleColor.white
         self.loadingView.isHidden = true
+        self.isHidden = true
     }
     
     func startAnimating() {
@@ -117,14 +118,14 @@ class YCMediaLoadingView: UIView {
             self.isHidden = false
             self.loadingView.isHidden = false
             let bounds = self.frame
-            let gap = (bounds.width - 20)/12
+            let gap = (bounds.width - 50)/24
             self.loadingTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.global())
-            self.loadingTimer!.schedule(deadline: .now(), repeating: .milliseconds(40))
+            self.loadingTimer!.schedule(deadline: .now(), repeating: .milliseconds(20))
             self.loadingTimer!.setEventHandler {
                 DispatchQueue.main.async {
                     let w = self.loadingView.frame.size.width
-                    if w + 20 > bounds.width {
-                        self.loadingView.frame.size.width = 20
+                    if w > bounds.width {
+                        self.loadingView.frame.size.width = 50
                         self.loadingView.frame.origin.x = (bounds.width-20)/2
                     }else {
                         self.loadingView.frame.size.width = self.loadingView.frame.width + gap
@@ -140,11 +141,11 @@ class YCMediaLoadingView: UIView {
         if !self.loadingView.isHidden{
             self.loadingView.layer.removeAllAnimations()
             self.loadingView.isHidden = true
-            self.isHidden = true
-            if let time = self.loadingTimer {
-                time.cancel()
-            }
-            self.loadingTimer = nil
         }
+        if let time = self.loadingTimer {
+            time.cancel()
+        }
+        self.loadingTimer = nil
+        self.isHidden = true
     }
 }
