@@ -89,3 +89,44 @@ class YCNavigationController: UINavigationController{
     }
 }
 
+class YCViewController: UIViewController {
+
+    var isGoto: Bool = false
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.delegate = self
+        super.viewWillDisappear(animated)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.isGoto = false
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if !self.isGoto {
+            self.resetViewController()
+        }
+        if let delegate = self.navigationController?.interactivePopGestureRecognizer?.delegate as? YCViewController, delegate == self {
+            self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        }
+        if let delegate = self.navigationController?.delegate as? YCViewController, delegate == self {
+            self.navigationController?.delegate = nil
+        }
+    }
+    
+    func initViewController(){
+        
+    }
+    
+    func resetViewController() {
+    }
+}
+
+extension YCViewController:UIGestureRecognizerDelegate, UINavigationControllerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool{
+        return true
+    }
+}

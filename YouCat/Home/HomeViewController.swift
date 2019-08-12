@@ -285,7 +285,7 @@ extension YCHomeViewController: YCPublishTableViewCellDelegate, YCAlertProtocol,
     
     func cellContentTap(_ cell: YCPublishTableViewCell?, contentIndex: Int) {
         if cell != nil, let publish = cell?.publishModel {
-            let publishDetail = YCPublishDetailViewController.getInstance()
+            let publishDetail = YCPublishDetailViewController()
             publishDetail.contentType = .HOME
             publishDetail.contentModel = publish
             publishDetail.contentIndex = contentIndex
@@ -330,11 +330,11 @@ extension YCHomeViewController: YCPublishTableViewCellDelegate, YCAlertProtocol,
     
     func cellCommentButtonClick(_ cell:YCPublishTableViewCell?){
         if let ce = cell, let publish = ce.publishModel {
-            let commentList = YCCommentListViewController.getInstance(.Publish, style: .Default) { (model) in
+            let commentList = YCCommentListViewController.getInstance(.Publish, style: .Default, completeBlock: { (model) in
                 if let publishModel = model as? YCPublishModel {
                     ce.changePublishCommentStatus(publish: publishModel)
                 }
-            }
+            }, pushBlock: nil, backBlock: nil)
             commentList.publishModel = publish
             let navigationController = UINavigationController(rootViewController: commentList)
             navigationController.isNavigationBarHidden = true

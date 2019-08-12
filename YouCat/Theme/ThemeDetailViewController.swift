@@ -11,26 +11,6 @@ import MJRefresh
 
 class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentStringProtocol, YCAlertProtocol {
     
-    static var _instaceArray: [YCThemeDetailViewController] = [];
-    
-    static func getInstance() -> YCThemeDetailViewController{
-        var _instance: YCThemeDetailViewController
-        if _instaceArray.count > 0 {
-            _instance = _instaceArray[0]
-            _instaceArray.remove(at: 0)
-            _instance.initViewController()
-            return _instance
-        }else {
-            _instance = YCThemeDetailViewController();
-            _instance.initViewController()
-        }
-        return _instance
-    }
-    
-    static func addInstance(instace: YCThemeDetailViewController) {
-        _instaceArray.append(instace)
-    }
-    
     let refreshCount = 40
     
     var themeModel: YCThemeModel?
@@ -58,6 +38,8 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     let footerFresh = MJRefreshAutoNormalFooter()
     
     var isFirstShow: Bool = true
+    var isGoto: Bool = false
+    var isLoginChange = false
     
     var maxScrollHeight: CGFloat = 44
 
@@ -84,20 +66,28 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
             self.maxScrollHeight = bar.frame.height
         }
         self.maxScrollHeight = YCScreen.safeArea.top + self.maxScrollHeight
-        if self.isFirstShow {
+        if self.isLoginChange || self.isFirstShow {
             self.themeDetail()
+        }
+        if self.isFirstShow {
             self.refreshPage()
         }
+        self.isGoto = false
         self.isFirstShow = false
+        self.isLoginChange = false
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initView()
+        self.initViewController()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        if !self.isGoto {
+            self.resetViewController()
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -485,6 +475,8 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     
     func initViewController() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.loginUserChange(_:)), name: NSNotification.Name("LoginUserChange"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.followUserChange(_:)), name: NSNotification.Name("FollowUser"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.unFollowUserChange(_:)), name: NSNotification.Name("UnFollowUser"), object: nil)
     }
     
     func resetViewController() {
@@ -502,6 +494,9 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         self.isFirstShow = true
         self.followButton.status = .Unfollow
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("LoginUserChange"), object: nil)
+        NotificationCenter.default.removeObserver(self, name:
+            NSNotification.Name("FollowUser"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("UnFollowUser"), object: nil)
     }
 }
 
@@ -524,7 +519,6 @@ extension YCThemeDetailViewController: UICollectionViewDataSource {
         let publishModel = self.publishes[row]
         cell.type = .THEME
         cell.publishModel = publishModel
-        print("init")
         return cell
     }
     
@@ -557,7 +551,7 @@ extension YCThemeDetailViewController: YCCollectionViewWaterfallLayoutDelegate {
         let row = indexPath.item
         let publishModel = self.publishes[row]
         
-        let publishDetail = YCPublishDetailViewController.getInstance()
+        let publishDetail = YCPublishDetailViewController()
         publishDetail.contentModel = publishModel
         publishDetail.contents = self.publishes
         publishDetail.contentType = .THEME
@@ -566,7 +560,7 @@ extension YCThemeDetailViewController: YCCollectionViewWaterfallLayoutDelegate {
             publishDetail.contentID = themeModel.themeID
         }
         publishDetail.contentValue = ["ThemeType": self.themeType]
-        
+        self.isGoto = true
         NotificationCenter.default.post(name: NSNotification.Name("RootPushPublishView"), object: publishDetail)
 //        let navigationController = UINavigationController(rootViewController: publishDetail)
 //        navigationController.isNavigationBarHidden = true
@@ -603,24 +597,35 @@ extension YCThemeDetailViewController: YCCollectionViewWaterfallLayoutDelegate {
 
 extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLoginProtocol, YCShareProtocol {
     
+    @objc func unFollowUserChange(_ notify: Notification) {
+        if let followUserID = notify.object as? String {
+            for publish in self.publishes {
+                if let publishUser = publish.user, publishUser.userID == followUserID {
+                    publish.user?.relation = 0
+                }
+            }
+        }
+    }
+    
+    @objc func followUserChange(_ notify: Notification) {
+        if let followUserID = notify.object as? String {
+            for publish in self.publishes {
+                if let publishUser = publish.user, publishUser.userID == followUserID {
+                    publish.user?.relation = 1
+                }
+            }
+        }
+    }
+    
     @objc func loginUserChange(_ notify: Notification) {
-        self.isFirstShow = true
+        self.isLoginChange = true
     }
     
     @objc func closeButtonClick(){
-//        self.navigationController?.dismiss(animated: true, completion: { () -> Void in
-//            self.resetViewController()
-//            YCThemeDetailViewController.addInstance(instace: self)
-//        })
-        
         if self.collectionView.isDecelerating {
             self.killScroll()
         }else {
             self.navigationController?.popViewController(animated: true)
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.7) {
-                self.resetViewController()
-                YCThemeDetailViewController.addInstance(instace: self)
-            }
         }
     }
     
@@ -735,7 +740,9 @@ extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLo
     }
     
     func followThemeHandler() {
+        self.isGoto = true
         self.showLoginView(view: self, noNeedShowBlock: {
+            self.isGoto = false
             self.followHandler()
         }) {
             self.followHandler()
@@ -765,7 +772,9 @@ extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLo
     }
     
     func unFollowThemeHandler() {
+        self.isGoto = true
         self.showLoginView(view: self, noNeedShowBlock: {
+            self.isGoto = false
             self.unFollowConfirmHandler()
         }, completeBlock: nil)
     }
@@ -803,7 +812,9 @@ extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLo
     }
     
     func unBlockThemeHandler() {
+        self.isGoto = true
         self.showLoginView(view: self, noNeedShowBlock: {
+            self.isGoto = false
             self.unFollowHandler()
         }) {
             self.unFollowHandler()
@@ -811,7 +822,9 @@ extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLo
     }
     
     func blockThemeHandler() {
+        self.isGoto = true
         self.showLoginView(view: self, noNeedShowBlock: {
+            self.isGoto = false
             self.blockConfirmHandler()
         }, completeBlock: nil)
     }

@@ -18,25 +18,7 @@ enum YCPublishDetailType: String{
     case LIKE = "like"
 }
 
-class YCPublishDetailViewController: UIViewController {
-    
-    static var _instaceArray: [YCPublishDetailViewController] = [];
-    
-    static func getInstance() -> YCPublishDetailViewController{
-        var _instance: YCPublishDetailViewController
-        if _instaceArray.count > 0 {
-            _instance = _instaceArray[0]
-            _instaceArray.remove(at: 0)
-            return _instance
-        }else {
-            _instance = YCPublishDetailViewController();
-        }
-        return _instance
-    }
-    
-    static func addInstance(instace: YCPublishDetailViewController) {
-        _instaceArray.append(instace)
-    }
+class YCPublishDetailViewController: YCViewController {
     
     var videoMedias: [YCMediaViewModel] = []
     
@@ -73,10 +55,6 @@ class YCPublishDetailViewController: UIViewController {
         super.viewWillAppear(animated)
         if self.isFirstShow {
             self.showView()
-        }else {
-            if let index = self.contentIndexPath, let currentCell = self.collectionView.cellForItem(at: index) as? YCPublishDetailViewCell{
-                currentCell.displayView()
-            }
         }
     }
     
@@ -93,28 +71,32 @@ class YCPublishDetailViewController: UIViewController {
                     self.footerRefresh()
                 }
             }
+        }else {
+            if let index = self.contentIndexPath, let currentCell = self.collectionView.cellForItem(at: index) as? YCPublishDetailViewCell{
+                currentCell.displayView()
+            }
         }
         self.isFirstShow = false
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-        
         self.initView()
-        for _ in 0..<6 {
+        for _ in 0..<10 {
             self.videoMedias.append(YCMediaViewModel(publishID: ""))
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(self.followUserChange(_:)), name: NSNotification.Name("FollowUser"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.unFollowUserChange(_:)), name: NSNotification.Name("UnFollowUser"), object: nil)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
         let cells = self.collectionView.visibleCells
         for cell in cells {
             if let contentCell = cell as? YCPublishDetailViewCell{
                 contentCell.displayPause()
             }
         }
+        super.viewDidDisappear(animated)
     }
     
     override func didReceiveMemoryWarning() {
@@ -200,7 +182,6 @@ class YCPublishDetailViewController: UIViewController {
         self.collectionView.register(YCPublishDetailViewCell.self, forCellWithReuseIdentifier: "YCPublishDetailCell")
 //        self.collectionView.register(YCCollectionFooterView.self, forSupplementaryViewOfKind: YCCollectionViewWaterfallSectionFooter, withReuseIdentifier: "YCPublishDetailFooterView")
        
-        
         self.collectionView.isPagingEnabled = true
         self.collectionView.showsHorizontalScrollIndicator = false
         self.collectionView.showsVerticalScrollIndicator = false
@@ -313,12 +294,15 @@ class YCPublishDetailViewController: UIViewController {
             }
         }
         if isChange, let index = self.contentIndexPath {
+            self.loadResourceIndex = -1
             let _ = self.loadCurrentMediaResouse(mediaIndex: index.item)
         }
         return isChange
     }
     
-    func resetViewController() {
+    override func resetViewController() {
+        super.resetViewController()
+        print("reset View")
         self.resetCollectionViewCell()
         self.contentModel = nil
         self.contentIndexPath = nil
@@ -333,6 +317,9 @@ class YCPublishDetailViewController: UIViewController {
         for mediaModel in self.videoMedias.filter({$0.unUsed == false}) {
             self.releaseMediaViewModel(mediaModel: mediaModel)
         }
+        NotificationCenter.default.removeObserver(self, name:
+            NSNotification.Name("FollowUser"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("UnFollowUser"), object: nil)
 //        self.videoMedias.removeAll()
     }
 }
@@ -469,7 +456,7 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
     }
     
     func loadCurrentMediaResouse(mediaIndex: Int) -> YCMediaViewModel? {
-        if let contents = self.contents, mediaIndex > -1, mediaIndex < contents.count {
+        if let contents = self.contents, mediaIndex > -1, mediaIndex < contents.count, self.loadResourceIndex !=  mediaIndex{
             self.loadResourceIndex = mediaIndex
             let top = min(mediaIndex, 3)
             let bottom = min((contents.count - 1) - mediaIndex, 3)
@@ -491,9 +478,17 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
             let currentContent = contents[mediaIndex]
             let currentViewModel = loadPublishModeMedia(currentContent)
             let loadContents = subContents.filter({$0.publishID != currentContent.publishID})
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+            if let currentPlayItem = currentViewModel?.videoPlayerItem, currentPlayItem.status == .readyToPlay {
                 for subContent in loadContents {
                     let _ = self.loadPublishModeMedia(subContent)
+                }
+            }else {
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+                    if let contentIndex = self.contentIndexPath, contentIndex.item == mediaIndex {
+                        for subContent in loadContents {
+                            let _ = self.loadPublishModeMedia(subContent)
+                        }
+                    }
                 }
             }
             return currentViewModel;
@@ -591,10 +586,6 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
     }
     
     func viewCloseHander() {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-            self.resetViewController()
-            YCPublishDetailViewController.addInstance(instace: self)
-        }
         self.navigationController?.popViewController(animated: true)
     }
 }
@@ -638,7 +629,9 @@ extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLogi
     
     
     func cellFollowButtonTap(_ cell: YCPublishDetailViewCell?, followBlock: (()->Void)?) {
+        self.isGoto = true
         self.showLoginView(view: self, noNeedShowBlock: {
+            self.isGoto = false
             self.followHandler(cell)
             if let block = followBlock {
                 block()
@@ -652,7 +645,9 @@ extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLogi
     }
     
     func cellCommentTap(_ cell: YCPublishDetailViewCell?) {
+        self.isGoto = true
         self.showLoginView(view: self, noNeedShowBlock: {
+            self.isGoto = false
             self.showCommentView(cell: cell)
         }) {
             self.showCommentView(cell: cell)
@@ -661,7 +656,10 @@ extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLogi
     
     func followHandler(_ ce: YCPublishDetailViewCell?) {
         if let cell = ce, let publish = cell.publishModel, let user = publish.user {
-            YCUserDomain().followUser(userID: user.userID) { (resultMode) in
+            YCUserDomain().followUser(userID: user.userID) { (result) in
+                if let re = result, re.result {
+                    NotificationCenter.default.post(name: NSNotification.Name("FollowUser"), object: user.userID)
+                }
             }
         }
     }
@@ -814,7 +812,9 @@ extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLogi
     }
     
     func cellLikeButtonClick(_ cell: YCPublishDetailViewCell?) {
+        self.isGoto = true
         self.showLoginView(view: self, noNeedShowBlock: {
+            self.isGoto = false
             if cell != nil, let publish = cell?.publishModel {
                 if publish.isLike == 0 {
                     self.likePublishHandler(publish, publishCell: cell)
@@ -833,9 +833,17 @@ extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLogi
     
     func cellCommentButtonClick(_ cell: YCPublishDetailViewCell?) {
         if let ce = cell, let publish = ce.publishModel {
-            let commentList = YCCommentListViewController.getInstance(.Publish, style: .Dark) { (model) in
+            let commentList = YCCommentListViewController.getInstance(.Publish, style: .Dark, completeBlock: { (model) in
                 if let publishModel = model as? YCPublishModel {
                     ce.changePublishCommentStatus(publish: publishModel)
+                }
+            }, pushBlock: {
+                if let index = self.contentIndexPath, let currentCell = self.collectionView.cellForItem(at: index) as? YCPublishDetailViewCell{
+                    currentCell.displayPause()
+                }
+            }) {
+                if let index = self.contentIndexPath, let currentCell = self.collectionView.cellForItem(at: index) as? YCPublishDetailViewCell{
+                    currentCell.displayView()
                 }
             }
             commentList.publishModel = publish
@@ -881,9 +889,10 @@ extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLogi
         if isSameUser {
             self.viewCloseHander()
         }else {
-            let userProfile = YCUserViewController.getInstance()
+            let userProfile = YCUserViewController()
             userProfile.userModel = user
             if let nav = self.navigationController {
+                self.isGoto = true
                 nav.pushViewController(userProfile, animated: true)
             }
         }
@@ -979,7 +988,40 @@ extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLogi
     }
 }
 
-extension YCPublishDetailViewController: UIGestureRecognizerDelegate{
+extension YCPublishDetailViewController{
+    
+    @objc func unFollowUserChange(_ notify: Notification) {
+        if let followUserID = notify.object as? String, let contents = self.contents {
+            for publish in contents{
+                if let publishUser = publish.user, publishUser.userID == followUserID {
+                    publish.user?.relation = 0
+                }
+            }
+            let cells = self.collectionView.visibleCells
+            for cell in cells {
+                if let contentCell = cell as? YCPublishDetailViewCell{
+                    contentCell.setFollowButtonStatus()
+                }
+            }
+        }
+    }
+    
+    @objc func followUserChange(_ notify: Notification) {
+        if let followUserID = notify.object as? String, let contents = self.contents {
+            for publish in contents {
+                if let publishUser = publish.user, publishUser.userID == followUserID {
+                    publish.user?.relation = 1
+                }
+            }
+            let cells = self.collectionView.visibleCells
+            for cell in cells {
+                if let contentCell = cell as? YCPublishDetailViewCell{
+                    contentCell.setFollowButtonStatus()
+                }
+            }
+        }
+    }
+    
     
     func resolvePopGesture(scrollView: UIScrollView) {
         if let gestures = self.navigationController?.view.gestureRecognizers {
@@ -990,5 +1032,4 @@ extension YCPublishDetailViewController: UIGestureRecognizerDelegate{
             }
         }
     }
-    
 }

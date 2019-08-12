@@ -27,7 +27,7 @@ class ThemeNavigationTransition: NSObject, UINavigationControllerDelegate {
     }
     
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
-        print("did show =", viewController)
+//        print("did show =", viewController)
         
     }
     

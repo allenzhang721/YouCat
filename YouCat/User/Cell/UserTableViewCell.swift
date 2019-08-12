@@ -149,6 +149,7 @@ extension YCUserTableViewCell: YCAlertProtocol {
                     if result.result {
                         self.followButton.status = .Following
                         self.userModel!.relation = 1
+                        NotificationCenter.default.post(name: NSNotification.Name("FollowUser"), object: user.userID)
                     }else {
                         self.followButton.status = oldStatus
                     }
@@ -168,6 +169,7 @@ extension YCUserTableViewCell: YCAlertProtocol {
                     if result.result {
                         self.userModel!.relation = 0
                         self.followButton.status = .Unfollow
+                        NotificationCenter.default.post(name: NSNotification.Name("UnFollowUser"), object: user.userID)
                     }else {
                         self.followButton.status = oldStatus
                     }

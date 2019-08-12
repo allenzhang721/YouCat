@@ -21,32 +21,13 @@ enum YCLoginUserType: String{
     case LoginUser = "login"
 }
 
-class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringProtocol, YCAlertProtocol {
-    
-    static var _instaceArray: [YCUserViewController] = [];
-    
-    static func getInstance() -> YCUserViewController{
-        var _instance: YCUserViewController
-        if _instaceArray.count > 0 {
-            _instance = _instaceArray[0]
-            _instaceArray.remove(at: 0)
-            _instance.initViewController()
-            return _instance
-        }else {
-            _instance = YCUserViewController();
-            _instance.initViewController()
-        }
-        return _instance
-    }
-    
-    static func addInstance(instace: YCUserViewController) {
-        _instaceArray.append(instace)
-    }
+class YCUserViewController: YCViewController, YCImageProtocol, YCNumberStringProtocol, YCAlertProtocol {
     
     var userPublishType: YCUserPublishType = .POST
     var loginUserType: YCLoginUserType = .Default
     let refreshCount = 40
     var isFirstShow: Bool = true
+    var isLoginChange: Bool = false
     var isSetting: Bool = false
 
     var userModel: YCUserModel?
@@ -88,10 +69,7 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = true
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-        
         UIApplication.shared.setStatusBarStyle(.default, animated: true)
-        
         super.viewWillAppear(animated)
         if self.isFirstShow || self.isSetting {
             self.setValue(userModel: self.userModel)
@@ -100,12 +78,15 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if self.isFirstShow {
+        if self.isLoginChange || self.isFirstShow {
             self.userDetail()
+        }
+        if self.isFirstShow {
             self.refreshPage()
         }
         self.isFirstShow = false
         self.isSetting = false
+        self.isLoginChange = false
     }
     
     override func viewDidLoad() {
@@ -114,8 +95,12 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
             self.topHeight = bar.frame.height
         }
         self.topHeight = YCScreen.safeArea.top + self.topHeight
+        self.initViewController()
         self.initView()
-        
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
     }
     
     override func didReceiveMemoryWarning() {
@@ -459,9 +444,11 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
     
     func userDetail() {
         if let user = self.userModel {
-            self.resetDetail()
-            if self.followButton.status != .EditProfile {
-                self.followButton.status = .Loading
+            if self.isFirstShow {
+                self.resetDetail()
+                if self.followButton.status != .EditProfile {
+                    self.followButton.status = .Loading
+                }
             }
             YCUserDomain().userDetail(userID: user.userID, completionBlock: { (model) in
                 if let mo = model, mo.result {
@@ -581,10 +568,6 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
             delegate.backUser(user: relationUser)
         }
         self.navigationController?.popViewController(animated: true)
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-            self.resetViewController()
-            YCUserViewController.addInstance(instace: self)
-        }
     }
     
     func updatePublishDate(modelList: Array<YCBaseModel>) -> Bool{
@@ -607,11 +590,16 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
         return isChange
     }
     
-    func initViewController(){
+    override func initViewController(){
         NotificationCenter.default.addObserver(self, selector: #selector(self.loginUserChange(_:)), name: NSNotification.Name("LoginUserChange"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.followUserChange(_:)), name: NSNotification.Name("FollowUser"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.unFollowUserChange(_:)), name: NSNotification.Name("UnFollowUser"), object: nil)
     }
     
-    func resetViewController() {
+    override func resetViewController() {
+        print("user reset")
+        super.resetViewController()
         self.userDetailModel = nil
         self.publishes.removeAll()
         self.publishSizes.removeAll()
@@ -625,6 +613,7 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
         self.footerFresh.isHidden = true
         self.isFirstShow = true
         self.isSetting = false
+        self.isLoginChange = false
         self.resetDetail()
         self.followButton.status = .Unfollow
         self.userPublishType = .POST
@@ -633,6 +622,9 @@ class YCUserViewController: UIViewController, YCImageProtocol, YCNumberStringPro
         self.likeButton.status = .Default
         self.delegate = nil
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("LoginUserChange"), object: nil)
+        NotificationCenter.default.removeObserver(self, name:
+            NSNotification.Name("FollowUser"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("UnFollowUser"), object: nil)
     }
 }
 
@@ -692,7 +684,7 @@ extension YCUserViewController: YCCollectionViewWaterfallLayoutDelegate {
         let row = indexPath.item
         let publishModel = self.publishes[row]
         
-        let publishDetail = YCPublishDetailViewController.getInstance()
+        let publishDetail = YCPublishDetailViewController()
         publishDetail.contentModel = publishModel
         publishDetail.contentIndex = 0
         publishDetail.contents = self.publishes
@@ -704,7 +696,12 @@ extension YCUserViewController: YCCollectionViewWaterfallLayoutDelegate {
         if let user = self.userModel {
             publishDetail.contentID = user.userID
         }
-        NotificationCenter.default.post(name: NSNotification.Name("RootPushPublishView"), object: publishDetail)
+        if let nav = self.navigationController {
+            self.isGoto = true
+            nav.pushViewController(publishDetail, animated: true)
+        }
+//        self.navigationController
+//        NotificationCenter.default.post(name: NSNotification.Name("RootPushPublishView"), object: publishDetail)
 //
 //        let navigationController = UINavigationController(rootViewController: publishDetail)
 //        navigationController.isNavigationBarHidden = true
@@ -733,18 +730,40 @@ extension YCUserViewController: YCCollectionViewWaterfallLayoutDelegate {
     }
 }
 
-extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProtocol, UIGestureRecognizerDelegate, YCShareProtocol{
+extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProtocol, YCShareProtocol{
+    
+    @objc func unFollowUserChange(_ notify: Notification) {
+        if let followUserID = notify.object as? String {
+            if let userID = self.userModel?.userID, followUserID == userID {
+                self.isLoginChange = true
+            }
+            for publish in self.publishes {
+                if let publishUser = publish.user, publishUser.userID == followUserID {
+                    publish.user?.relation = 0
+                }
+            }
+        }
+    }
+    
+    @objc func followUserChange(_ notify: Notification) {
+        if let followUserID = notify.object as? String {
+            if let userID = self.userModel?.userID, followUserID == userID {
+                self.isLoginChange = true
+            }
+            for publish in self.publishes {
+                if let publishUser = publish.user, publishUser.userID == followUserID {
+                    publish.user?.relation = 1
+                }
+            }
+        }
+    }
     
     @objc func loginUserChange(_ notify: Notification) {
-        self.isFirstShow = true
+        self.isLoginChange = true
     }
     
     func cellUserIconTap(_ cell:YCPublishCollectionViewCell?){
         
-    }
-    
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool{
-        return true
     }
     
     @objc func operateButtonClick(){
@@ -852,20 +871,22 @@ extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProt
     }
     
     @objc func followersTapHandler() {
-        let userList = YCUserListViewController.getInstance()
+        let userList = YCUserListViewController()
         userList.userModel = self.userDetailModel
         userList.userListType = .Followers
         if let nav = self.navigationController {
+            self.isGoto = true
             nav.pushViewController(userList, animated: true)
         }
     }
     
     @objc func followingTapHandler() {
-        let userList = YCUserListViewController.getInstance()
+        let userList = YCUserListViewController()
         userList.userModel = self.userDetailModel
         userList.userListType = .Following
         
         if let nav = self.navigationController {
+            self.isGoto = true
             nav.pushViewController(userList, animated: true)
         }
     }
@@ -911,7 +932,9 @@ extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProt
     }
     
     func editProfileHandler() {
+        self.isGoto = true
         self.showLoginView(view: self, noNeedShowBlock: {
+            self.isGoto = false
             self.editProfile()
         }, completeBlock: nil)
     }
@@ -928,7 +951,9 @@ extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProt
     }
     
     func followUserHandler() {
+        self.isGoto = true
         self.showLoginView(view: self, noNeedShowBlock: {
+            self.isGoto = false
             self.followHandler()
         }) {
             self.followHandler()
@@ -944,6 +969,7 @@ extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProt
                     if result.result {
                         self.followButton.status = .Following
                         (self.userModel as? YCRelationUserModel)?.relation = 1
+                        NotificationCenter.default.post(name: NSNotification.Name("FollowUser"), object: user.userID)
                     }else {
                         self.followButton.status = oldStatus
                         if let message = result.message {
@@ -958,7 +984,9 @@ extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProt
     }
     
     func unFollowUserHandler() {
+        self.isGoto = true
         self.showLoginView(view: self, noNeedShowBlock: {
+            self.isGoto = false
             self.unFollowConfirmHandler()
         }, completeBlock: nil)
     }
@@ -982,6 +1010,7 @@ extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProt
                     if result.result {
                         (self.userModel as? YCRelationUserModel)?.relation = 0
                         self.followButton.status = .Unfollow
+                        NotificationCenter.default.post(name: NSNotification.Name("UnFollowUser"), object: user.userID)
                     }else {
                         self.followButton.status = oldStatus
                         if let message = result.message {
@@ -996,7 +1025,9 @@ extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProt
     }
     
     func unBlockUserHandler() {
+        self.isGoto = true
         self.showLoginView(view: self, noNeedShowBlock: {
+            self.isGoto = false
             self.unFollowHandler()
         }) {
             self.unFollowHandler()
@@ -1004,7 +1035,9 @@ extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProt
     }
     
     func blockUserHandler() {
+        self.isGoto = true
         self.showLoginView(view: self, noNeedShowBlock: {
+            self.isGoto = false
             self.blockConfirmHandler()
         }, completeBlock: nil)
     }

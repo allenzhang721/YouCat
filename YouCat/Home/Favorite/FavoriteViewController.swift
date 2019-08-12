@@ -73,6 +73,8 @@ class YCFavoriteViewController: UIViewController, YCImageProtocol, YCContentStri
         self.initView()
         NotificationCenter.default.addObserver(self, selector: #selector(self.loginUserChange(_:)), name: NSNotification.Name("LoginUserChange"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshHome(_:)), name: NSNotification.Name("reFreshHome"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.followUserChange(_:)), name: NSNotification.Name("FollowUser"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.unFollowUserChange(_:)), name: NSNotification.Name("UnFollowUser"), object: nil)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -298,8 +300,28 @@ class YCFavoriteViewController: UIViewController, YCImageProtocol, YCContentStri
 
 extension YCFavoriteViewController: YCLoginProtocol {
     
+    @objc func unFollowUserChange(_ notify: Notification) {
+        if let followUserID = notify.object as? String {
+            for publish in self.publishes {
+                if let publishUser = publish.user, publishUser.userID == followUserID {
+                    publish.user?.relation = 0
+                }
+            }
+        }
+    }
+    
+    @objc func followUserChange(_ notify: Notification) {
+        if let followUserID = notify.object as? String {
+            for publish in self.publishes {
+                if let publishUser = publish.user, publishUser.userID == followUserID {
+                    publish.user?.relation = 1
+                }
+            }
+        }
+    }
+    
     @objc func loginUserChange(_ notify: Notification) {
-        self.isFirstLoad = true
+//        self.isFirstLoad = true
         self.setUserIcon()
     }
     
@@ -376,7 +398,7 @@ extension YCFavoriteViewController: YCCollectionViewWaterfallLayoutDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let row = indexPath.item
         let publish = self.publishes[row]
-        let publishDetail = YCPublishDetailViewController.getInstance()
+        let publishDetail = YCPublishDetailViewController()
         publishDetail.contentType = .HOME
         publishDetail.contentModel = publish
         publishDetail.contentIndex = 0

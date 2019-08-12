@@ -99,7 +99,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         self.userView.snp.makeConstraints { (make) in
             make.right.equalTo(-15)
             make.bottom.equalTo(self.contentPageController.snp.top).offset(0)
-            make.width.equalTo(66)
+            make.width.equalTo(54)
             make.height.equalTo(66)
         }
         
@@ -109,20 +109,20 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         iconBg.snp.makeConstraints { (make) in
             make.right.equalTo(0)
             make.bottom.equalTo(-12)
-            make.width.equalTo(66)
-            make.height.equalTo(66)
+            make.width.equalTo(54)
+            make.height.equalTo(54)
         }
-        self.cropImageCircle(iconBg, 33)
+        self.cropImageCircle(iconBg, 27)
         
         self.userIcon = UIImageView()
         iconBg.addSubview(self.userIcon)
         self.userIcon.snp.makeConstraints { (make) in
             make.left.equalTo(1)
             make.top.equalTo(1)
-            make.width.equalTo(64)
-            make.height.equalTo(64)
+            make.width.equalTo(52)
+            make.height.equalTo(52)
         }
-        self.cropImageCircle(self.userIcon, 32)
+        self.cropImageCircle(self.userIcon, 26)
         self.userIcon.image = UIImage(named: "default_icon")
         
         let iconTap = UITapGestureRecognizer(target: self, action: #selector(self.iconTapHandler))
@@ -135,7 +135,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         self.followButton.snp.makeConstraints { (make) in
             make.bottom.equalTo(0)
             make.centerX.equalTo(iconBg).offset(0)
-            make.width.equalTo(50)
+            make.width.equalTo(44)
             make.height.equalTo(24)
         }
         let followButtonTap = UITapGestureRecognizer(target: self, action: #selector(self.followButtonTapHandler))
@@ -418,6 +418,18 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             }
             self.contentViews.removeAll()
             self.contentIndex = 0
+        }
+    }
+    
+    func setFollowButtonStatus() {
+        if let publish = self.publishModel, let user = publish.user {
+            if user.relation == 0 {
+                self.followButton.isHidden = false
+                self.followButton.alpha = 1
+                self.followButton.setUnFollowStatus()
+            }else {
+                self.followButton.isHidden = true
+            }
         }
     }
     

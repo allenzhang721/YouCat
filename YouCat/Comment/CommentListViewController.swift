@@ -27,19 +27,23 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
     var listType: YCCommentLisType = .Publish
     var listStyle: YCCommentListStyle = .Default
     var completeBlock: ((_ model: YCBaseModel?) -> Void)?
+    var pushBlock: (() -> Void)?
+    var backBlock: (() -> Void)?
     
-    convenience init(_ type: YCCommentLisType, style: YCCommentListStyle, completeBlock: ((_ model: YCBaseModel?) -> Void)?) {
+    convenience init(_ type: YCCommentLisType, style: YCCommentListStyle, completeBlock: ((_ model: YCBaseModel?) -> Void)?, pushBlock: (() -> Void)?, backBlock: (() -> Void)?) {
         self.init()
         self.listType = type
         self.listStyle = style
         self.completeBlock = completeBlock
+        self.pushBlock = pushBlock
+        self.backBlock = backBlock
         self.view.backgroundColor = UIColor.clear
         self.modalPresentationStyle = .custom
     }
     
     static var _instaceArray: [YCCommentListViewController] = [];
     
-    static func getInstance(_ type: YCCommentLisType, style: YCCommentListStyle, completeBlock: ((_ model: YCBaseModel?) -> Void)?) -> YCCommentListViewController{
+    static func getInstance(_ type: YCCommentLisType, style: YCCommentListStyle, completeBlock: ((_ model: YCBaseModel?) -> Void)?, pushBlock: (() -> Void)?, backBlock: (() -> Void)?) -> YCCommentListViewController{
         var _instance: YCCommentListViewController
         if _instaceArray.count > 0 {
             _instance = _instaceArray[0]
@@ -47,9 +51,11 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
             _instance.listType = type
             _instance.listStyle = style
             _instance.completeBlock = completeBlock
+            _instance.pushBlock = pushBlock
+            _instance.backBlock = backBlock
             return _instance
         }else {
-            _instance = YCCommentListViewController(type, style: style, completeBlock: completeBlock)
+            _instance = YCCommentListViewController(type, style: style, completeBlock: completeBlock, pushBlock: pushBlock, backBlock: backBlock)
         }
         return _instance
     }
@@ -93,17 +99,19 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
     
     let commentBgTop = YCScreen.bounds.height / 4
     
+    var isDismissed: Bool = false
+    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = true
         super.viewWillAppear(animated)
         if self.isFirstLoad {
             self.initStyle()
             self.setValue()
+        }else {
+            if let back = self.backBlock {
+                back()
+            }
         }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -112,6 +120,16 @@ class YCCommentListViewController: UIViewController, YCContentStringProtocol, YC
             self.refreshPage()
         }
         self.isFirstLoad = false
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if !self.isDismissed{
+            if let pushBlock = self.pushBlock {
+                pushBlock()
+            }
+        }
+        self.isDismissed = false
     }
     
     override func viewDidLoad() {
@@ -599,6 +617,7 @@ extension YCCommentListViewController: YCLoginProtocol {
     }
     
     func resetViewController() {
+        self.isDismissed = false
         self.isFirstLoad = true
         self.commentes.removeAll()
         self.viewCommentes.removeAll()
@@ -615,6 +634,7 @@ extension YCCommentListViewController: YCLoginProtocol {
     
     func closeViewHandler() {
         if let ng = self.navigationController {
+            self.isDismissed = true
             ng.dismiss(animated: true) {
                 if let complete = self.completeBlock {
                     switch self.listType{
@@ -846,7 +866,7 @@ extension YCCommentListViewController: YCCommentListViewCellDelegate {
     }
     
     func goUser(_ user: YCUserModel) {
-        let userProfile = YCUserViewController.getInstance()
+        let userProfile = YCUserViewController()
         userProfile.userModel = user
         if let nav = self.navigationController {
             nav.pushViewController(userProfile, animated: true)

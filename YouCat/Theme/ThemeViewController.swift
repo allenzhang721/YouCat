@@ -286,7 +286,7 @@ extension YCThemeViewController: UITableViewDelegate {
         let cellFrame = tableView.convert(cell.frame, to: view)
         let row = indexPath.item
         let theme = self.themes[row]
-        let themeDetail = YCThemeDetailViewController.getInstance()
+        let themeDetail = YCThemeDetailViewController()
         themeDetail.themeModel = theme
         navigationTransitionDelegate.startPresentY = startFrame.minY
         let wGap = YCScreen.bounds.width * 0.06
@@ -338,7 +338,7 @@ extension YCThemeViewController: UITableViewDelegate {
 extension YCThemeViewController: YCLoginProtocol, YCAlertProtocol {
     
     @objc func loginUserChange(_ notify: Notification) {
-        self.isFirstLoad = true
+//        self.isFirstLoad = true
         self.setUserIcon()
     }
     
