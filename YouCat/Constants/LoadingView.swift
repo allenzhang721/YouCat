@@ -106,7 +106,7 @@ class YCMediaLoadingView: UIView {
         let bgView = UIView(frame: CGRect(x: 0, y: 0, width: bounds.width, height: 0.5))
         self.addSubview(bgView)
         bgView.backgroundColor = YCStyleColor.grayWhiteAlpha
-        self.loadingView = UIView(frame: CGRect(x: (bounds.width-50)/2, y: 0, width: 50, height: 1))
+        self.loadingView = UIView(frame: CGRect(x: (bounds.width-50)/2, y: 0, width: 50, height: 0.5))
         self.addSubview(self.loadingView)
         self.loadingView.backgroundColor = YCStyleColor.white
         self.loadingView.isHidden = true

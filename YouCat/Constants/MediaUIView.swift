@@ -285,7 +285,7 @@ class YCImageView: YCBaseView {
             self.initSnapView()
             var imgPath = ""
             if snapShot {
-                imgPath = image.imagePath + "?imageView2/2/w/640"
+                imgPath = image.imagePath + "?imageView2/2/w/480"
             }else {
                 imgPath = image.imagePath
             }
@@ -301,7 +301,7 @@ class YCImageView: YCBaseView {
         if let imageModel = self.imageModel {
             self.initImageView()
 //            let imageW = Int(bound.width)
-            let snapPath = imageModel.imagePath + "?imageView2/2/w/640"
+            let snapPath = imageModel.imagePath + "?imageView2/2/w/480"
             if let img = self.img, let url = URL(string: snapPath){
                 img.kf.setImage(with: ImageResource(downloadURL: url), placeholder: self.defaultImg(), options: nil, progressBlock: nil, completionHandler: nil)
             }
@@ -316,11 +316,11 @@ class YCImageView: YCBaseView {
                 self.isLoading = true
                 let bounds = self.bounds
                 let viewH = bounds.height - YCScreen.fullScreenArea.bottom
-//                self.loading = YCMediaLoadingView(frame: CGRect(x: 0, y: viewH, width: bounds.width, height: 1))
-//                self.addSubview(self.loading!)
-//                if let loading = self.loading {
-//                    loading.startAnimating()
-//                }
+                self.loading = YCMediaLoadingView(frame: CGRect(x: 0, y: viewH, width: bounds.width, height: 1))
+                self.addSubview(self.loading!)
+                if let loading = self.loading {
+                    loading.startAnimating()
+                }
                 img.kf.setImage(with: ImageResource(downloadURL: url), placeholder: nil, options: [.keepCurrentImageWhileLoading], progressBlock: nil, completionHandler: { (image, error, type, url) in
                     if let loading = self.loading {
                         loading.stopAnimating()
