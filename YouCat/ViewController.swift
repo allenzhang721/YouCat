@@ -27,6 +27,8 @@ class ViewController: UIViewController {
         self.addChild(navigationController)
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.rootPushUserViewNotification(_:)), name: NSNotification.Name("RootPushUserView"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.rootPushPublishViewNotification(_:)), name: NSNotification.Name("RootPushPublishView"), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -34,15 +36,23 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @objc func rootPushPublishViewNotification(_ notify: Notification){
+        if let publishDetail = notify.object as? YCPublishDetailViewController {
+            if let nav = self.root.navigationController {
+                nav.pushViewController(publishDetail, animated: true)
+            }
+        }
+    }
+    
     @objc func rootPushUserViewNotification(_ notify: Notification){
         if let user = notify.object as? YCRelationUserModel {
-            let userProfile = YCUserViewController.getInstance()
+            let userProfile = YCUserViewController.getInstance() as! YCUserViewController
             userProfile.userModel = user
             if let nav = self.root.navigationController {
                 nav.pushViewController(userProfile, animated: true)
             }
         }else if let user = notify.object as? YCLoginUserModel {
-            let userProfile = YCUserViewController.getInstance()
+            let userProfile = YCUserViewController.getInstance() as! YCUserViewController
             userProfile.userModel = user
             userProfile.loginUserType = .LoginUser
             if let nav = self.root.navigationController {

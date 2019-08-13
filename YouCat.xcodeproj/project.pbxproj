@@ -60,6 +60,7 @@
 		256299CB21849004005FDDFC /* PublishDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256299CA21849004005FDDFC /* PublishDetailViewController.swift */; };
 		256299CD2185A049005FDDFC /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256299CC2185A049005FDDFC /* SliderView.swift */; };
 		256299CF21870608005FDDFC /* PublishDetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256299CE21870608005FDDFC /* PublishDetailViewCell.swift */; };
+		25731CD622F172B600FB49B1 /* VideoUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25731CD522F172B600FB49B1 /* VideoUIView.swift */; };
 		257B040721D642180004FB1B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 257B040621D642180004FB1B /* QuartzCore.framework */; };
 		257B040921D6422B0004FB1B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 257B040821D6422B0004FB1B /* SystemConfiguration.framework */; };
 		257B040B21D642300004FB1B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 257B040A21D642300004FB1B /* Security.framework */; };
@@ -97,6 +98,8 @@
 		2C827F48206F3EEB0035DCE2 /* ThemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C827F47206F3EEB0035DCE2 /* ThemeViewController.swift */; };
 		4BDCF867747000828440DF7E /* Pods_YouCatTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D76547DA6CCEE139A5F6E084 /* Pods_YouCatTests.framework */; };
 		83A6F551E87BF929BB599A40 /* Pods_YouCat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F17FB4EF2FA68C8A2CD9B94 /* Pods_YouCat.framework */; };
+		959CE20A22C0EDE600D683E7 /* ThemeTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 959CE20922C0EDE600D683E7 /* ThemeTransition.swift */; };
+		95C175CB22D0912A006DE231 /* ThemeNavigationTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C175CA22D0912A006DE231 /* ThemeNavigationTransition.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -242,9 +245,10 @@
 		256299C121802589005FDDFC /* PublishCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishCollectionViewLayout.swift; sourceTree = "<group>"; };
 		256299C321808002005FDDFC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = YouCat/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		256299C82180A6AB005FDDFC /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
-		256299CA21849004005FDDFC /* PublishDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishDetailViewController.swift; sourceTree = "<group>"; };
+		256299CA21849004005FDDFC /* PublishDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishDetailViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		256299CC2185A049005FDDFC /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
 		256299CE21870608005FDDFC /* PublishDetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishDetailViewCell.swift; sourceTree = "<group>"; };
+		25731CD522F172B600FB49B1 /* VideoUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoUIView.swift; sourceTree = "<group>"; };
 		257B040621D642180004FB1B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		257B040821D6422B0004FB1B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		257B040A21D642300004FB1B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -291,6 +295,8 @@
 		5536AD062810EA944BFD8DAA /* Pods_YouCatUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouCatUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		581287F3A5F73B04B2906D2F /* Pods-YouCatTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCatTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCatTests/Pods-YouCatTests.release.xcconfig"; sourceTree = "<group>"; };
 		7EA9D9DE110AC0A34E1D6FE9 /* Pods-YouCat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCat.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCat/Pods-YouCat.release.xcconfig"; sourceTree = "<group>"; };
+		959CE20922C0EDE600D683E7 /* ThemeTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ThemeTransition.swift; path = YouCat/ThemeTransition.swift; sourceTree = SOURCE_ROOT; };
+		95C175CA22D0912A006DE231 /* ThemeNavigationTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeNavigationTransition.swift; sourceTree = "<group>"; };
 		D76547DA6CCEE139A5F6E084 /* Pods_YouCatTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouCatTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E309D7DCD1368C5CF318F47C /* Pods-YouCatTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCatTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouCatTests/Pods-YouCatTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -484,6 +490,7 @@
 				254C9C3021EF025C0057A023 /* ShareProtocol.swift */,
 				25562C6122760DBB004F1BD6 /* PhotoAlbumUtil.swift */,
 				255846C022B1354300782021 /* ErrorView.swift */,
+				25731CD522F172B600FB49B1 /* VideoUIView.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -599,6 +606,8 @@
 		2C35AC87203D8B63002F0983 /* Theme */ = {
 			isa = PBXGroup;
 			children = (
+				959CE20922C0EDE600D683E7 /* ThemeTransition.swift */,
+				95C175CA22D0912A006DE231 /* ThemeNavigationTransition.swift */,
 				2C827F47206F3EEB0035DCE2 /* ThemeViewController.swift */,
 				25368B75217A12EA00C3EB56 /* ThemeTableViewCell.swift */,
 				252E5266217DA3AE00C27826 /* ThemeDetailViewController.swift */,
@@ -966,6 +975,7 @@
 				252B902121B539B700E41842 /* UploadController.swift in Sources */,
 				25B878F1215BA01A00E30C91 /* ImageController.swift in Sources */,
 				25B878AA215510C200E30C91 /* DeviceManager.swift in Sources */,
+				959CE20A22C0EDE600D683E7 /* ThemeTransition.swift in Sources */,
 				25B878A32153B84A00E30C91 /* LikeDomain.swift in Sources */,
 				2C35AC8D203D8D51002F0983 /* HomeViewController.swift in Sources */,
 				2530524E2147D4D400BB9624 /* PublishDomain.swift in Sources */,
@@ -991,6 +1001,7 @@
 				2C827F48206F3EEB0035DCE2 /* ThemeViewController.swift in Sources */,
 				2C3441FA203D89F3008BF439 /* AppDelegate.swift in Sources */,
 				2530525A2147FB0600BB9624 /* MediaModel.swift in Sources */,
+				25731CD622F172B600FB49B1 /* VideoUIView.swift in Sources */,
 				257E895A21C394990084944E /* CommentListViewController.swift in Sources */,
 				253052582147FA2900BB9624 /* UserModel.swift in Sources */,
 				25B878A82154F8B200E30C91 /* UserManager.swift in Sources */,
@@ -1012,6 +1023,7 @@
 				252B902321B5707400E41842 /* UpdateUserViewController.swift in Sources */,
 				2529087E21C9193300300D44 /* CommentListViewCell.swift in Sources */,
 				25562C6A22772C96004F1BD6 /* UserListViewController.swift in Sources */,
+				95C175CB22D0912A006DE231 /* ThemeNavigationTransition.swift in Sources */,
 				252B900421AFDEF100E41842 /* SettingViewController.swift in Sources */,
 				253052722150DFE000BB9624 /* ThemeDomain.swift in Sources */,
 				256299C221802589005FDDFC /* PublishCollectionViewLayout.swift in Sources */,

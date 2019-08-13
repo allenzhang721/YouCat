@@ -16,7 +16,7 @@
 "PostLabel" = "发布";
 "LikeLabel" = "喜欢";
 
-"EnterCommentLabel" = "输入评论";
+"EnterCommentLabel" = "说点什么~";
 "DefaultUserName" = "用户";
 "NicknameLabel" = "昵称";
 "NicknamePlaceholder" = "请输入你的昵称";
@@ -43,7 +43,7 @@
 "ShareLabel" = "分享";
 "BlockLabel" = "加入黑名单";
 "UnBlockLabel" = "移出黑名单";
-"UnFollowLabel" = "停止关注";
+"UnFollowLabel" = "取消关注";
 "ShareButtonLabel" = "分享";
 "DeleteLabel" = "删除";
 "DeleteCommentTitle" = "删除评论";

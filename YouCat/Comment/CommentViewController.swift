@@ -79,9 +79,9 @@ class YCCommentViewController: UIViewController {
         
         let commentBordView = UIView()
         self.commentBgView.addSubview(commentBordView)
-        
         commentBordView.layer.borderWidth = 1
         commentBordView.layer.cornerRadius = 16
+        commentBordView.isHidden = true
         
         let lineView = UIView()
         self.commentBgView.addSubview(lineView)
@@ -92,16 +92,25 @@ class YCCommentViewController: UIViewController {
             make.height.equalTo(1)
         }
         
+        let commentSignImg = UIImageView(image: UIImage(named: "comment_sign_black"))
+        self.commentBgView.addSubview(commentSignImg)
+        commentSignImg.snp.makeConstraints { (make) in
+            make.height.equalTo(32)
+            make.width.equalTo(32)
+            make.left.equalTo(5)
+            make.top.equalTo(10)
+        }
+        
         self.textView = UITextView()
         self.commentBgView.addSubview(self.textView)
         self.textView.snp.makeConstraints { (make) in
             make.right.equalTo(-25)
-            make.left.equalTo(25)
+            make.left.equalTo(30)
             make.centerY.equalTo(self.commentBgView).offset(0)
         }
         self.textView.backgroundColor = UIColor.clear
         self.textView.isScrollEnabled = false
-        self.textView.font = UIFont.systemFont(ofSize: 18)
+        self.textView.font = UIFont.systemFont(ofSize: 16)
         self.textView.returnKeyType = .send
         self.textView.enablesReturnKeyAutomatically = true
         self.textView.delegate = self
@@ -130,6 +139,7 @@ class YCCommentViewController: UIViewController {
             commentBordView.layer.borderColor = YCStyleColor.gray.cgColor
             commentBordView.backgroundColor = YCStyleColor.white
             self.placeholderLabel.textColor = YCStyleColor.gray
+            commentSignImg.image = UIImage(named: "comment_sign_black")
         }else if self.style == .Dark {
             self.textView.keyboardAppearance = .dark
             self.textView.textColor = YCStyleColor.white
@@ -138,6 +148,8 @@ class YCCommentViewController: UIViewController {
             commentBordView.layer.borderColor = YCStyleColor.blackAlpha.cgColor
             commentBordView.backgroundColor = YCStyleColor.grayWhiteAlpha
             self.placeholderLabel.textColor = YCStyleColor.grayWhite
+            commentSignImg.image = UIImage(named: "comment_sign_gray")
+
         }
     }
     

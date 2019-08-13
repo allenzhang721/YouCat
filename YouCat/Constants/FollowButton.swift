@@ -11,7 +11,7 @@ import UIKit
 public extension UIButton{
     
     struct AssociatedKeys{
-        static var defaultInterval : TimeInterval = 1 //间隔时间
+        static var defaultInterval : TimeInterval = 0.3 //间隔时间
         static var A_customInterval = "customInterval"
         static var A_ignoreInterval = "ignoreInterval"
     }

@@ -15,25 +15,27 @@ enum YCUserListType: String{
     case Following = "following"
 }
 
-class YCUserListViewController: UIViewController{
-    static var _instaceArray: [YCUserListViewController] = [];
+class YCUserListViewController: YCViewController{
     
-    static func getInstance() -> YCUserListViewController{
-        var _instance: YCUserListViewController
-        if _instaceArray.count > 0 {
-            _instance = _instaceArray[0]
-            _instaceArray.remove(at: 0)
+    static var _instanceArray: [YCUserListViewController] = [];
+    
+    override class func getInstance() -> YCViewController{
+        var _instance: YCViewController
+        if _instanceArray.count > 0 {
+            _instance = _instanceArray[0]
+            _instanceArray.remove(at: 0)
             _instance.initViewController()
             return _instance
         }else {
-            _instance = YCUserListViewController();
-            _instance.initViewController()
+            _instance = YCUserListViewController()
         }
         return _instance
     }
     
-    static func addInstance(instace: YCUserListViewController) {
-        _instaceArray.append(instace)
+    override class func addInstance(_ instance: YCViewController) {
+        if let ins = instance as? YCUserListViewController {
+            _instanceArray.append(ins)
+        }
     }
     
     var userModel: YCUserDetailModel?
@@ -54,11 +56,12 @@ class YCUserListViewController: UIViewController{
     
     var errorView: YCWifiErrorView?
     
-    func initViewController(){
+    override func initViewController(){
         
     }
     
-    func resetViewController(){
+    override func resetViewController(){
+        super.resetViewController()
         self.userModel = nil
         self.userList.removeAll()
         self.tableView.reloadData()
@@ -69,8 +72,6 @@ class YCUserListViewController: UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = true
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-        
         super.viewWillAppear(animated)
         self.setValue()
     }
@@ -82,8 +83,11 @@ class YCUserListViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.initView()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
     }
     
     override func didReceiveMemoryWarning() {
@@ -129,7 +133,7 @@ class YCUserListViewController: UIViewController{
             make.centerY.equalTo(backButton).offset(0)
         }
         self.titleLabel.textColor = YCStyleColor.black
-        self.titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        self.titleLabel.font = UIFont.boldSystemFont(ofSize: 14)
         self.titleLabel.text = ""
         self.titleLabel.textAlignment = .center
         
@@ -140,7 +144,7 @@ class YCUserListViewController: UIViewController{
             make.left.equalTo(0)
             make.right.equalTo(0)
             make.top.equalTo(topHeight-1)
-            make.height.equalTo(1)
+            make.height.equalTo(0.5)
         }
         
         self.tableView = UITableView()
@@ -359,18 +363,15 @@ extension YCUserListViewController: UITableViewDelegate {
     }
 }
 
-extension YCUserListViewController: UIGestureRecognizerDelegate, YCUserTableViewCellDelegate, YCNumberStringProtocol, YCUserViewControllerDelegate, YCAlertProtocol{
-    
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool{
-        return true
-    }
+extension YCUserListViewController: YCUserTableViewCellDelegate, YCNumberStringProtocol, YCUserViewControllerDelegate, YCAlertProtocol{
     
     func cellUserIconTap(_ cell:YCUserTableViewCell?){
         if cell != nil, let user = cell?.userModel {
-            let userProfile = YCUserViewController.getInstance()
+            let userProfile = YCUserViewController.getInstance() as! YCUserViewController
             userProfile.userModel = user
             userProfile.delegate = self
             if let nav = self.navigationController {
+                self.isGoto = true
                 nav.pushViewController(userProfile, animated: true)
             }
         }
@@ -378,10 +379,6 @@ extension YCUserListViewController: UIGestureRecognizerDelegate, YCUserTableView
     
     @objc func backButtonClick() {
         self.navigationController?.popViewController(animated: true)
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-            self.resetViewController()
-            YCUserListViewController.addInstance(instace: self)
-        }
     }
     
     func backUser(user: YCRelationUserModel?) {

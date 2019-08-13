@@ -23,7 +23,7 @@ class YCThemeTableViewCell: UITableViewCell, YCImageProtocol, YCContentStringPro
         }
     }
     
-    var preThemeID: String = ""
+//    var preThemeID: String = ""
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -33,6 +33,34 @@ class YCThemeTableViewCell: UITableViewCell, YCImageProtocol, YCContentStringPro
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
         self.initView()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        UIView.animate(withDuration: 0.2) {
+//            self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+//        }
+//
+//
+        
+        super.touchesBegan(touches, with: event)
+        
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.8, options: [.curveEaseOut], animations: {
+            self.transform = CGAffineTransform(scaleX: 0.97, y: 0.97)
+        }, completion: nil)
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        UIView.animate(withDuration: 0.2) {
+            self.transform = .identity
+        }
+        super.touchesEnded(touches, with: event)
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        UIView.animate(withDuration: 0.2) {
+            self.transform = .identity
+        }
+        super.touchesEnded(touches, with: event)
     }
     
     
@@ -99,19 +127,19 @@ class YCThemeTableViewCell: UITableViewCell, YCImageProtocol, YCContentStringPro
         }
         self.titleLabel.numberOfLines = 0
         self.titleLabel.textColor = YCStyleColor.black
-        self.titleLabel.font = UIFont.boldSystemFont(ofSize: 36)
+        self.titleLabel.font = UIFont.boldSystemFont(ofSize: 32)
         self.titleLabel.text = ""
         
         self.descLabel = UILabel();
         self.descLabel.numberOfLines = 0
         self.addSubview(self.descLabel)
         self.descLabel.snp.makeConstraints { (make) in
-            make.left.equalTo(self.bgView).offset(20)
-            make.right.equalTo(self.bgView).offset(0)
+            make.left.equalTo(self.bgView).offset(25)
+            make.right.equalTo(self.bgView).offset(-25)
             make.top.equalTo(self.titleLabel.snp.bottom).offset(10)
         }
         self.descLabel.textColor = YCStyleColor.gray
-        self.descLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        self.descLabel.font = UIFont.systemFont(ofSize: 16)
         self.descLabel.text = ""
         
         self.lineLabel = UILabel();
@@ -130,9 +158,9 @@ class YCThemeTableViewCell: UITableViewCell, YCImageProtocol, YCContentStringPro
     }
     
     func didSetThemeModel() {
-        if let theme = self.themeModel, self.preThemeID != theme.themeID{
+        if let theme = self.themeModel{
             self.setCellValue()
-            self.preThemeID = theme.themeID
+//            self.preThemeID = theme.themeID
         }
     }
     
@@ -165,7 +193,7 @@ class YCThemeTableViewCell: UITableViewCell, YCImageProtocol, YCContentStringPro
             switch stypleType {
             case 1:
                 self.titleLabel.snp.remakeConstraints { (make) in
-                    make.left.equalTo(self.bgView).offset(20)
+                    make.left.equalTo(self.bgView).offset(25)
                     make.right.equalTo(self.bgView).offset(-100)
                     make.top.equalTo(self.themeCover.snp.bottom).offset(10)
                 }
@@ -187,9 +215,9 @@ class YCThemeTableViewCell: UITableViewCell, YCImageProtocol, YCContentStringPro
                     make.bottom.equalTo(0)
                 }
                 self.titleLabel.snp.remakeConstraints { (make) in
-                    make.left.equalTo(self.bgView).offset(20)
+                    make.left.equalTo(self.bgView).offset(25)
                     make.right.equalTo(self.bgView).offset(-100)
-                    make.top.equalTo(self.bgView).offset(20)
+                    make.top.equalTo(self.bgView).offset(40)
                 }
                 self.titleLabel.textColor = YCStyleColor.white
                 self.descLabel.textColor = YCStyleColor.whiteAlpha
@@ -203,9 +231,9 @@ class YCThemeTableViewCell: UITableViewCell, YCImageProtocol, YCContentStringPro
                     make.bottom.equalTo(0)
                 }
                 self.titleLabel.snp.remakeConstraints { (make) in
-                    make.left.equalTo(self.bgView).offset(20)
+                    make.left.equalTo(self.bgView).offset(25)
                     make.right.equalTo(self.bgView).offset(-100)
-                    make.top.equalTo(self.bgView).offset(20)
+                    make.top.equalTo(self.bgView).offset(40)
                 }
                 self.titleLabel.textColor = YCStyleColor.black
                 self.descLabel.textColor = YCStyleColor.blackAlphaMore

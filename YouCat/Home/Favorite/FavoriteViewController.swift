@@ -8,6 +8,7 @@
 
 import UIKit
 import MJRefresh
+import Kingfisher
 
 class YCFavoriteViewController: UIViewController, YCImageProtocol, YCContentStringProtocol, YCAlertProtocol {
     
@@ -54,6 +55,7 @@ class YCFavoriteViewController: UIViewController, YCImageProtocol, YCContentStri
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
+        UIApplication.shared.setStatusBarStyle(.default, animated: true)
         super.viewWillAppear(animated)
         self.setUserIcon()
     }
@@ -72,6 +74,8 @@ class YCFavoriteViewController: UIViewController, YCImageProtocol, YCContentStri
         self.initView()
         NotificationCenter.default.addObserver(self, selector: #selector(self.loginUserChange(_:)), name: NSNotification.Name("LoginUserChange"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshHome(_:)), name: NSNotification.Name("reFreshHome"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.followUserChange(_:)), name: NSNotification.Name("FollowUser"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.unFollowUserChange(_:)), name: NSNotification.Name("UnFollowUser"), object: nil)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -193,6 +197,11 @@ class YCFavoriteViewController: UIViewController, YCImageProtocol, YCContentStri
                     if let modelList = list.modelArray {
                         self.publishes.removeAll()
                         if self.updatePublishDate(modelList: modelList) {
+                            for cell in self.collectionView.visibleCells {
+                                if let ce = cell as? YCPublishCollectionViewCell{
+                                    ce.releaseCell()
+                                }
+                            }
                             self.collectionView.reloadData()
                             self.footerFresh.isHidden = false
                             let _ = YCDateManager.saveModelListDate(modelList: self.publishes, account: LocalManager.home)
@@ -292,8 +301,28 @@ class YCFavoriteViewController: UIViewController, YCImageProtocol, YCContentStri
 
 extension YCFavoriteViewController: YCLoginProtocol {
     
+    @objc func unFollowUserChange(_ notify: Notification) {
+        if let followUserID = notify.object as? String {
+            for publish in self.publishes {
+                if let publishUser = publish.user, publishUser.userID == followUserID {
+                    publish.user?.relation = 0
+                }
+            }
+        }
+    }
+    
+    @objc func followUserChange(_ notify: Notification) {
+        if let followUserID = notify.object as? String {
+            for publish in self.publishes {
+                if let publishUser = publish.user, publishUser.userID == followUserID {
+                    publish.user?.relation = 1
+                }
+            }
+        }
+    }
+    
     @objc func loginUserChange(_ notify: Notification) {
-        self.isFirstLoad = true
+//        self.isFirstLoad = true
         self.setUserIcon()
     }
     
@@ -341,6 +370,19 @@ extension YCFavoriteViewController: UICollectionViewDataSource {
         cell.publishModel = publishModel
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let cell = cell as? YCPublishCollectionViewCell{
+            cell.endDisplayCell()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let cell = cell as? YCPublishCollectionViewCell{
+            cell.willDisplayCell()
+        }
+    }
+    
 }
 
 extension YCFavoriteViewController: YCCollectionViewWaterfallLayoutDelegate {
@@ -357,18 +399,20 @@ extension YCFavoriteViewController: YCCollectionViewWaterfallLayoutDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let row = indexPath.item
         let publish = self.publishes[row]
-        let publishDetail = YCPublishDetailViewController.getInstance()
+        let publishDetail = YCPublishDetailViewController.getInstance() as! YCPublishDetailViewController
         publishDetail.contentType = .HOME
         publishDetail.contentModel = publish
         publishDetail.contentIndex = 0
         publishDetail.contents = [publish]
         publishDetail.contentID = publish.publishID
-        
-        let navigationController = UINavigationController(rootViewController: publishDetail)
-        navigationController.isNavigationBarHidden = true
-        self.present(navigationController, animated: true) {
-            
-        }
+ //       self.navigationController?.pushViewController(publishDetail, animated: true)
+       NotificationCenter.default.post(name: NSNotification.Name("RootPushPublishView"), object: publishDetail)
+
+//        let navigationController = UINavigationController(rootViewController: publishDetail)
+//        navigationController.isNavigationBarHidden = true
+//        self.present(navigationController, animated: true) {
+//
+//        }
     }
 }
 

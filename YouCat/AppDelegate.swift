@@ -191,7 +191,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
     }
 
     func setup() {
-        ImageCache.default.maxMemoryCost = UInt(200 * 1024 * 1024) // Allen: 200 MB
+        ImageCache.default.maxMemoryCost = UInt(512 * 1024 * 1024) // Allen: 256 MB
         // Override point for customization after application launch.
         #if DEBUG
             FilePath.baseURL = RequestHost.debug.description;
@@ -215,12 +215,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
                     if top == 0 {
                         top = 22
                     }
-                    let bottom = top==44 ? 34 : 0
-                    YCScreen.safeArea = UIEdgeInsets(top: top, left: 0, bottom: CGFloat(bottom), right: 0)
+                    let bottom: CGFloat = top==44 ? 34 : 0
+                    YCScreen.safeArea = UIEdgeInsets(top: top, left: 0, bottom: bottom, right: 0)
+                    YCScreen.fullScreenArea = UIEdgeInsets(top: 0, left: 0, bottom: bottom+49, right: 0)
                 }
             } else {
                 // Fallback on earlier versions
                 YCScreen.safeArea = UIEdgeInsets(top: 22, left: 0, bottom: 0, right: 0)
+                YCScreen.fullScreenArea = UIEdgeInsets(top: 0, left: 0, bottom: 49, right: 0)
             }
         }
     }

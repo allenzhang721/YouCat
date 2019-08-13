@@ -11,19 +11,15 @@ import Kingfisher
 
 class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberStringProtocol, YCContentStringProtocol {
     
-    var headerView: UIView!
+    var userView: UIView!
     var userIcon: UIImageView!
     var followButton: YCFollowButton!
-    var operatorButton: UIButton!
     
     var contentLabel: UILabel!
     
-    var commentView: UIView!
-    var shareBtn: UIButton!
-    var shareLabel: UILabel!
-    var likeBtn: UIButton!
+    var bottomOperateView: UIView!
+    var likeImg: UIImageView!
     var likeCountLabel: UILabel!
-    var commentBtn: UIButton!
     var commentCountLabel: UILabel!
     
     var contentPageController: UIPageControl!
@@ -46,6 +42,8 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
                 if old.publishID != publishModel?.publishID {
                     self.displayRelease()
                     self.didSetPublishModel();
+                }else {
+                    self.changeCellStyle()
                 }
             }else {
                 self.didSetPublishModel();
@@ -53,11 +51,9 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         }
     }
     
-    var mediaModel: YCMediaViewModel?
-    
     var contentIndex = 0
     var delegate:YCPublishDetailViewCellDelegate?
-    
+        
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -76,7 +72,6 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         viewDoubleTap.numberOfTapsRequired = 2
         self.addGestureRecognizer(viewDoubleTap)
         
-        let buttonBottom = YCScreen.safeArea.bottom == 0 ? 10:(YCScreen.safeArea.bottom-5)
         self.contentScrollView = UIScrollView()
         self.addSubview(self.contentScrollView)
         self.contentScrollView.snp.makeConstraints { (make) in
@@ -85,191 +80,241 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             make.right.equalTo(self.contentGap).priority(999)
             make.bottom.equalTo(0).priority(999)
         }
+        self.contentScrollView.bounces = false
         self.contentScrollView.isPagingEnabled = true
         self.contentScrollView.showsHorizontalScrollIndicator = false
         self.contentScrollView.showsVerticalScrollIndicator = false
         self.contentScrollView.scrollsToTop = false
         self.contentScrollView.delegate = self
-        
-        
-        self.headerView = UIView(frame: CGRect(x: 0, y: YCScreen.safeArea.top, width: self.frame.width, height: 50))
-        self.addSubview(self.headerView)
-        
-        self.userIcon = UIImageView()
-        self.headerView.addSubview(self.userIcon)
-        self.userIcon.snp.makeConstraints { (make) in
-            make.left.equalTo(15)
-            make.top.equalTo(2)
-            make.width.equalTo(44)
-            make.height.equalTo(44)
-        }
-        self.cropImageCircle(self.userIcon, 22)
-        self.userIcon.image = UIImage(named: "default_icon")
-        
-        let iconTap = UITapGestureRecognizer(target: self, action: #selector(self.iconTapHandler))
-        self.userIcon.isUserInteractionEnabled = true
-        self.userIcon.addGestureRecognizer(iconTap)
-        
-        let iconBg = UIView()
-        iconBg.backgroundColor = YCStyleColor.white
-        self.headerView.insertSubview(iconBg, belowSubview: self.userIcon)
-        iconBg.snp.makeConstraints { (make) in
-            make.center.equalTo(self.userIcon).offset(0)
-            make.width.equalTo(46)
-            make.height.equalTo(46)
-        }
-        self.cropImageCircle(iconBg, 23)
-        
-        self.followButton = YCFollowButton(fontSize: 12, radius: 12)
-        self.headerView.addSubview(self.followButton)
-        self.followButton.snp.makeConstraints { (make) in
-            make.left.equalTo(self.userIcon.snp.right).offset(10)
-            make.centerY.equalTo(self.userIcon).offset(2)
-            make.width.equalTo(60)
-            make.height.equalTo(24)
-        }
-        let followButtonTap = UITapGestureRecognizer(target: self, action: #selector(self.followButtonTapHandler))
-        self.followButton.addGestureRecognizer(followButtonTap)
-    
-        self.operatorButton = UIButton()
-        self.headerView.addSubview(self.operatorButton)
-        self.operatorButton.snp.makeConstraints { (make) in
-            make.right.equalTo(self).offset(-54)
-            make.centerY.equalTo(self.userIcon).offset(0)
-            make.width.equalTo(44)
-            make.height.equalTo(44)
-        }
-        self.operatorButton.setImage(UIImage(named: "operate_white"), for: .normal)
-        self.operatorButton.setImage(UIImage(named: "operate_white"), for: .highlighted)
-        self.operatorButton.addTarget(self, action: #selector(self.operateButtonClick), for: .touchUpInside)
-        
-        self.shareLabel = UILabel();
-        self.addSubview(self.shareLabel)
-        self.shareLabel.snp.makeConstraints { (make) in
-            make.right.equalTo(-10)
-            make.width.equalTo(44)
-            make.bottom.equalTo(0-buttonBottom)
-        }
-        self.shareLabel.textColor = YCStyleColor.white
-        self.shareLabel.font = UIFont.systemFont(ofSize: 12)
-        self.shareLabel.text = YCLanguageHelper.getString(key: "ShareButtonLabel")
-        self.shareLabel.textAlignment = .center
-        
-        self.shareBtn = UIButton();
-        self.addSubview(self.shareBtn)
-        self.shareBtn.snp.makeConstraints { (make) in
-            make.right.equalTo(-10)
-            make.bottom.equalTo(self.shareLabel.snp.top).offset(10)
-            make.width.equalTo(44)
-            make.height.equalTo(44)
-        }
-        self.shareBtn.setImage(UIImage(named: "share_white"), for: .normal)
-        self.shareBtn.setImage(UIImage(named: "share_white"), for: .highlighted)
-        self.shareBtn.addTarget(self, action: #selector(self.shareButtonClick), for: .touchUpInside)
-        
+
         self.contentPageController = UIPageControl()
         self.addSubview(self.contentPageController)
         self.contentPageController.snp.makeConstraints { (make) in
             make.left.equalTo(20)
             make.right.equalTo(-20)
-            make.bottom.equalTo(self.shareBtn.snp.top).offset(20)
+            make.bottom.equalTo(0-YCScreen.fullScreenArea.bottom)
         }
         self.contentPageController.isUserInteractionEnabled = false
+        
+        self.userView = UIView()
+        self.addSubview(self.userView)
+        self.userView.snp.makeConstraints { (make) in
+            make.right.equalTo(-15)
+            make.bottom.equalTo(self.contentPageController.snp.top).offset(0)
+            make.width.equalTo(54)
+            make.height.equalTo(66)
+        }
+        
+        let iconBg = UIView()
+        iconBg.backgroundColor = YCStyleColor.white
+        self.userView.addSubview(iconBg)
+        iconBg.snp.makeConstraints { (make) in
+            make.right.equalTo(0)
+            make.bottom.equalTo(-12)
+            make.width.equalTo(54)
+            make.height.equalTo(54)
+        }
+        self.cropImageCircle(iconBg, 27)
+        
+        self.userIcon = UIImageView()
+        iconBg.addSubview(self.userIcon)
+        self.userIcon.snp.makeConstraints { (make) in
+            make.left.equalTo(1)
+            make.top.equalTo(1)
+            make.width.equalTo(52)
+            make.height.equalTo(52)
+        }
+        self.cropImageCircle(self.userIcon, 26)
+        self.userIcon.image = UIImage(named: "default_icon")
+        
+        let iconTap = UITapGestureRecognizer(target: self, action: #selector(self.iconTapHandler))
+        iconBg.isUserInteractionEnabled = true
+        iconBg.addGestureRecognizer(iconTap)
+        
+        
+        self.followButton = YCFollowButton(fontSize: 12, radius: 12)
+        self.userView.addSubview(self.followButton)
+        self.followButton.snp.makeConstraints { (make) in
+            make.bottom.equalTo(0)
+            make.centerX.equalTo(iconBg).offset(0)
+            make.width.equalTo(44)
+            make.height.equalTo(24)
+        }
+        let followButtonTap = UITapGestureRecognizer(target: self, action: #selector(self.followButtonTapHandler))
+        self.followButton.addGestureRecognizer(followButtonTap)
         
         self.contentLabel = UILabel();
         self.contentLabel.numberOfLines = 0
         self.addSubview(self.contentLabel)
         self.contentLabel.snp.makeConstraints { (make) in
-            make.left.equalTo(20)
-            make.right.equalTo(-20)
-            make.bottom.equalTo(self.contentPageController.snp.top).offset(10)
+            make.left.equalTo(15)
+            make.right.equalTo(-100)
+            make.bottom.equalTo(self.contentPageController.snp.top).offset(0)
         }
         self.contentLabel.textColor = YCStyleColor.white
-        self.contentLabel.font = UIFont.systemFont(ofSize: 14)
+        self.contentLabel.font = UIFont.boldSystemFont(ofSize: 16)
         self.contentLabel.text = ""
         self.contentLabel.shadowColor = YCStyleColor.black
-        self.contentLabel.shadowOffset = CGSize(width: 0, height: 0.5)
+        self.contentLabel.shadowOffset = CGSize(width: 0, height: 0)
         self.contentLabel.layer.shadowOpacity = 0.1
-        self.contentLabel.layer.shadowRadius = 4
+        self.contentLabel.layer.shadowRadius = 2
         
-        self.likeBtn = UIButton();
-        self.addSubview(self.likeBtn)
-        self.likeBtn.snp.makeConstraints { (make) in
-            make.right.equalTo(self.shareBtn.snp.left).offset(0)
-            make.top.equalTo(self.shareBtn).offset(0)
+        self.bottomOperateView = UIView()
+        self.addSubview(self.bottomOperateView)
+        self.bottomOperateView.snp.makeConstraints { (make) in
+            make.left.equalTo(0)
+            make.right.equalTo(0)
+            make.bottom.equalTo(0)
+            make.height.equalTo(YCScreen.fullScreenArea.bottom)
+        }
+        
+        let lineView = UIView()
+        self.bottomOperateView.addSubview(lineView)
+        lineView.snp.makeConstraints { (make) in
+            make.right.equalTo(0)
+            make.left.equalTo(0)
+            make.height.equalTo(0.5)
+            make.top.equalTo(0)
+        }
+        lineView.backgroundColor = YCStyleColor.grayWhiteAlpha
+        
+        let shareView = UIView()
+        self.bottomOperateView.addSubview(shareView)
+        shareView.snp.makeConstraints { (make) in
+            make.right.equalTo(0)
+            make.top.equalTo(0)
+            make.height.equalTo(YCScreen.fullScreenArea.bottom)
+            make.width.equalTo(54)
+        }
+        let shareTap = UITapGestureRecognizer(target: self, action: #selector(self.shareButtonClick))
+        shareView.isUserInteractionEnabled = true
+        shareView.addGestureRecognizer(shareTap)
+        
+        let shareLabel = UILabel();
+        shareView.addSubview(shareLabel)
+        shareLabel.snp.makeConstraints { (make) in
+            make.right.equalTo(0)
+            make.width.equalTo(10)
+            make.height.equalTo(44)
+            make.top.equalTo(2)
+        }
+        shareLabel.textColor = YCStyleColor.white
+        shareLabel.font = UIFont.systemFont(ofSize: 12)
+        shareLabel.text = ""//YCLanguageHelper.getString(key: "ShareButtonLabel")
+        shareLabel.textAlignment = .center
+        
+        let shareBtn = UIImageView(image: UIImage(named: "share_white"))
+        shareView.addSubview(shareBtn)
+        shareBtn.snp.makeConstraints { (make) in
+            make.right.equalTo(shareLabel.snp.left).offset(0)
+            make.centerY.equalTo(shareLabel).offset(0)
             make.width.equalTo(44)
             make.height.equalTo(44)
         }
-        self.likeBtn.setImage(UIImage(named: "like_white"), for: .normal)
-        self.likeBtn.setImage(UIImage(named: "like_white"), for: .highlighted)
-        self.likeBtn.addTarget(self, action: #selector(self.likeButtonClick), for: .touchUpInside)
+        
+        let likeView = UIView()
+        self.bottomOperateView.addSubview(likeView)
+        likeView.snp.makeConstraints { (make) in
+            make.right.equalTo(shareBtn.snp.left).offset(0)
+            make.top.equalTo(0)
+            make.height.equalTo(YCScreen.fullScreenArea.bottom)
+            make.width.equalTo(60)
+        }
+        likeView.tag = 1
+        let likeTap = UITapGestureRecognizer(target: self, action: #selector(self.likeButtonClick))
+        likeView.isUserInteractionEnabled = true
+        likeView.addGestureRecognizer(likeTap)
+        
+        self.likeImg = UIImageView(image: UIImage(named: "like_white"))
+        likeView.addSubview(self.likeImg)
+        self.likeImg.snp.makeConstraints { (make) in
+            make.left.equalTo(0)
+            make.centerY.equalTo(shareBtn).offset(0)
+            make.width.equalTo(44)
+            make.height.equalTo(44)
+        }
         
         self.likeCountLabel = UILabel();
-        self.addSubview(self.likeCountLabel)
+        likeView.addSubview(self.likeCountLabel)
         self.likeCountLabel.snp.makeConstraints { (make) in
-            make.right.equalTo(self.likeBtn).offset(0)
-            make.left.equalTo(self.likeBtn).offset(0)
-            make.top.equalTo(self.likeBtn.snp.bottom).offset(-10)
+            make.left.equalTo(self.likeImg.snp.right).offset(-5)
+            make.centerY.equalTo(shareBtn).offset(0)
         }
         self.likeCountLabel.textColor = YCStyleColor.white
-        self.likeCountLabel.font = UIFont.systemFont(ofSize: 12)
+        self.likeCountLabel.font = UIFont.boldSystemFont(ofSize: 12)
         self.likeCountLabel.text = "0"
-        self.likeCountLabel.textAlignment = .center
+        self.likeCountLabel.textAlignment = .left
         
-        self.commentBtn = UIButton();
-        self.addSubview(self.commentBtn)
-        self.commentBtn.snp.makeConstraints { (make) in
-            make.right.equalTo(self.likeBtn.snp.left).offset(0)
-            make.top.equalTo(self.likeBtn).offset(0)
+        
+        let commentCountView = UIView()
+        self.bottomOperateView.addSubview(commentCountView)
+        commentCountView.snp.makeConstraints { (make) in
+            make.top.equalTo(0)
+            make.right.equalTo(likeView.snp.left).offset(0)
+            make.height.equalTo(YCScreen.fullScreenArea.bottom)
+            make.width.equalTo(60)
+        }
+        commentCountView.tag = 2
+        let commentCountTap = UITapGestureRecognizer(target: self, action: #selector(self.commentButtonClick))
+        commentCountView.isUserInteractionEnabled = true
+        commentCountView.addGestureRecognizer(commentCountTap)
+       
+        let commentImg = UIImageView(image: UIImage(named: "comment_white"))
+        commentCountView.addSubview(commentImg)
+        commentImg.snp.makeConstraints { (make) in
+            make.left.equalTo(0)
+            make.centerY.equalTo(shareBtn).offset(0)
             make.width.equalTo(44)
             make.height.equalTo(44)
         }
-        self.commentBtn.setImage(UIImage(named: "comment_white"), for: .normal)
-        self.commentBtn.setImage(UIImage(named: "comment_white"), for: .highlighted)
-        self.commentBtn.addTarget(self, action: #selector(self.commentButtonClick), for: .touchUpInside)
         
         self.commentCountLabel = UILabel();
-        self.addSubview(self.commentCountLabel)
+        commentCountView.addSubview(self.commentCountLabel)
         self.commentCountLabel.snp.makeConstraints { (make) in
-            make.right.equalTo(self.commentBtn).offset(0)
-            make.left.equalTo(self.commentBtn).offset(0)
-            make.top.equalTo(self.commentBtn.snp.bottom).offset(-10)
+            make.left.equalTo(commentImg.snp.right).offset(-5)
+            make.centerY.equalTo(shareBtn).offset(0)
         }
         self.commentCountLabel.textColor = YCStyleColor.white
-        self.commentCountLabel.font = UIFont.systemFont(ofSize: 12)
+        self.commentCountLabel.font = UIFont.boldSystemFont(ofSize: 12)
         self.commentCountLabel.text = "0"
-        self.commentCountLabel.textAlignment = .center
+        self.commentCountLabel.textAlignment = .left
         
-        self.commentView = UIView()
-        self.addSubview(self.commentView)
-        self.commentView.snp.makeConstraints { (make) in
-            make.left.equalTo(15)
-            make.right.equalTo(self.commentBtn.snp.left)
-            make.top.equalTo(self.commentBtn).offset(13)
-            make.height.equalTo(35)
+        let commentView = UIView()
+        self.bottomOperateView.addSubview(commentView)
+        commentView.snp.makeConstraints { (make) in
+            make.left.equalTo(5)
+            make.right.equalTo(commentCountView.snp.left)
+            make.top.equalTo(0)
+            make.height.equalTo(YCScreen.fullScreenArea.bottom)
         }
-        self.commentView.layer.borderColor = YCStyleColor.blackAlpha.cgColor
-        self.commentView.layer.borderWidth = 1
-        self.commentView.layer.cornerRadius = 16;
-        self.commentView.backgroundColor = YCStyleColor.grayWhiteAlpha
+        commentView.layer.borderColor = UIColor.clear.cgColor//YCStyleColor.blackAlpha.cgColor
+        commentView.layer.borderWidth = 1
+        commentView.layer.cornerRadius = 16;
+        commentView.backgroundColor = UIColor.clear//YCStyleColor.grayWhiteAlpha
         let commentTap = UITapGestureRecognizer(target: self, action: #selector(self.commentTapHandler))
-        self.commentView.isUserInteractionEnabled = true
-        self.commentView.addGestureRecognizer(commentTap)
+        commentView.isUserInteractionEnabled = true
+        commentView.addGestureRecognizer(commentTap)
+        
+        let commentSignImg = UIImageView(image: UIImage(named: "comment_sign_gray"))
+        commentView.addSubview(commentSignImg)
+        commentSignImg.snp.makeConstraints { (make) in
+            make.height.equalTo(32)
+            make.width.equalTo(32)
+            make.left.equalTo(0)
+            make.centerY.equalTo(shareBtn).offset(0)
+        }
         
         let commentLabel = UILabel();
-        self.commentView.addSubview(commentLabel)
+        commentView.addSubview(commentLabel)
         commentLabel.snp.makeConstraints { (make) in
-            make.left.equalTo(15)
+            make.left.equalTo(30)
             make.right.equalTo(15)
-            make.top.equalTo(6)
-            make.height.equalTo(22)
+            make.centerY.equalTo(shareBtn).offset(0)
         }
         commentLabel.textColor = YCStyleColor.grayWhite
         commentLabel.font = UIFont.systemFont(ofSize: 16)
         commentLabel.text = YCLanguageHelper.getString(key: "EnterCommentLabel")
         self.backgroundColor = YCStyleColor.black
-        
-        
     }
     
     func willDisplayView(contentIndex: Int) {
@@ -277,6 +322,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             self.contentIndex = contentIndex
         }
         self.prepareContent()
+        self.changeCellStyle()
     }
     
     func displayView() {
@@ -288,8 +334,13 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
                         self.loadContent()
                     }
                 })
+            }else {
+                for view in self.contentViews {
+                    view.displayView()
+                }
             }
             self.isDisplaying = true
+            self.changeCellStyle()
         }
     }
     
@@ -317,21 +368,14 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             view.clean()
             view.removeFromSuperview()
         }
-        self.mediaModel = nil
         self.contentViews.removeAll()
         self.contentIndex = 0
         self.isDisplaying = false
         self.isFocus = false
         self.isTapStatus = false
-        self.headerView.alpha = 1
+        self.userView.alpha = 1
         self.contentLabel.alpha = 1
-        self.commentView.alpha = 1
-        self.commentBtn.alpha = 1
-        self.commentCountLabel.alpha = 1
-        self.likeBtn.alpha = 1
-        self.likeCountLabel.alpha = 1
-        self.shareBtn.alpha = 1
-        self.shareLabel.alpha = 1
+        self.bottomOperateView.alpha = 1
     }
     
     
@@ -366,12 +410,11 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             self.contentLabel.text = self.getContentString(content: publish.content)
             self.likeCountLabel.text = self.getNumberString(number: publish.likeCount)
             self.commentCountLabel.text = self.getNumberString(number: publish.commentCount)
+            self.resetCountLabel()
             if publish.isLike == 1 {
-                self.likeBtn.setImage(UIImage(named: "like_high"), for: .normal)
-                self.likeBtn.setImage(UIImage(named: "like_high"), for: .highlighted)
+                self.likeImg.image = UIImage(named: "like_high")
             }else {
-                self.likeBtn.setImage(UIImage(named: "like_white"), for: .normal)
-                self.likeBtn.setImage(UIImage(named: "like_white"), for: .highlighted)
+                self.likeImg.image = UIImage(named: "like_white")
             }
             for view in self.contentViews {
                 view.clean()
@@ -379,6 +422,46 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             }
             self.contentViews.removeAll()
             self.contentIndex = 0
+        }
+    }
+    
+    func changeCellStyle() {
+        if let publish = self.publishModel {
+            if let user = publish.user {
+                if user.relation == 0 {
+                    self.followButton.isHidden = false
+                    self.followButton.alpha = 1
+                    self.followButton.setUnFollowStatus()
+                }else {
+                    self.followButton.isHidden = true
+                }
+            }
+            self.contentLabel.text = self.getContentString(content: publish.content)
+            self.likeCountLabel.text = self.getNumberString(number: publish.likeCount)
+            self.commentCountLabel.text = self.getNumberString(number: publish.commentCount)
+            self.resetCountLabel()
+            if publish.isLike == 1 {
+                self.likeImg.image = UIImage(named: "like_high")
+            }else {
+                self.likeImg.image = UIImage(named: "like_white")
+            }
+        }
+    }
+    
+    func resetCountLabel() {
+        self.likeCountLabel.sizeToFit()
+        let w1 = self.likeCountLabel.frame.width
+        if w1 > 20 {
+            self.viewWithTag(1)?.snp.updateConstraints({ (make) in
+                make.width.equalTo(44+w1-5)
+            })
+        }
+        self.commentCountLabel.sizeToFit()
+        let w2 = self.commentCountLabel.frame.width
+        if w2 > 20 {
+            self.viewWithTag(2)?.snp.updateConstraints({ (make) in
+                make.width.equalTo(44+w2-5)
+            })
         }
     }
     
@@ -399,8 +482,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
                     self.contentIndex = 0
                 }
                 let contentW = bound.width+CGFloat(self.contentGap*2)
-                let bottomH = YCScreen.safeArea.bottom == 0 ? 54:YCScreen.safeArea.bottom+44
-                let contentH = bound.height - bottomH
+                let contentH = bound.height //- self.bottomH
                 let contentRect = CGRect(x: 0, y: 0, width: contentW, height: contentH).insetBy(dx: CGFloat(self.contentGap), dy: 0)
                 self.addPublishContent(model: model, frame: contentRect, index: self.contentIndex)
                 self.contentScrollView.contentSize = CGSize(width: contentW, height: bound.height)
@@ -423,8 +505,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             let mediasCount = medias.count
             let bound = self.frame
             let contentW = bound.width+CGFloat(self.contentGap*2)
-            let bottomH = YCScreen.safeArea.bottom == 0 ? 54:YCScreen.safeArea.bottom+44
-            let contentH = bound.height - bottomH
+            let contentH = bound.height //- self.bottomH
             for (index,model) in medias.enumerated() {
                 let contentRect = CGRect(x: contentW*CGFloat(index), y: 0, width: contentW, height: contentH).insetBy(dx: CGFloat(self.contentGap), dy: 0)
                 var isHave = false
@@ -449,13 +530,30 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
                                                         height: bounds.height)
             let offset = CGPoint(x: contentW * CGFloat(self.contentIndex), y: 0)
             self.contentScrollView.setContentOffset(offset, animated: false)
+            var mediaModels: [YCMediaViewModel]? = nil
+            if let delegate = self.delegate {
+                mediaModels = delegate.cellLoadCellMedia(cell: self)
+            }
+            var viewIndex = 0
             for view in self.contentViews {
-                view.loadMedia(self.mediaModel)
+                if let medias = mediaModels {
+                    if viewIndex > -1, viewIndex < medias.count {
+                        view.loadMedia(medias[viewIndex])
+                    }else if(medias.count > 0) {
+                        view.loadMedia(medias[0])
+                    }else{
+                        view.loadMedia(nil)
+                    }
+                }else {
+                    view.loadMedia(nil)
+                }
+                view.displayView()
                 if view.contentIndex == self.contentIndex {
                     view.play()
                 }else {
                     view.stop()
                 }
+                viewIndex = viewIndex + 1
             }
             self.contentPageController.numberOfPages = mediasCount
             self.contentPageController.currentPage = self.contentIndex
@@ -546,7 +644,7 @@ extension YCPublishDetailViewCell: YCViewDelegate {
         let contentIndex = view.contentIndex
         if let publish = self.publishModel {
             if self.isFocus || self.isDoubleTap{
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+1, execute: {
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.7, execute: {
                     for view in self.contentViews {
                         if view.contentIndex == self.contentIndex {
                             view.play()
@@ -592,13 +690,12 @@ extension YCPublishDetailViewCell {
             publishModel.isLike = publish.isLike
             publishModel.likeCount = publish.likeCount
             if publishModel.isLike == 1 {
-                self.likeBtn.setImage(UIImage(named: "like_high"), for: .normal)
-                self.likeBtn.setImage(UIImage(named: "like_high"), for: .highlighted)
+                self.likeImg.image = UIImage(named: "like_high")
             }else {
-                self.likeBtn.setImage(UIImage(named: "like_white"), for: .normal)
-                self.likeBtn.setImage(UIImage(named: "like_white"), for: .highlighted)
+                self.likeImg.image = UIImage(named: "like_white")
             }
             self.likeCountLabel.text = self.getNumberString(number: publishModel.likeCount)
+            self.resetCountLabel()
         }
     }
     
@@ -606,6 +703,7 @@ extension YCPublishDetailViewCell {
         if let publishModel = self.publishModel {
             publishModel.commentCount = publish.commentCount
             self.commentCountLabel.text = self.getNumberString(number: publishModel.commentCount)
+            self.resetCountLabel()
         }
     }
     
@@ -623,13 +721,6 @@ extension YCPublishDetailViewCell {
                     self.followButton.alpha = 1
                 })
             }
-        }
-    }
-    
-    @objc func operateButtonClick(){
-        if let delegate = self.delegate {
-            self.isFocus = true
-            delegate.cellOperateButtonClick(self)
         }
     }
     
@@ -671,7 +762,7 @@ extension YCPublishDetailViewCell {
     @objc func viewTapHandler(sender:UITapGestureRecognizer) {
         if !self.isDoubleTap {
             if sender.numberOfTapsRequired == 1 {
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.5, execute: {
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.3, execute: {
                     if !self.isDoubleTap {
                         self.viewSigleTapHandler(sender: sender)
                     }
@@ -694,7 +785,7 @@ extension YCPublishDetailViewCell {
             self.tapTime = nil
         }
         self.tapTime = DispatchSource.makeTimerSource(queue: DispatchQueue.global())
-        self.tapTime?.schedule(deadline: .now()+1)
+        self.tapTime?.schedule(deadline: .now()+0.7)
         self.tapTime!.setEventHandler {
             self.isDoubleTap = false
             self.tapTime!.cancel()
@@ -714,28 +805,16 @@ extension YCPublishDetailViewCell {
             if publish.contentType == 1 {
                 if self.isTapStatus {
                     UIView.animate(withDuration: 0.3, animations: {
-                        self.headerView.alpha = 1
+                        self.userView.alpha = 1
                         self.contentLabel.alpha = 1
-                        self.commentView.alpha = 1
-                        self.commentBtn.alpha = 1
-                        self.commentCountLabel.alpha = 1
-                        self.likeBtn.alpha = 1
-                        self.likeCountLabel.alpha = 1
-                        self.shareBtn.alpha = 1
-                        self.shareLabel.alpha = 1
+                        self.bottomOperateView.alpha = 1
                     })
                     self.isTapStatus = false
                 }else {
                     UIView.animate(withDuration: 0.3, animations: {
-                        self.headerView.alpha = 0
+                        self.userView.alpha = 0
                         self.contentLabel.alpha = 0
-                        self.commentView.alpha = 0
-                        self.commentBtn.alpha = 0
-                        self.commentCountLabel.alpha = 0
-                        self.likeBtn.alpha = 0
-                        self.likeCountLabel.alpha = 0
-                        self.shareBtn.alpha = 0
-                        self.shareLabel.alpha = 0
+                        self.bottomOperateView.alpha = 0
                     })
                     self.isTapStatus = true
                 }
@@ -743,16 +822,16 @@ extension YCPublishDetailViewCell {
             }else if publish.contentType == 2 {
                 if self.isTapStatus {
                     for view in self.contentViews {
-                        view.pause()
-                    }
-                    self.isTapStatus = false
-                }else {
-                    for view in self.contentViews {
                         if view.contentIndex == self.contentIndex {
                             view.play()
                         }else {
                             view.stop()
                         }
+                    }
+                    self.isTapStatus = false
+                }else {
+                    for view in self.contentViews {
+                        view.pause()
                     }
                     self.isTapStatus = true
                 }
@@ -776,6 +855,7 @@ extension YCPublishDetailViewCell {
 
 
 protocol YCPublishDetailViewCellDelegate {
+    func cellLoadCellMedia(cell: YCPublishDetailViewCell?) -> [YCMediaViewModel]?
     func cellUserIconTap(cell: YCPublishDetailViewCell?)
     func cellDidPlayToEnd(cell: YCPublishDetailViewCell?)
     func cellCommentTap(_ cell: YCPublishDetailViewCell?)
@@ -784,5 +864,4 @@ protocol YCPublishDetailViewCellDelegate {
     func cellShareButtonClick(_ cell:YCPublishDetailViewCell?)
     func cellLikeButtonClick(_ cell:YCPublishDetailViewCell?)
     func cellCommentButtonClick(_ cell:YCPublishDetailViewCell?)
-    func cellOperateButtonClick(_ cell:YCPublishDetailViewCell?)
 }

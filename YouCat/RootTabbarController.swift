@@ -66,3 +66,79 @@ extension YCRootTabbarController: UITabBarControllerDelegate{
     }
 }
 
+extension UINavigationController{
+    
+    override open var childForStatusBarStyle: UIViewController? {
+        return self.topViewController
+    }
+    
+    override open var childForStatusBarHidden: UIViewController?{
+        return self.topViewController
+    }
+}
+
+
+class YCNavigationController: UINavigationController{
+    
+    override var childForStatusBarStyle: UIViewController? {
+        return self.topViewController
+    }
+    
+    override var childForStatusBarHidden: UIViewController?{
+        return self.topViewController
+    }
+}
+
+class YCViewController: UIViewController {
+    
+    class func getInstance() -> YCViewController{
+        return YCViewController()
+    }
+    
+    class func addInstance(_ instance: YCViewController) {
+        
+    }
+    
+    var isGoto: Bool = false
+    var addInteractivePop: Bool = true
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if self.addInteractivePop {
+            self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+            self.navigationController?.delegate = self
+        }
+        super.viewWillDisappear(animated)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.isGoto = false
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if !self.isGoto {
+            self.resetViewController()
+        }
+        if let delegate = self.navigationController?.interactivePopGestureRecognizer?.delegate as? YCViewController, delegate == self {
+            self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        }
+        if let delegate = self.navigationController?.delegate as? YCViewController, delegate == self {
+            self.navigationController?.delegate = nil
+        }
+    }
+    
+    func initViewController(){
+        
+    }
+    
+    func resetViewController() {
+        YCViewController.addInstance(self)
+    }
+}
+
+extension YCViewController:UIGestureRecognizerDelegate, UINavigationControllerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool{
+        return true
+    }
+}

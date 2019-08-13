@@ -9,26 +9,27 @@
 import UIKit
 import MJRefresh
 
-class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentStringProtocol, YCAlertProtocol {
+class YCThemeDetailViewController: YCViewController, YCImageProtocol, YCContentStringProtocol, YCAlertProtocol {
     
-    static var _instaceArray: [YCThemeDetailViewController] = [];
+    static var _instanceArray: [YCThemeDetailViewController] = [];
     
-    static func getInstance() -> YCThemeDetailViewController{
-        var _instance: YCThemeDetailViewController
-        if _instaceArray.count > 0 {
-            _instance = _instaceArray[0]
-            _instaceArray.remove(at: 0)
+    override class func getInstance() -> YCViewController{
+        var _instance: YCViewController
+        if _instanceArray.count > 0 {
+            _instance = _instanceArray[0]
+            _instanceArray.remove(at: 0)
             _instance.initViewController()
             return _instance
         }else {
-            _instance = YCThemeDetailViewController();
-            _instance.initViewController()
+            _instance = YCThemeDetailViewController()
         }
         return _instance
     }
     
-    static func addInstance(instace: YCThemeDetailViewController) {
-        _instaceArray.append(instace)
+    override class func addInstance(_ instance: YCViewController) {
+        if let ins = instance as? YCThemeDetailViewController {
+            _instanceArray.append(ins)
+        }
     }
     
     let refreshCount = 40
@@ -45,20 +46,34 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     var collectionLayout: YCCollectionViewWaterfallLayout!
     
     var topView: UIView!
+    var topHeight: CGFloat = 0
     var coverImg: YCImageView!
     var themeNameLabel: UILabel!
     var themeDescLabel: UILabel!
     var followButton: YCFollowButton!
     var topLineView: UIView!
+    var maskView: UIView!
     
     var loadingView: YCLoadingView!
     
     let footerFresh = MJRefreshAutoNormalFooter()
     
     var isFirstShow: Bool = true
+    var isLoginChange = false
+    
+    var maxScrollHeight: CGFloat = 44
+
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+        return .lightContent;
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = true
+        UIApplication.shared.setStatusBarStyle(.lightContent, animated: true)
         super.viewWillAppear(animated)
         if self.isFirstShow {
            self.setValue(themeModel: self.themeModel)
@@ -67,20 +82,33 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if self.isFirstShow {
+        if let bar = self.navigationController?.navigationBar{
+            self.maxScrollHeight = bar.frame.height
+        }
+        self.maxScrollHeight = YCScreen.safeArea.top + self.maxScrollHeight
+        if self.isLoginChange || self.isFirstShow {
             self.themeDetail()
+        }
+        if self.isFirstShow {
             self.refreshPage()
         }
+        self.isGoto = false
         self.isFirstShow = false
+        self.isLoginChange = false
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.addInteractivePop = false
         self.initView()
+        self.initViewController()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        if !self.isGoto {
+            self.resetViewController()
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -109,8 +137,9 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     
     func initOperateButton() {
         let closeButton=UIButton()
-        closeButton.setImage(UIImage(named: "close_black"), for: .normal)
-        closeButton.setImage(UIImage(named: "close_black"), for: .highlighted)
+        closeButton.tag = 100
+        closeButton.setImage(UIImage(named: "close_white"), for: .normal)
+        closeButton.setImage(UIImage(named: "close_white"), for: .highlighted)
         closeButton.addTarget(self, action: #selector(self.closeButtonClick), for: .touchUpInside)
         self.view.addSubview(closeButton)
         closeButton.snp.makeConstraints { (make) in
@@ -121,8 +150,9 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         }
         
         let operateButton=UIButton()
-        operateButton.setImage(UIImage(named: "operate_black"), for: .normal)
-        operateButton.setImage(UIImage(named: "operate_black"), for: .highlighted)
+        operateButton.tag = 101
+        operateButton.setImage(UIImage(named: "operate_white"), for: .normal)
+        operateButton.setImage(UIImage(named: "operate_white"), for: .highlighted)
         operateButton.addTarget(self, action: #selector(self.operateButtonClick), for: .touchUpInside)
         self.view.addSubview(operateButton)
         operateButton.snp.makeConstraints { (make) in
@@ -133,26 +163,97 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         }
     }
     
+    func updateInitStartView(){
+        self.updateInitalViews()
+    }
+    
+    func updateInitEndView(){
+        self.updateFinalViews()
+    }
+    
+    var snapView: UIView?
+    
+    func updatestartDismiss(){
+//        self.updateFinalViews()
+        if self.collectionView.isDecelerating {
+            self.killScroll()
+        }
+        if self.collectionView.contentOffset.y > self.topHeight {
+            self.snapView = self.view.snapshotView(afterScreenUpdates: false)
+            self.view.addSubview(self.snapView!)
+            self.collectionView.contentOffset.y = self.topHeight
+        }
+    }
+    
+    func updatefinalDismiss(){
+        self.collectionView.contentOffset.y = 0
+        self.updateInitalViews()
+        if self.snapView != nil {
+            self.snapView!.transform = CGAffineTransform(translationX: 0, y: self.topHeight+20)
+        }
+    }
+    
+    func updateDidDismissed() {
+        self.snapView?.removeFromSuperview()
+    }
+    
+    func updateInitalViews() {
+        if self.isFirstShow {
+            self.setValue(themeModel: self.themeModel)
+        }
+        let wGap = YCScreen.bounds.width * 0.06
+        let offset: CGFloat = wGap
+        let bounds = YCScreen.bounds
+        self.themeNameLabel.frame.origin.x = offset + 25
+        self.themeDescLabel.frame.origin.x = offset + 25
+        self.followButton.frame.origin.x = bounds.width - 100 - offset
+        self.followButton.alpha = 0
+        self.topLineView.alpha = 0
+        self.view.viewWithTag(100)?.alpha = 0
+        self.view.viewWithTag(101)?.alpha = 0
+    }
+    
+    func updateFinalViews() {
+        if self.isFirstShow {
+            self.setValue(themeModel: self.themeModel)
+        }
+        let offset: CGFloat = 0
+        let bounds = YCScreen.bounds
+        self.themeNameLabel.frame.origin.x = offset + 25
+        self.themeDescLabel.frame.origin.x = offset + 25
+        self.followButton.frame.origin.x = bounds.width - 100 - offset
+        self.followButton.alpha = 1
+        self.topLineView.alpha = 1
+        self.view.viewWithTag(100)?.alpha = 1
+        self.view.viewWithTag(101)?.alpha = 1
+    }
+    
     func initTopView(){
+        
+        let offset: CGFloat = 0
+        
         let bounds = YCScreen.bounds
         self.topView = UIView(frame: CGRect(x:0, y:0, width: bounds.width, height: bounds.width))
         self.topView.backgroundColor = YCStyleColor.white
         
         self.coverImg = YCImageView(frame: CGRect(x:0, y:0, width: bounds.width, height: bounds.width))
+        coverImg.contentMode = .scaleAspectFill
         self.topView.addSubview(self.coverImg)
         
-        self.themeNameLabel = UILabel(frame: CGRect(x:20, y:0, width: bounds.width - 120, height: 36))
+        let wGap = YCScreen.bounds.width * 0.06
+        
+        self.themeNameLabel = UILabel(frame: CGRect(x:offset + 20, y:0, width: bounds.width - wGap*2 - 170, height: 36))
         self.topView.addSubview(self.themeNameLabel)
         self.themeNameLabel.textColor = YCStyleColor.black
-        self.themeNameLabel.font = UIFont.boldSystemFont(ofSize: 36)
+        self.themeNameLabel.font = UIFont.boldSystemFont(ofSize: 32)
         
-        self.themeDescLabel = UILabel(frame: CGRect(x:20, y:0, width: bounds.width - 40, height: 22))
+        self.themeDescLabel = UILabel(frame: CGRect(x:offset + 25, y:0, width: bounds.width - wGap*2 - 50, height: 22))
         self.topView.addSubview(self.themeDescLabel)
         self.themeDescLabel.textColor = YCStyleColor.gray
-        self.themeDescLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        self.themeDescLabel.font = UIFont.systemFont(ofSize: 16)
         self.themeDescLabel.numberOfLines = 0
         
-        self.followButton = YCFollowButton(frame: CGRect(x:bounds.width - 100, y:0, width: 90, height: 32))
+        self.followButton = YCFollowButton(frame: CGRect(x:bounds.width - 100 - offset, y:0, width: 90, height: 32))
         self.topView.addSubview(self.followButton)
         let followTap = UITapGestureRecognizer(target: self, action: #selector(self.followButtonTap))
         self.followButton.addGestureRecognizer(followTap)
@@ -227,14 +328,16 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         }
         self.themeNameLabel.sizeToFit()
         self.themeDescLabel.sizeToFit()
+        let wGap = bounds.width * 0.06
+        self.themeNameLabel.frame.size.width = bounds.width - wGap*2 - 170
+        self.themeDescLabel.frame.size.width = bounds.width - wGap*2 - 50
         var topH:CGFloat = 1
         switch stypleType {
         case 1:
-            self.themeNameLabel.frame.origin.x = 20
+            self.themeNameLabel.frame.origin.x = 25
             self.themeNameLabel.frame.origin.y = self.coverImg.frame.height + 10
             self.themeDescLabel.frame.origin.y = self.themeNameLabel.frame.origin.y +  self.themeNameLabel.frame.height + 10
-            self.themeDescLabel.frame.origin.x = 20
-            self.themeDescLabel.frame.size.width = bounds.width - 40
+            self.themeDescLabel.frame.origin.x = 25
             self.followButton.frame.origin.y = self.themeNameLabel.frame.origin.y - (self.followButton.frame.height - self.themeNameLabel.frame.height)/2
             topH = self.themeDescLabel.frame.origin.y + self.themeDescLabel.frame.height + 11
             self.themeNameLabel.textColor = YCStyleColor.black
@@ -242,11 +345,10 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
             self.topLineView.isHidden = false
             break;
         case 2:
-            self.themeNameLabel.frame.origin.x = 20
-            self.themeNameLabel.frame.origin.y = YCScreen.safeArea.top + 20
+            self.themeNameLabel.frame.origin.x = 25
+            self.themeNameLabel.frame.origin.y = YCScreen.safeArea.top + 40
             self.themeDescLabel.frame.origin.y = self.themeNameLabel.frame.origin.y +  self.themeNameLabel.frame.height + 10
-            self.themeDescLabel.frame.origin.x = 20
-            self.themeDescLabel.frame.size.width = bounds.width - 40
+            self.themeDescLabel.frame.origin.x = 25
             self.followButton.frame.origin.y = self.coverImg.frame.height - self.followButton.frame.height - 10
             topH = self.coverImg.frame.height
             self.themeNameLabel.textColor = YCStyleColor.white
@@ -254,11 +356,10 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
             self.topLineView.isHidden = true
             break;
         case 3:
-            self.themeNameLabel.frame.origin.x = 20
-            self.themeNameLabel.frame.origin.y = YCScreen.safeArea.top + 20
+            self.themeNameLabel.frame.origin.x = 25
+            self.themeNameLabel.frame.origin.y = YCScreen.safeArea.top + 40
             self.themeDescLabel.frame.origin.y = self.themeNameLabel.frame.origin.y +  self.themeNameLabel.frame.height + 10
-            self.themeDescLabel.frame.origin.x = 20
-            self.themeDescLabel.frame.size.width = bounds.width - 40
+            self.themeDescLabel.frame.origin.x = 25
             self.followButton.frame.origin.y = self.coverImg.frame.height - self.followButton.frame.height - 10
             topH = self.coverImg.frame.height
             self.themeNameLabel.textColor = YCStyleColor.black
@@ -268,7 +369,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         default:
             break;
         }
-        
+        self.topHeight = topH
         self.topView.frame.size.height = topH
         self.topLineView.frame.origin.y = topH - 1
         self.collectionLayout.headerReferenceSize = CGSize(width: bounds.width, height: topH)
@@ -393,20 +494,31 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         return isChange
     }
     
-    func initViewController() {
+    override func initViewController() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.loginUserChange(_:)), name: NSNotification.Name("LoginUserChange"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.followUserChange(_:)), name: NSNotification.Name("FollowUser"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.unFollowUserChange(_:)), name: NSNotification.Name("UnFollowUser"), object: nil)
     }
     
-    func resetViewController() {
+    override func resetViewController() {
+        super.resetViewController()
         self.themeModel = nil
         self.themeDetailModel = nil
         self.publishes.removeAll()
         self.publishSizes.removeAll()
+        for cell in self.collectionView.visibleCells {
+            if let ce = cell as? YCPublishCollectionViewCell{
+                ce.releaseCell()
+            }
+        }
         self.collectionView.reloadData()
         self.footerFresh.isHidden = true
         self.isFirstShow = true
         self.followButton.status = .Unfollow
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("LoginUserChange"), object: nil)
+        NotificationCenter.default.removeObserver(self, name:
+            NSNotification.Name("FollowUser"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("UnFollowUser"), object: nil)
     }
 }
 
@@ -431,6 +543,19 @@ extension YCThemeDetailViewController: UICollectionViewDataSource {
         cell.publishModel = publishModel
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let cell = cell as? YCPublishCollectionViewCell{
+            cell.endDisplayCell()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let cell = cell as? YCPublishCollectionViewCell{
+            cell.willDisplayCell()
+        }
+    }
+    
 }
 
 extension YCThemeDetailViewController: YCCollectionViewWaterfallLayoutDelegate {
@@ -448,7 +573,7 @@ extension YCThemeDetailViewController: YCCollectionViewWaterfallLayoutDelegate {
         let row = indexPath.item
         let publishModel = self.publishes[row]
         
-        let publishDetail = YCPublishDetailViewController.getInstance()
+        let publishDetail = YCPublishDetailViewController.getInstance() as! YCPublishDetailViewController
         publishDetail.contentModel = publishModel
         publishDetail.contents = self.publishes
         publishDetail.contentType = .THEME
@@ -457,29 +582,80 @@ extension YCThemeDetailViewController: YCCollectionViewWaterfallLayoutDelegate {
             publishDetail.contentID = themeModel.themeID
         }
         publishDetail.contentValue = ["ThemeType": self.themeType]
-        
-        let navigationController = UINavigationController(rootViewController: publishDetail)
-        navigationController.isNavigationBarHidden = true
-        self.present(navigationController, animated: true) {
-            
+        self.isGoto = true
+        NotificationCenter.default.post(name: NSNotification.Name("RootPushPublishView"), object: publishDetail)
+//        let navigationController = UINavigationController(rootViewController: publishDetail)
+//        navigationController.isNavigationBarHidden = true
+//        self.present(navigationController, animated: true) {
+//
+//        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        var alphaChange = (scrollView.contentOffset.y + self.maxScrollHeight)/self.maxScrollHeight
+        if alphaChange > 1 {
+            alphaChange = 1
+        }
+        if alphaChange < 0 {
+            alphaChange = 0
+        }
+        if let a = self.view.viewWithTag(100)?.alpha {
+            if abs((a - alphaChange)*10) < 5{
+                self.view.viewWithTag(100)?.alpha = alphaChange
+                self.view.viewWithTag(101)?.alpha = alphaChange
+            }
+        }else {
+            self.view.viewWithTag(100)?.alpha = alphaChange
+            self.view.viewWithTag(101)?.alpha = alphaChange
+        }
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if (scrollView.contentOffset.y <= -self.maxScrollHeight) {
+            closeButtonClick()
         }
     }
 }
 
 extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLoginProtocol, YCShareProtocol {
     
+    @objc func unFollowUserChange(_ notify: Notification) {
+        if let followUserID = notify.object as? String {
+            for publish in self.publishes {
+                if let publishUser = publish.user, publishUser.userID == followUserID {
+                    publish.user?.relation = 0
+                }
+            }
+        }
+    }
+    
+    @objc func followUserChange(_ notify: Notification) {
+        if let followUserID = notify.object as? String {
+            for publish in self.publishes {
+                if let publishUser = publish.user, publishUser.userID == followUserID {
+                    publish.user?.relation = 1
+                }
+            }
+        }
+    }
+    
     @objc func loginUserChange(_ notify: Notification) {
-        self.isFirstShow = true
+        self.isLoginChange = true
     }
     
     @objc func closeButtonClick(){
-        self.navigationController?.dismiss(animated: true, completion: { () -> Void in
-            self.resetViewController()
-            YCThemeDetailViewController.addInstance(instace: self)
-        })
+        if self.collectionView.isDecelerating {
+            self.killScroll()
+        }else {
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     @objc func operateButtonClick(){
+        if self.collectionView.isDecelerating {
+            self.killScroll()
+        }
+        
         if self.followButton.status != .Loading {
             var alertArray:Array<[String : Any]> = []
             alertArray.append(["title":YCLanguageHelper.getString(key: "ShareLabel")])
@@ -503,6 +679,12 @@ extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLo
                 }
             }
         }
+    }
+    
+    func killScroll() {
+        var offset = self.collectionView.contentOffset
+        offset.y -= 1.0
+        self.collectionView.setContentOffset(offset, animated: false)
     }
     
     func shareHandler() {
@@ -580,7 +762,9 @@ extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLo
     }
     
     func followThemeHandler() {
+        self.isGoto = true
         self.showLoginView(view: self, noNeedShowBlock: {
+            self.isGoto = false
             self.followHandler()
         }) {
             self.followHandler()
@@ -610,7 +794,9 @@ extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLo
     }
     
     func unFollowThemeHandler() {
+        self.isGoto = true
         self.showLoginView(view: self, noNeedShowBlock: {
+            self.isGoto = false
             self.unFollowConfirmHandler()
         }, completeBlock: nil)
     }
@@ -648,7 +834,9 @@ extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLo
     }
     
     func unBlockThemeHandler() {
+        self.isGoto = true
         self.showLoginView(view: self, noNeedShowBlock: {
+            self.isGoto = false
             self.unFollowHandler()
         }) {
             self.unFollowHandler()
@@ -656,7 +844,9 @@ extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLo
     }
     
     func blockThemeHandler() {
+        self.isGoto = true
         self.showLoginView(view: self, noNeedShowBlock: {
+            self.isGoto = false
             self.blockConfirmHandler()
         }, completeBlock: nil)
     }
@@ -716,4 +906,5 @@ class YCCollectionHeaderView: UICollectionReusableView {
 
 class YCCollectionFooterView: UICollectionReusableView {
 }
+
 
