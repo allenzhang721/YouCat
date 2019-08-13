@@ -285,7 +285,7 @@ extension YCHomeViewController: YCPublishTableViewCellDelegate, YCAlertProtocol,
     
     func cellContentTap(_ cell: YCPublishTableViewCell?, contentIndex: Int) {
         if cell != nil, let publish = cell?.publishModel {
-            let publishDetail = YCPublishDetailViewController()
+            let publishDetail = YCPublishDetailViewController.getInstance() as! YCPublishDetailViewController
             publishDetail.contentType = .HOME
             publishDetail.contentModel = publish
             publishDetail.contentIndex = contentIndex

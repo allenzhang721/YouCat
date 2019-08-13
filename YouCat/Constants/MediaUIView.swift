@@ -316,9 +316,11 @@ class YCImageView: YCBaseView {
                 self.isLoading = true
                 let bounds = self.bounds
                 let viewH = bounds.height - YCScreen.fullScreenArea.bottom
-                self.loading = YCMediaLoadingView(frame: CGRect(x: 5, y: viewH, width: bounds.width-10, height: 1))
-                self.addSubview(self.loading!)
-                self.loading!.startAnimating()
+//                self.loading = YCMediaLoadingView(frame: CGRect(x: 0, y: viewH, width: bounds.width, height: 1))
+//                self.addSubview(self.loading!)
+//                if let loading = self.loading {
+//                    loading.startAnimating()
+//                }
                 img.kf.setImage(with: ImageResource(downloadURL: url), placeholder: nil, options: [.keepCurrentImageWhileLoading], progressBlock: nil, completionHandler: { (image, error, type, url) in
                     if let loading = self.loading {
                         loading.stopAnimating()
@@ -489,7 +491,7 @@ class YCAnimationView: YCBaseView {
                 self.isLoading = true
                 let bounds = self.bounds
                 let viewH = bounds.height - YCScreen.fullScreenArea.bottom
-                self.loading = YCMediaLoadingView(frame: CGRect(x: 5, y: viewH, width: bounds.width-10, height: 1))
+                self.loading = YCMediaLoadingView(frame: CGRect(x: 0, y: viewH, width: bounds.width, height: 1))
                 self.addSubview(self.loading!)
                 self.loading!.startAnimating()
                 self.img!.kf.setImage(with: ImageResource(downloadURL: url), placeholder: nil, options: [.keepCurrentImageWhileLoading], progressBlock: nil, completionHandler: { (image, error, type, url) in

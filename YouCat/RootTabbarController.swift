@@ -90,12 +90,23 @@ class YCNavigationController: UINavigationController{
 }
 
 class YCViewController: UIViewController {
-
+    
+    class func getInstance() -> YCViewController{
+        return YCViewController()
+    }
+    
+    class func addInstance(_ instance: YCViewController) {
+        
+    }
+    
     var isGoto: Bool = false
+    var addInteractivePop: Bool = true
     
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-        self.navigationController?.delegate = self
+        if self.addInteractivePop {
+            self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+            self.navigationController?.delegate = self
+        }
         super.viewWillDisappear(animated)
     }
     
@@ -122,6 +133,7 @@ class YCViewController: UIViewController {
     }
     
     func resetViewController() {
+        YCViewController.addInstance(self)
     }
 }
 

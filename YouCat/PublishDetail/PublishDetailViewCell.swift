@@ -42,6 +42,8 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
                 if old.publishID != publishModel?.publishID {
                     self.displayRelease()
                     self.didSetPublishModel();
+                }else {
+                    self.changeCellStyle()
                 }
             }else {
                 self.didSetPublishModel();
@@ -320,6 +322,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             self.contentIndex = contentIndex
         }
         self.prepareContent()
+        self.changeCellStyle()
     }
     
     func displayView() {
@@ -337,6 +340,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
                 }
             }
             self.isDisplaying = true
+            self.changeCellStyle()
         }
     }
     
@@ -421,14 +425,25 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
         }
     }
     
-    func setFollowButtonStatus() {
-        if let publish = self.publishModel, let user = publish.user {
-            if user.relation == 0 {
-                self.followButton.isHidden = false
-                self.followButton.alpha = 1
-                self.followButton.setUnFollowStatus()
+    func changeCellStyle() {
+        if let publish = self.publishModel {
+            if let user = publish.user {
+                if user.relation == 0 {
+                    self.followButton.isHidden = false
+                    self.followButton.alpha = 1
+                    self.followButton.setUnFollowStatus()
+                }else {
+                    self.followButton.isHidden = true
+                }
+            }
+            self.contentLabel.text = self.getContentString(content: publish.content)
+            self.likeCountLabel.text = self.getNumberString(number: publish.likeCount)
+            self.commentCountLabel.text = self.getNumberString(number: publish.commentCount)
+            self.resetCountLabel()
+            if publish.isLike == 1 {
+                self.likeImg.image = UIImage(named: "like_high")
             }else {
-                self.followButton.isHidden = true
+                self.likeImg.image = UIImage(named: "like_white")
             }
         }
     }
@@ -521,12 +536,16 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             }
             var viewIndex = 0
             for view in self.contentViews {
-                if mediaModels != nil {
-                    if viewIndex > -1, viewIndex < mediaModels!.count {
-                        view.loadMedia(mediaModels![viewIndex])
-                    }else if(mediaModels!.count > 0) {
-                        view.loadMedia(mediaModels![0])
+                if let medias = mediaModels {
+                    if viewIndex > -1, viewIndex < medias.count {
+                        view.loadMedia(medias[viewIndex])
+                    }else if(medias.count > 0) {
+                        view.loadMedia(medias[0])
+                    }else{
+                        view.loadMedia(nil)
                     }
+                }else {
+                    view.loadMedia(nil)
                 }
                 view.displayView()
                 if view.contentIndex == self.contentIndex {
@@ -625,7 +644,7 @@ extension YCPublishDetailViewCell: YCViewDelegate {
         let contentIndex = view.contentIndex
         if let publish = self.publishModel {
             if self.isFocus || self.isDoubleTap{
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+1, execute: {
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.7, execute: {
                     for view in self.contentViews {
                         if view.contentIndex == self.contentIndex {
                             view.play()
@@ -766,7 +785,7 @@ extension YCPublishDetailViewCell {
             self.tapTime = nil
         }
         self.tapTime = DispatchSource.makeTimerSource(queue: DispatchQueue.global())
-        self.tapTime?.schedule(deadline: .now()+1)
+        self.tapTime?.schedule(deadline: .now()+0.7)
         self.tapTime!.setEventHandler {
             self.isDoubleTap = false
             self.tapTime!.cancel()

@@ -8,6 +8,7 @@
 
 import UIKit
 import MJRefresh
+import Kingfisher
 
 class YCFavoriteViewController: UIViewController, YCImageProtocol, YCContentStringProtocol, YCAlertProtocol {
     
@@ -398,7 +399,7 @@ extension YCFavoriteViewController: YCCollectionViewWaterfallLayoutDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let row = indexPath.item
         let publish = self.publishes[row]
-        let publishDetail = YCPublishDetailViewController()
+        let publishDetail = YCPublishDetailViewController.getInstance() as! YCPublishDetailViewController
         publishDetail.contentType = .HOME
         publishDetail.contentModel = publish
         publishDetail.contentIndex = 0

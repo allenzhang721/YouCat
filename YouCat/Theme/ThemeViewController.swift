@@ -286,7 +286,7 @@ extension YCThemeViewController: UITableViewDelegate {
         let cellFrame = tableView.convert(cell.frame, to: view)
         let row = indexPath.item
         let theme = self.themes[row]
-        let themeDetail = YCThemeDetailViewController()
+        let themeDetail = YCThemeDetailViewController.getInstance() as! YCThemeDetailViewController
         themeDetail.themeModel = theme
         navigationTransitionDelegate.startPresentY = startFrame.minY
         let wGap = YCScreen.bounds.width * 0.06

@@ -17,6 +17,27 @@ enum YCUserListType: String{
 
 class YCUserListViewController: YCViewController{
     
+    static var _instanceArray: [YCUserListViewController] = [];
+    
+    override class func getInstance() -> YCViewController{
+        var _instance: YCViewController
+        if _instanceArray.count > 0 {
+            _instance = _instanceArray[0]
+            _instanceArray.remove(at: 0)
+            _instance.initViewController()
+            return _instance
+        }else {
+            _instance = YCUserListViewController()
+        }
+        return _instance
+    }
+    
+    override class func addInstance(_ instance: YCViewController) {
+        if let ins = instance as? YCUserListViewController {
+            _instanceArray.append(ins)
+        }
+    }
+    
     var userModel: YCUserDetailModel?
     var userListType: YCUserListType = .Followers
     let refreshCount = 40
@@ -346,7 +367,7 @@ extension YCUserListViewController: YCUserTableViewCellDelegate, YCNumberStringP
     
     func cellUserIconTap(_ cell:YCUserTableViewCell?){
         if cell != nil, let user = cell?.userModel {
-            let userProfile = YCUserViewController()
+            let userProfile = YCUserViewController.getInstance() as! YCUserViewController
             userProfile.userModel = user
             userProfile.delegate = self
             if let nav = self.navigationController {

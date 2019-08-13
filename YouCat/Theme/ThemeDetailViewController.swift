@@ -9,7 +9,28 @@
 import UIKit
 import MJRefresh
 
-class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentStringProtocol, YCAlertProtocol {
+class YCThemeDetailViewController: YCViewController, YCImageProtocol, YCContentStringProtocol, YCAlertProtocol {
+    
+    static var _instanceArray: [YCThemeDetailViewController] = [];
+    
+    override class func getInstance() -> YCViewController{
+        var _instance: YCViewController
+        if _instanceArray.count > 0 {
+            _instance = _instanceArray[0]
+            _instanceArray.remove(at: 0)
+            _instance.initViewController()
+            return _instance
+        }else {
+            _instance = YCThemeDetailViewController()
+        }
+        return _instance
+    }
+    
+    override class func addInstance(_ instance: YCViewController) {
+        if let ins = instance as? YCThemeDetailViewController {
+            _instanceArray.append(ins)
+        }
+    }
     
     let refreshCount = 40
     
@@ -38,7 +59,6 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     let footerFresh = MJRefreshAutoNormalFooter()
     
     var isFirstShow: Bool = true
-    var isGoto: Bool = false
     var isLoginChange = false
     
     var maxScrollHeight: CGFloat = 44
@@ -79,6 +99,7 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.addInteractivePop = false
         self.initView()
         self.initViewController()
     }
@@ -473,13 +494,14 @@ class YCThemeDetailViewController: UIViewController, YCImageProtocol, YCContentS
         return isChange
     }
     
-    func initViewController() {
+    override func initViewController() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.loginUserChange(_:)), name: NSNotification.Name("LoginUserChange"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.followUserChange(_:)), name: NSNotification.Name("FollowUser"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.unFollowUserChange(_:)), name: NSNotification.Name("UnFollowUser"), object: nil)
     }
     
-    func resetViewController() {
+    override func resetViewController() {
+        super.resetViewController()
         self.themeModel = nil
         self.themeDetailModel = nil
         self.publishes.removeAll()
@@ -551,7 +573,7 @@ extension YCThemeDetailViewController: YCCollectionViewWaterfallLayoutDelegate {
         let row = indexPath.item
         let publishModel = self.publishes[row]
         
-        let publishDetail = YCPublishDetailViewController()
+        let publishDetail = YCPublishDetailViewController.getInstance() as! YCPublishDetailViewController
         publishDetail.contentModel = publishModel
         publishDetail.contents = self.publishes
         publishDetail.contentType = .THEME

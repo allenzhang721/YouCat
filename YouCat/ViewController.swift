@@ -46,13 +46,13 @@ class ViewController: UIViewController {
     
     @objc func rootPushUserViewNotification(_ notify: Notification){
         if let user = notify.object as? YCRelationUserModel {
-            let userProfile = YCUserViewController()
+            let userProfile = YCUserViewController.getInstance() as! YCUserViewController
             userProfile.userModel = user
             if let nav = self.root.navigationController {
                 nav.pushViewController(userProfile, animated: true)
             }
         }else if let user = notify.object as? YCLoginUserModel {
-            let userProfile = YCUserViewController()
+            let userProfile = YCUserViewController.getInstance() as! YCUserViewController
             userProfile.userModel = user
             userProfile.loginUserType = .LoginUser
             if let nav = self.root.navigationController {

@@ -866,7 +866,7 @@ extension YCCommentListViewController: YCCommentListViewCellDelegate {
     }
     
     func goUser(_ user: YCUserModel) {
-        let userProfile = YCUserViewController()
+        let userProfile = YCUserViewController.getInstance() as! YCUserViewController
         userProfile.userModel = user
         if let nav = self.navigationController {
             nav.pushViewController(userProfile, animated: true)

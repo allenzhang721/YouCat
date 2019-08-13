@@ -23,6 +23,27 @@ enum YCLoginUserType: String{
 
 class YCUserViewController: YCViewController, YCImageProtocol, YCNumberStringProtocol, YCAlertProtocol {
     
+    static var _instanceArray: [YCUserViewController] = [];
+    
+    override class func getInstance() -> YCViewController{
+        var _instance: YCViewController
+        if _instanceArray.count > 0 {
+            _instance = _instanceArray[0]
+            _instanceArray.remove(at: 0)
+            _instance.initViewController()
+            return _instance
+        }else {
+            _instance = YCUserViewController()
+        }
+        return _instance
+    }
+    
+    override class func addInstance(_ instance: YCViewController) {
+        if let ins = instance as? YCUserViewController {
+            _instanceArray.append(ins)
+        }
+    }
+    
     var userPublishType: YCUserPublishType = .POST
     var loginUserType: YCLoginUserType = .Default
     let refreshCount = 40
@@ -684,7 +705,7 @@ extension YCUserViewController: YCCollectionViewWaterfallLayoutDelegate {
         let row = indexPath.item
         let publishModel = self.publishes[row]
         
-        let publishDetail = YCPublishDetailViewController()
+        let publishDetail = YCPublishDetailViewController.getInstance() as! YCPublishDetailViewController
         publishDetail.contentModel = publishModel
         publishDetail.contentIndex = 0
         publishDetail.contents = self.publishes
@@ -736,6 +757,7 @@ extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProt
         if let followUserID = notify.object as? String {
             if let userID = self.userModel?.userID, followUserID == userID {
                 self.isLoginChange = true
+                self.followButton.status = .Unfollow
             }
             for publish in self.publishes {
                 if let publishUser = publish.user, publishUser.userID == followUserID {
@@ -749,6 +771,7 @@ extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProt
         if let followUserID = notify.object as? String {
             if let userID = self.userModel?.userID, followUserID == userID {
                 self.isLoginChange = true
+                self.followButton.status = .Following
             }
             for publish in self.publishes {
                 if let publishUser = publish.user, publishUser.userID == followUserID {

@@ -191,7 +191,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
     }
 
     func setup() {
-        ImageCache.default.maxMemoryCost = UInt(512 * 1024 * 1024) // Allen: 200 MB
+        ImageCache.default.maxMemoryCost = UInt(512 * 1024 * 1024) // Allen: 256 MB
         // Override point for customization after application launch.
         #if DEBUG
             FilePath.baseURL = RequestHost.debug.description;

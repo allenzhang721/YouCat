@@ -19,6 +19,27 @@ enum YCPublishDetailType: String{
 }
 
 class YCPublishDetailViewController: YCViewController {
+
+    static var _instanceArray: [YCPublishDetailViewController] = [];
+    
+    override class func getInstance() -> YCViewController{
+        var _instance: YCViewController
+        if _instanceArray.count > 0 {
+            _instance = _instanceArray[0]
+            _instanceArray.remove(at: 0)
+            _instance.initViewController()
+            return _instance
+        }else {
+            _instance = YCPublishDetailViewController()
+        }
+        return _instance
+    }
+    
+    override class func addInstance(_ instance: YCViewController) {
+        if let ins = instance as? YCPublishDetailViewController {
+            _instanceArray.append(ins)
+        }
+    }
     
     var videoMedias: [YCMediaViewModel] = []
     
@@ -40,7 +61,7 @@ class YCPublishDetailViewController: YCViewController {
     var isLoading = false
     var loadingView: YCLoadingView!
     var loadResourceIndex = -1
-
+    
     override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -476,20 +497,59 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
                 }
             }
             let currentContent = contents[mediaIndex]
-            let currentViewModel = loadPublishModeMedia(currentContent)
+            let currentViewModel = self.loadPublishModeMedia(currentContent)
             let loadContents = subContents.filter({$0.publishID != currentContent.publishID})
-            if let currentPlayItem = currentViewModel?.videoPlayerItem, currentPlayItem.status == .readyToPlay {
+            var waitingLoad = false
+            if let current = currentViewModel {
+                if let currentPlayItem = current.videoPlayerItem {
+                    if currentPlayItem.status == .readyToPlay || currentPlayItem.status == .failed {
+                        waitingLoad = false
+                    }else {
+                        waitingLoad = true
+                    }
+                }else {
+                    waitingLoad = false
+                }
+            }else {
+                waitingLoad = false
+            }
+            if !waitingLoad {
                 for subContent in loadContents {
                     let _ = self.loadPublishModeMedia(subContent)
                 }
             }else {
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-                    if let contentIndex = self.contentIndexPath, contentIndex.item == mediaIndex {
-                        for subContent in loadContents {
-                            let _ = self.loadPublishModeMedia(subContent)
+                DispatchQueue.global().async {
+                    print("waiting begin")
+                    var waiting = true
+                    while waiting {
+                        if let contentIndex = self.contentIndexPath, contentIndex.item == mediaIndex {
+                            if let currentPlayItem = currentViewModel?.videoPlayerItem{
+                                if currentPlayItem.status == .readyToPlay {
+                                    waiting = false
+                                    for subContent in loadContents {
+                                        let _ = self.loadPublishModeMedia(subContent)
+                                    }
+                                }else if currentPlayItem.status == .failed {
+                                    waiting = false
+                                }else {
+                                    waiting = true
+                                }
+                            }else {
+                                waiting = false
+                            }
+                        }else {
+                            waiting = false
                         }
                     }
+                    print("waiting finish")
                 }
+//                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+//                    if let contentIndex = self.contentIndexPath, contentIndex.item == mediaIndex {
+//                        for subContent in loadContents {
+//                            let _ = self.loadPublishModeMedia(subContent)
+//                        }
+//                    }
+//                }
             }
             return currentViewModel;
         }
@@ -889,7 +949,7 @@ extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLogi
         if isSameUser {
             self.viewCloseHander()
         }else {
-            let userProfile = YCUserViewController()
+            let userProfile = YCUserViewController.getInstance() as! YCUserViewController
             userProfile.userModel = user
             if let nav = self.navigationController {
                 self.isGoto = true
@@ -1000,7 +1060,7 @@ extension YCPublishDetailViewController{
             let cells = self.collectionView.visibleCells
             for cell in cells {
                 if let contentCell = cell as? YCPublishDetailViewCell{
-                    contentCell.setFollowButtonStatus()
+                    contentCell.changeCellStyle()
                 }
             }
         }
@@ -1016,7 +1076,7 @@ extension YCPublishDetailViewController{
             let cells = self.collectionView.visibleCells
             for cell in cells {
                 if let contentCell = cell as? YCPublishDetailViewCell{
-                    contentCell.setFollowButtonStatus()
+                    contentCell.changeCellStyle()
                 }
             }
         }
