@@ -53,6 +53,7 @@ class YCThemeViewController: UIViewController, YCImageProtocol {
         super.viewDidLoad()
         self.initView()
         NotificationCenter.default.addObserver(self, selector: #selector(self.loginUserChange(_:)), name: NSNotification.Name("LoginUserChange"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.userLogout(_:)), name: NSNotification.Name("UserLogout"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCategory(_:)), name: NSNotification.Name("reFreshCategory"), object: nil)
     }
 
@@ -339,6 +340,11 @@ extension YCThemeViewController: YCLoginProtocol, YCAlertProtocol {
     
     @objc func loginUserChange(_ notify: Notification) {
 //        self.isFirstLoad = true
+        self.setUserIcon()
+    }
+    
+    @objc func userLogout(_ notify: Notification) {
+        self.isFirstLoad = true
         self.setUserIcon()
     }
     

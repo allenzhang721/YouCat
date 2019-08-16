@@ -73,6 +73,7 @@ class YCFavoriteViewController: UIViewController, YCImageProtocol, YCContentStri
         super.viewDidLoad()
         self.initView()
         NotificationCenter.default.addObserver(self, selector: #selector(self.loginUserChange(_:)), name: NSNotification.Name("LoginUserChange"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.userLogout(_:)), name: NSNotification.Name("UserLogout"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshHome(_:)), name: NSNotification.Name("reFreshHome"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.followUserChange(_:)), name: NSNotification.Name("FollowUser"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.unFollowUserChange(_:)), name: NSNotification.Name("UnFollowUser"), object: nil)
@@ -323,6 +324,11 @@ extension YCFavoriteViewController: YCLoginProtocol {
     
     @objc func loginUserChange(_ notify: Notification) {
 //        self.isFirstLoad = true
+        self.setUserIcon()
+    }
+    
+    @objc func userLogout(_ notify: Notification) {
+        self.isFirstLoad = true
         self.setUserIcon()
     }
     

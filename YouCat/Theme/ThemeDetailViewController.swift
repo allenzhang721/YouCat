@@ -75,8 +75,9 @@ class YCThemeDetailViewController: YCViewController, YCImageProtocol, YCContentS
         self.navigationController?.isNavigationBarHidden = true
         UIApplication.shared.setStatusBarStyle(.lightContent, animated: true)
         super.viewWillAppear(animated)
-        if self.isFirstShow {
-           self.setValue(themeModel: self.themeModel)
+        if self.isFirstShow ||  self.isLoginChange {
+            self.setValue(themeModel: self.themeModel)
+            self.themeDetail()
         }
     }
     
@@ -85,10 +86,7 @@ class YCThemeDetailViewController: YCViewController, YCImageProtocol, YCContentS
         if let bar = self.navigationController?.navigationBar{
             self.maxScrollHeight = bar.frame.height
         }
-        self.maxScrollHeight = YCScreen.safeArea.top + self.maxScrollHeight
-        if self.isLoginChange || self.isFirstShow {
-            self.themeDetail()
-        }
+        self.maxScrollHeight = YCScreen.safeArea.top + self.maxScrollHeight - 10
         if self.isFirstShow {
             self.refreshPage()
         }
@@ -386,6 +384,9 @@ class YCThemeDetailViewController: YCViewController, YCImageProtocol, YCContentS
                     if let themeDetail = model.baseModel as? YCThemeDetailModel {
                         self.setValue(themeModel: themeDetail)
                         self.themeDetailModel = themeDetail
+                        self.themeModel?.relation = themeDetail.relation
+                        self.themeModel?.name = themeDetail.name
+                        self.themeModel?.description = themeDetail.description
                         if let status = YCFollowButtonStatus(rawValue: themeDetail.relation) {
                             self.followButton.status = status
                         }else {

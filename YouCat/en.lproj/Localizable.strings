@@ -18,19 +18,21 @@
 
 "EnterCommentLabel" = "Comment";
 "DefaultUserName" = "User_";
+"IconLabel" = "Icon";
 "NicknameLabel" = "Name";
 "NicknamePlaceholder" = "Enter your nickname";
 "BioLabel" = "Bio";
+"IconLabel" = "Profile Photo";
 "BioPlaceholder" = "Enter your bio";
 "GenderLabel" = "Gender";
-"GenderTitle" = "Edit Gender";
+"GenderTitle" = "Gender";
 "MaleLabel" = "Male";
 "FemaleLabel" = "Female";
 "PhoneLabel" = "Phone";
 "LoginLabel" = "Log In";
 "LogoutLabel" = "Log Out";
 "LogoutTitle" = "Log Out?";
-"IconTitle" = "Edit Icon";
+"IconTitle" = "Profile Photo";
 "PhotoLabel" = "Take Photo";
 "CameraAccessTitle" = 'Allow youCat to access your camera in "Settings"->"Privacy"';
 "LibraryLabel" = "Select from Album";
@@ -61,8 +63,9 @@
 "SaveLabel" = "Save";
 "QuitLabel" = "Quit";
 "SaveChangeTitle" = "Save Change?";
-"EditNicknameTitle" = "Edit Nickname";
-"EditBioTitle" = "Edit Bio";
+"EditNicknameTitle" = "Name";
+"EditBioTitle" = "Bio";
+"EditProfileTitle" = "Profile";
 
 "SettingLabel" = "Setting";
 "PhonePlaceholder" = "Phone number";

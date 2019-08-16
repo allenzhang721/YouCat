@@ -18,6 +18,7 @@
 
 "EnterCommentLabel" = "说点什么~";
 "DefaultUserName" = "用户";
+"IconLabel" = "头像";
 "NicknameLabel" = "昵称";
 "NicknamePlaceholder" = "请输入你的昵称";
 "BioLabel" = "签名";
@@ -52,7 +53,7 @@
 "FollowButtonLabel" = "关注";
 "FollowingButtonLabel" = "已关注";
 "UnBlockButtonLabel" = "移出黑名单";
-"EditProfileButtonLabel" = "编辑个人资料";
+"EditProfileButtonLabel" = "编辑个人信息";
 "BlockTitle" = "是否确定将其添加至黑名单?";
 "ConfirmLabel" = "确定";
 "CancelLabel" = "取消";
@@ -63,6 +64,7 @@
 "SaveChangeTitle" = "是否保存修改?";
 "EditNicknameTitle" = "修改昵称";
 "EditBioTitle" = "修改个性签名";
+"EditProfileTitle" = "个人信息";
 
 "SettingLabel" = "设置";
 "PhonePlaceholder" = "请输入手机号码";

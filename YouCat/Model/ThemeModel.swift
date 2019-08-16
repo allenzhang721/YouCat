@@ -13,14 +13,14 @@ class YCThemeModel: YCBaseModel {
     
     let themeID: String;
     let uuid: String;
-    let name: String;
-    let description: String;
+    var name: String;
+    var description: String;
     let themeType: Int;
     let styleType: Int;
     let createDate: Date?
     let creator: YCRelationUserModel?
-    let coverImage: YCImageModel?
-    let coverVideo: YCVideoModel?
+    var coverImage: YCImageModel?
+    var coverVideo: YCVideoModel?
     var relation: Int;
     
     init(themeID: String, uuid: String, name:String, description: String, themeType: Int, styleType: Int, relation: Int, createDate: String, creatorJSON: JSON?, coverImageJSON: JSON?, coverVideoJSON: JSON?) {

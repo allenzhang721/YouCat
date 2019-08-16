@@ -48,7 +48,7 @@ class YCUserViewController: YCViewController, YCImageProtocol, YCNumberStringPro
     var loginUserType: YCLoginUserType = .Default
     let refreshCount = 40
     var isFirstShow: Bool = true
-    var isLoginChange: Bool = false
+    var isResetUserInfo: Bool = false
     var isSetting: Bool = false
 
     var userModel: YCUserModel?
@@ -92,22 +92,20 @@ class YCUserViewController: YCViewController, YCImageProtocol, YCNumberStringPro
         self.navigationController?.isNavigationBarHidden = true
         UIApplication.shared.setStatusBarStyle(.default, animated: true)
         super.viewWillAppear(animated)
-        if self.isFirstShow || self.isSetting {
+        if self.isFirstShow || self.isSetting || self.isResetUserInfo {
             self.setValue(userModel: self.userModel)
+            self.userDetail()
         }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if self.isLoginChange || self.isFirstShow {
-            self.userDetail()
-        }
         if self.isFirstShow {
             self.refreshPage()
         }
         self.isFirstShow = false
         self.isSetting = false
-        self.isLoginChange = false
+        self.isResetUserInfo = false
     }
     
     override func viewDidLoad() {
@@ -474,14 +472,14 @@ class YCUserViewController: YCViewController, YCImageProtocol, YCNumberStringPro
             YCUserDomain().userDetail(userID: user.userID, completionBlock: { (model) in
                 if let mo = model, mo.result {
                     if let userDetail = mo.baseModel as? YCUserDetailModel {
-                        self.setDetail(userDetailModel: userDetail)
                         self.userDetailModel = userDetail
+                        self.setDetail(userDetailModel: userDetail)
+                        self.setValue(userModel: userDetail)
                     }else {
                         if let userDetail = self.userDetailModel {
                             self.setDetail(userDetailModel: userDetail)
                         }else {
                             self.resetDetail()
-                            self.followButton.status = .Unfollow
                         }
                     }
                 }else {
@@ -634,7 +632,7 @@ class YCUserViewController: YCViewController, YCImageProtocol, YCNumberStringPro
         self.footerFresh.isHidden = true
         self.isFirstShow = true
         self.isSetting = false
-        self.isLoginChange = false
+        self.isResetUserInfo = false
         self.resetDetail()
         self.followButton.status = .Unfollow
         self.userPublishType = .POST
@@ -756,7 +754,7 @@ extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProt
     @objc func unFollowUserChange(_ notify: Notification) {
         if let followUserID = notify.object as? String {
             if let userID = self.userModel?.userID, followUserID == userID {
-                self.isLoginChange = true
+                self.isResetUserInfo = true
                 self.followButton.status = .Unfollow
             }
             for publish in self.publishes {
@@ -770,7 +768,7 @@ extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProt
     @objc func followUserChange(_ notify: Notification) {
         if let followUserID = notify.object as? String {
             if let userID = self.userModel?.userID, followUserID == userID {
-                self.isLoginChange = true
+                self.isResetUserInfo = true
                 self.followButton.status = .Following
             }
             for publish in self.publishes {
@@ -782,7 +780,7 @@ extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProt
     }
     
     @objc func loginUserChange(_ notify: Notification) {
-        self.isLoginChange = true
+        self.isResetUserInfo = true
     }
     
     func cellUserIconTap(_ cell:YCPublishCollectionViewCell?){
@@ -829,7 +827,7 @@ extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProt
         self.showSheetAlert("", alertMessage: YCLanguageHelper.getString(key: "LogoutTitle"), okAlertArray: alertArray, cancelAlertLabel: YCLanguageHelper.getString(key: "CancelLabel"), view: self) { (index) in
             if index == 0 {
                 if YCUserManager.logout() {
-                    NotificationCenter.default.post(name: NSNotification.Name("LoginUserChange"), object: nil)
+                    NotificationCenter.default.post(name: NSNotification.Name("UserLogout"), object: nil)
                     self.backButtonClick()
                 }
             }
@@ -963,14 +961,19 @@ extension YCUserViewController: YCPublishCollectionViewCellDelegate, YCLoginProt
     }
     
     func editProfile() {
-        let settingView = YCSettingViewController.getInstance()
+        let settingView = YCSettingViewController()
         
-        let navigationController = UINavigationController(rootViewController: settingView)
-        navigationController.isNavigationBarHidden = true
-        self.present(navigationController, animated: true) {
-            
+        if let nav = self.navigationController {
+            self.isSetting = true
+            self.isGoto = true
+            nav.pushViewController(settingView, animated: true)
         }
-        self.isSetting = true
+        
+//        let navigationController = UINavigationController(rootViewController: settingView)
+//        navigationController.isNavigationBarHidden = true
+//        self.present(navigationController, animated: true) {
+//
+//        }
     }
     
     func followUserHandler() {
