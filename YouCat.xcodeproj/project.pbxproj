@@ -116,8 +116,6 @@
 		95E4E3482307B3E0000032CA /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4E33E2307B3E0000032CA /* Client.swift */; };
 		95E4E3492307B3E0000032CA /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4E33F2307B3E0000032CA /* LocationManager.swift */; };
 		95E4E34A2307B3E0000032CA /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4E3402307B3E0000032CA /* Configuration.swift */; };
-		95E4E34D2307B52E000032CA /* LaunchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95E4E34B2307B52E000032CA /* LaunchView.xib */; };
-		95E4E34E2307B52E000032CA /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4E34C2307B52E000032CA /* LaunchViewController.swift */; };
 		95E4E3582307B584000032CA /* ContactListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95E4E3502307B584000032CA /* ContactListView.xib */; };
 		95E4E3592307B584000032CA /* FileView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95E4E3512307B584000032CA /* FileView.xib */; };
 		95E4E35A2307B584000032CA /* ContactListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4E3522307B584000032CA /* ContactListViewController.swift */; };
@@ -339,8 +337,6 @@
 		95E4E33E2307B3E0000032CA /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		95E4E33F2307B3E0000032CA /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		95E4E3402307B3E0000032CA /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
-		95E4E34B2307B52E000032CA /* LaunchView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchView.xib; sourceTree = "<group>"; };
-		95E4E34C2307B52E000032CA /* LaunchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		95E4E3502307B584000032CA /* ContactListView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactListView.xib; sourceTree = "<group>"; };
 		95E4E3512307B584000032CA /* FileView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FileView.xib; sourceTree = "<group>"; };
 		95E4E3522307B584000032CA /* ContactListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactListViewController.swift; sourceTree = "<group>"; };
@@ -590,8 +586,6 @@
 			isa = PBXGroup;
 			children = (
 				95E4E34F2307B584000032CA /* Others */,
-				95E4E34B2307B52E000032CA /* LaunchView.xib */,
-				95E4E34C2307B52E000032CA /* LaunchViewController.swift */,
 				95E4E33C2307B3E0000032CA /* Capabilities */,
 				95C62FC82307AFA900D651C4 /* Message */,
 				25D721BE21A6E0E8007F5648 /* Header */,
@@ -947,7 +941,6 @@
 				95C62FDD2307AFA900D651C4 /* ImageMessageCell.xib in Resources */,
 				95E4E3582307B584000032CA /* ContactListView.xib in Resources */,
 				95C62FDE2307AFA900D651C4 /* MessageListView.xib in Resources */,
-				95E4E34D2307B52E000032CA /* LaunchView.xib in Resources */,
 				256299C421808002005FDDFC /* Assets.xcassets in Resources */,
 				252B901121B040B500E41842 /* InfoPlist.strings in Resources */,
 			);
@@ -1123,7 +1116,6 @@
 				95E4E35A2307B584000032CA /* ContactListViewController.swift in Sources */,
 				2C827F48206F3EEB0035DCE2 /* ThemeViewController.swift in Sources */,
 				95C62FD82307AFA900D651C4 /* RecalledMessageCell.swift in Sources */,
-				95E4E34E2307B52E000032CA /* LaunchViewController.swift in Sources */,
 				2C3441FA203D89F3008BF439 /* AppDelegate.swift in Sources */,
 				95C62FDC2307AFA900D651C4 /* MessageListViewController.swift in Sources */,
 				95E4E34A2307B3E0000032CA /* Configuration.swift in Sources */,

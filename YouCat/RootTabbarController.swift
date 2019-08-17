@@ -52,8 +52,7 @@ class YCRootTabbarController: UITabBarController {
         self.tabBar.tintColor = YCStyleColor.red
         self.navigationController?.isNavigationBarHidden = true
         register()
-        clientInitializing(isReopen: false)
-        DispatchQueue.main.asyncAfter(deadline: .now()+3) {
+        clientInitializing(isReopen: false) {
             self.createMessageViewControllers()
         }
     }
@@ -77,7 +76,7 @@ class YCRootTabbarController: UITabBarController {
     
     func createMessageViewControllers() {
         let IDSet: Set<String> = Set(arrayLiteral: "Mary")
-        clientInitializing(isReopen: true)
+//        clientInitializing(isReopen: true)
         var memberSet: Set<String> = IDSet
         memberSet.insert(Client.current.ID)
         guard memberSet.count > 1 else {
@@ -121,7 +120,7 @@ class YCRootTabbarController: UITabBarController {
         
     }
     
-    func clientInitializing(isReopen: Bool) {
+    func clientInitializing(isReopen: Bool, completed:(()->())?) {
         do {
 //            self.activityToggle()
             
@@ -162,7 +161,7 @@ class YCRootTabbarController: UITabBarController {
                                         client: client,
                                         isReopen: isReopen,
                                         storedConversations: (conversations.isEmpty ? nil : conversations),
-                                        storedServiceConversations: (serviceConversations.isEmpty ? nil : serviceConversations)
+                                        storedServiceConversations: (serviceConversations.isEmpty ? nil : serviceConversations), completed: completed
                                     )
                                 case .failure(error: let error):
 //                                    self.activityToggle()
@@ -179,7 +178,7 @@ class YCRootTabbarController: UITabBarController {
                     }
                 }
             } else {
-                self.open(client: client, isReopen: isReopen)
+                self.open(client: client, isReopen: isReopen, completed: completed)
             }
         } catch {
 //            self.activityToggle()
@@ -191,7 +190,8 @@ class YCRootTabbarController: UITabBarController {
         client: IMClient,
         isReopen: Bool,
         storedConversations: [IMConversation]? = nil,
-        storedServiceConversations: [IMServiceConversation]? = nil)
+        storedServiceConversations: [IMServiceConversation]? = nil,
+        completed:(()->())?)
     {
         let options: IMClient.SessionOpenOptions
         if let _ = client.tag {
@@ -209,6 +209,7 @@ class YCRootTabbarController: UITabBarController {
                     Client.storedConversations = storedConversations
                     Client.storedServiceConversations = storedServiceConversations
 //                    UIApplication.shared.keyWindow?.rootViewController = TabBarController()
+                    completed?()
                 }
             case .failure(error: let error):
                 if error.code == 4111 {

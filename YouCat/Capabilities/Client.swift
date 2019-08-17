@@ -81,7 +81,7 @@ extension Client: IMClientDelegate {
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
                         Client.current = nil
                         Configuration.UserOption.isAutoOpenEnabled.set(value: false)
-                        UIApplication.shared.keyWindow?.rootViewController = UINavigationController(rootViewController: LaunchViewController())
+//                        UIApplication.shared.keyWindow?.rootViewController = UINavigationController(rootViewController: LaunchViewController())
                     }))
                     UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
                 }
