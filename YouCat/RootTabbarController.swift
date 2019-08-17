@@ -53,7 +53,7 @@ class YCRootTabbarController: UITabBarController {
         self.navigationController?.isNavigationBarHidden = true
         register()
         clientInitializing(isReopen: false)
-        DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+        DispatchQueue.main.asyncAfter(deadline: .now()+3) {
             self.createMessageViewControllers()
         }
     }
