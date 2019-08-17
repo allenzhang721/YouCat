@@ -1,6 +1,21 @@
 PODS:
-  - Alamofire (4.6.0)
+  - Alamofire (4.8.2)
+  - AlamofireImage (3.5.2):
+    - Alamofire (~> 4.8)
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
   - HappyDNS (0.3.14)
+  - LeanCloud (16.5.0):
+    - LeanCloud/IM (= 16.5.0)
+    - LeanCloud/Storage (= 16.5.0)
+  - LeanCloud/IM (16.5.0):
+    - FMDB (~> 2.7.0)
+    - LeanCloud/Storage
+    - Starscream (~> 3.1.0)
+    - SwiftProtobuf (~> 1.6.0)
+  - LeanCloud/Storage (16.5.0):
+    - Alamofire (~> 4.8.0)
   - Locksmith (4.0.0)
   - MJRefresh (3.1.15.7)
   - mob_smssdk (3.2.1):
@@ -9,12 +24,16 @@ PODS:
   - Qiniu (7.2.5):
     - HappyDNS (~> 0.3)
   - SnapKit (4.0.0)
+  - Starscream (3.1.0)
+  - SwiftProtobuf (1.6.0)
   - SwiftyJSON (4.0.0)
   - WechatOpenSDK (1.8.2)
   - Weibo_SDK (3.2.3)
 
 DEPENDENCIES:
-  - Alamofire (~> 4.6.0)
+  - Alamofire (~> 4.8.0)
+  - AlamofireImage (~> 3.5.0)
+  - LeanCloud (~> 16.5.0)
   - Locksmith
   - MJRefresh (~> 3.1)
   - mob_smssdk
@@ -27,13 +46,18 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
+    - AlamofireImage
+    - FMDB
     - HappyDNS
+    - LeanCloud
     - Locksmith
     - MJRefresh
     - mob_smssdk
     - MOBFoundation
     - Qiniu
     - SnapKit
+    - Starscream
+    - SwiftProtobuf
     - SwiftyJSON
     - WechatOpenSDK
 
@@ -47,18 +71,23 @@ CHECKOUT OPTIONS:
     :git: https://github.com/sinaweibosdk/weibo_ios_sdk.git
 
 SPEC CHECKSUMS:
-  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
+  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
+  AlamofireImage: 63cfe3baf1370be6c498149687cf6db3e3b00999
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   HappyDNS: dc6a164ee81979093123c241c6353bcf0218add6
+  LeanCloud: 08df0aa28a5242c8ac9850ac96c37163d153935d
   Locksmith: e9bebbaaa4cee3c511bc358a44f843c3fe00e21f
   MJRefresh: 697f8ec75ebdbe9207767bb682cf0f51b0d8a41f
   mob_smssdk: edc462704cc07c6d245eee16c4c09ac4f4d53e61
   MOBFoundation: 7f1e157be332576e4d45809a03bc733292c6ad8d
   Qiniu: 909b408ee489ea54827e9717be90b94bc9dfbc48
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
+  Starscream: 08172b481e145289c4930cb567230fb55897cfa4
+  SwiftProtobuf: e905ca1366405696411aaf174411c4b19c0ef73d
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
   WechatOpenSDK: 676feec516a11173eafd1fe64b10d27babf28701
   Weibo_SDK: 652ca78c2f7147a5de5e75e7cbea89838a81772a
 
-PODFILE CHECKSUM: 3c06073a1daf80bfefa29b28a6854019acbcdef5
+PODFILE CHECKSUM: 2e2b392155a26ef8179621d4aeb7b619ca340388
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.7.5

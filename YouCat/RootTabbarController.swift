@@ -1,4 +1,4 @@
-//
+ //
 //  RootTabbarController.swift
 //  YouCat
 //
@@ -7,6 +7,7 @@
 //
 
 import UIKit
+ import LeanCloud
 
 class YCRootTabbarController: UITabBarController {
 
@@ -43,10 +44,180 @@ class YCRootTabbarController: UITabBarController {
         let categoryTabBarItem = UITabBarItem(title: YCLanguageHelper.getString(key: "ThemeLabel"), image: UIImage(named: "tabbar-catagory"), tag: 2)
         categoryTabBarItem.selectedImage = UIImage(named: "tabbar-catagory-selected")
         categoryNav.tabBarItem = categoryTabBarItem;
+        
+        
+//        vc.conversation = chatRoom
     
         self.viewControllers = [feedNav,categoryNav]
         self.tabBar.tintColor = YCStyleColor.red
         self.navigationController?.isNavigationBarHidden = true
+        register()
+        clientInitializing(isReopen: false)
+        DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+            self.createMessageViewControllers()
+        }
+    }
+    
+    func register() {
+        do {
+            LCApplication.logLevel = .all
+            try LCApplication.default.set(
+                id: "heQFQ0SwoQqiI3gEAcvKXjeR-gzGzoHsz",
+                key: "lNSjPPPDohJjYMJcQSxi9qAm"
+            )
+        } catch {
+            fatalError("\(error)")
+        }
+        
+        _ = Client.delegator
+        _ = LocationManager.delegator
+        
+        LCObject.register()
+    }
+    
+    func createMessageViewControllers() {
+        let IDSet: Set<String> = Set(arrayLiteral: "Mary")
+        clientInitializing(isReopen: true)
+        var memberSet: Set<String> = IDSet
+        memberSet.insert(Client.current.ID)
+        guard memberSet.count > 1 else {
+            return
+        }
+        let name: String = {
+            let sortedNames: [String] = memberSet.sorted(by: { $0 < $1 })
+            let name: String
+            if sortedNames.count > 3 {
+                name = [sortedNames[0], sortedNames[1], sortedNames[2], "..."].joined(separator: " & ")
+            } else {
+                name = sortedNames.joined(separator: " & ")
+            }
+            return name
+        }()
+//        self.activityToggle()
+        do {
+            try Client.current.createConversation(clientIDs: memberSet, name: name, completion: { (result) in
+//                self.activityToggle()
+                switch result {
+                case .success(value: let conversation):
+                    mainQueueExecuting {
+                        let messageListVC = MessageListViewController()
+                        messageListVC.conversation = conversation
+                        let ttem = UITabBarItem(title: YCLanguageHelper.getString(key: "ChatLabel"), image: UIImage(named: "tabbar-chat"), tag: 2)
+                        ttem.selectedImage = UIImage(named: "tabbar-chat-selected")
+                        messageListVC.tabBarItem = ttem;
+                        self.viewControllers?.insert(messageListVC, at: 2)
+//                        self.navigationController?.pushViewController(messageListVC, animated: true)
+                    }
+                case .failure(error: let error):
+                    UIAlertController.show(error: error, controller: self)
+                }
+            })
+        } catch {
+//            self.activityToggle()
+            UIAlertController.show(error: error, controller: self)
+        }
+        
+        
+        
+    }
+    
+    func clientInitializing(isReopen: Bool) {
+        do {
+//            self.activityToggle()
+            
+            let clientID: String = "Robert"
+            let tag: String? = (Configuration.UserOption.isTagEnabled.boolValue ? "mobile" : nil)
+            let options: IMClient.Options = Configuration.UserOption.isLocalStorageEnabled.boolValue
+                ? .default
+                : { var dOptions = IMClient.Options.default; dOptions.remove(.usingLocalStorage); return dOptions }()
+            
+            let client = try IMClient(
+                ID: clientID,
+                tag: tag,
+                options: options,
+                delegate: Client.delegator,
+                eventQueue: Client.queue
+            )
+            
+            if options.contains(.usingLocalStorage) {
+                try client.prepareLocalStorage { (result) in
+                    Client.specificAssertion
+                    switch result {
+                    case .success:
+                        do {
+                            try client.getAndLoadStoredConversations(completion: { (result) in
+                                Client.specificAssertion
+                                switch result {
+                                case .success(value: let storedConversations):
+                                    var conversations: [IMConversation] = []
+                                    var serviceConversations: [IMServiceConversation] = []
+                                    for item in storedConversations {
+                                        if type(of: item) == IMConversation.self {
+                                            conversations.append(item)
+                                        } else if let serviceItem = item as? IMServiceConversation {
+                                            serviceConversations.append(serviceItem)
+                                        }
+                                    }
+                                    self.open(
+                                        client: client,
+                                        isReopen: isReopen,
+                                        storedConversations: (conversations.isEmpty ? nil : conversations),
+                                        storedServiceConversations: (serviceConversations.isEmpty ? nil : serviceConversations)
+                                    )
+                                case .failure(error: let error):
+//                                    self.activityToggle()
+                                    UIAlertController.show(error: error, controller: self)
+                                }
+                            })
+                        } catch {
+//                            self.activityToggle()
+                            UIAlertController.show(error: error, controller: self)
+                        }
+                    case .failure(error: let error):
+//                        self.activityToggle()
+                        UIAlertController.show(error: error, controller: self)
+                    }
+                }
+            } else {
+                self.open(client: client, isReopen: isReopen)
+            }
+        } catch {
+//            self.activityToggle()
+            UIAlertController.show(error: error, controller: self)
+        }
+    }
+    
+    func open(
+        client: IMClient,
+        isReopen: Bool,
+        storedConversations: [IMConversation]? = nil,
+        storedServiceConversations: [IMServiceConversation]? = nil)
+    {
+        let options: IMClient.SessionOpenOptions
+        if let _ = client.tag {
+            options = Configuration.UserOption.isAutoOpenEnabled.boolValue ? [] : [.forced]
+        } else {
+            options = .default
+        }
+        client.open(options: options, completion: { (result) in
+            Client.specificAssertion
+//            self.activityToggle()
+            switch result {
+            case .success:
+                mainQueueExecuting {
+                    Client.current = client
+                    Client.storedConversations = storedConversations
+                    Client.storedServiceConversations = storedServiceConversations
+//                    UIApplication.shared.keyWindow?.rootViewController = TabBarController()
+                }
+            case .failure(error: let error):
+                if error.code == 4111 {
+                    Client.delegator.client(client, event: .sessionDidClose(error: error))
+                } else {
+                    UIAlertController.show(error: error, controller: self)
+                }
+            }
+        })
     }
 }
 

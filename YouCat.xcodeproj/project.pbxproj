@@ -100,6 +100,32 @@
 		83A6F551E87BF929BB599A40 /* Pods_YouCat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F17FB4EF2FA68C8A2CD9B94 /* Pods_YouCat.framework */; };
 		959CE20A22C0EDE600D683E7 /* ThemeTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 959CE20922C0EDE600D683E7 /* ThemeTransition.swift */; };
 		95C175CB22D0912A006DE231 /* ThemeNavigationTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C175CA22D0912A006DE231 /* ThemeNavigationTransition.swift */; };
+		95C62FD52307AFA900D651C4 /* ConversationDetailsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95C62FC92307AFA900D651C4 /* ConversationDetailsView.xib */; };
+		95C62FD62307AFA900D651C4 /* MediaMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C62FCA2307AFA900D651C4 /* MediaMessageCell.swift */; };
+		95C62FD72307AFA900D651C4 /* ConversationDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C62FCB2307AFA900D651C4 /* ConversationDetailsViewController.swift */; };
+		95C62FD82307AFA900D651C4 /* RecalledMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C62FCC2307AFA900D651C4 /* RecalledMessageCell.swift */; };
+		95C62FD92307AFA900D651C4 /* TextMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C62FCD2307AFA900D651C4 /* TextMessageCell.swift */; };
+		95C62FDA2307AFA900D651C4 /* RecalledMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95C62FCE2307AFA900D651C4 /* RecalledMessageCell.xib */; };
+		95C62FDB2307AFA900D651C4 /* ImageMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C62FCF2307AFA900D651C4 /* ImageMessageCell.swift */; };
+		95C62FDC2307AFA900D651C4 /* MessageListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C62FD02307AFA900D651C4 /* MessageListViewController.swift */; };
+		95C62FDD2307AFA900D651C4 /* ImageMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95C62FD12307AFA900D651C4 /* ImageMessageCell.xib */; };
+		95C62FDE2307AFA900D651C4 /* MessageListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95C62FD22307AFA900D651C4 /* MessageListView.xib */; };
+		95C62FDF2307AFA900D651C4 /* TextMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95C62FD32307AFA900D651C4 /* TextMessageCell.xib */; };
+		95C62FE02307AFA900D651C4 /* MediaMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95C62FD42307AFA900D651C4 /* MediaMessageCell.xib */; };
+		95E4E3472307B3E0000032CA /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4E33D2307B3E0000032CA /* Extension.swift */; };
+		95E4E3482307B3E0000032CA /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4E33E2307B3E0000032CA /* Client.swift */; };
+		95E4E3492307B3E0000032CA /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4E33F2307B3E0000032CA /* LocationManager.swift */; };
+		95E4E34A2307B3E0000032CA /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4E3402307B3E0000032CA /* Configuration.swift */; };
+		95E4E34D2307B52E000032CA /* LaunchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95E4E34B2307B52E000032CA /* LaunchView.xib */; };
+		95E4E34E2307B52E000032CA /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4E34C2307B52E000032CA /* LaunchViewController.swift */; };
+		95E4E3582307B584000032CA /* ContactListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95E4E3502307B584000032CA /* ContactListView.xib */; };
+		95E4E3592307B584000032CA /* FileView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95E4E3512307B584000032CA /* FileView.xib */; };
+		95E4E35A2307B584000032CA /* ContactListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4E3522307B584000032CA /* ContactListViewController.swift */; };
+		95E4E35B2307B584000032CA /* AudioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4E3532307B584000032CA /* AudioViewController.swift */; };
+		95E4E35C2307B584000032CA /* FileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4E3542307B584000032CA /* FileViewController.swift */; };
+		95E4E35D2307B584000032CA /* AudioView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95E4E3552307B584000032CA /* AudioView.xib */; };
+		95E4E35E2307B584000032CA /* TextEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95E4E3562307B584000032CA /* TextEditView.xib */; };
+		95E4E35F2307B584000032CA /* TextEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E4E3572307B584000032CA /* TextEditViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -297,6 +323,32 @@
 		7EA9D9DE110AC0A34E1D6FE9 /* Pods-YouCat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCat.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCat/Pods-YouCat.release.xcconfig"; sourceTree = "<group>"; };
 		959CE20922C0EDE600D683E7 /* ThemeTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ThemeTransition.swift; path = YouCat/ThemeTransition.swift; sourceTree = SOURCE_ROOT; };
 		95C175CA22D0912A006DE231 /* ThemeNavigationTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeNavigationTransition.swift; sourceTree = "<group>"; };
+		95C62FC92307AFA900D651C4 /* ConversationDetailsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConversationDetailsView.xib; sourceTree = "<group>"; };
+		95C62FCA2307AFA900D651C4 /* MediaMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaMessageCell.swift; sourceTree = "<group>"; };
+		95C62FCB2307AFA900D651C4 /* ConversationDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationDetailsViewController.swift; sourceTree = "<group>"; };
+		95C62FCC2307AFA900D651C4 /* RecalledMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecalledMessageCell.swift; sourceTree = "<group>"; };
+		95C62FCD2307AFA900D651C4 /* TextMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextMessageCell.swift; sourceTree = "<group>"; };
+		95C62FCE2307AFA900D651C4 /* RecalledMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecalledMessageCell.xib; sourceTree = "<group>"; };
+		95C62FCF2307AFA900D651C4 /* ImageMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageMessageCell.swift; sourceTree = "<group>"; };
+		95C62FD02307AFA900D651C4 /* MessageListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageListViewController.swift; sourceTree = "<group>"; };
+		95C62FD12307AFA900D651C4 /* ImageMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageMessageCell.xib; sourceTree = "<group>"; };
+		95C62FD22307AFA900D651C4 /* MessageListView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MessageListView.xib; sourceTree = "<group>"; };
+		95C62FD32307AFA900D651C4 /* TextMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextMessageCell.xib; sourceTree = "<group>"; };
+		95C62FD42307AFA900D651C4 /* MediaMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediaMessageCell.xib; sourceTree = "<group>"; };
+		95E4E33D2307B3E0000032CA /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		95E4E33E2307B3E0000032CA /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
+		95E4E33F2307B3E0000032CA /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		95E4E3402307B3E0000032CA /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		95E4E34B2307B52E000032CA /* LaunchView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchView.xib; sourceTree = "<group>"; };
+		95E4E34C2307B52E000032CA /* LaunchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
+		95E4E3502307B584000032CA /* ContactListView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactListView.xib; sourceTree = "<group>"; };
+		95E4E3512307B584000032CA /* FileView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FileView.xib; sourceTree = "<group>"; };
+		95E4E3522307B584000032CA /* ContactListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactListViewController.swift; sourceTree = "<group>"; };
+		95E4E3532307B584000032CA /* AudioViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioViewController.swift; sourceTree = "<group>"; };
+		95E4E3542307B584000032CA /* FileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileViewController.swift; sourceTree = "<group>"; };
+		95E4E3552307B584000032CA /* AudioView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioView.xib; sourceTree = "<group>"; };
+		95E4E3562307B584000032CA /* TextEditView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextEditView.xib; sourceTree = "<group>"; };
+		95E4E3572307B584000032CA /* TextEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextEditViewController.swift; sourceTree = "<group>"; };
 		D76547DA6CCEE139A5F6E084 /* Pods_YouCatTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouCatTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E309D7DCD1368C5CF318F47C /* Pods-YouCatTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCatTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouCatTests/Pods-YouCatTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -537,6 +589,11 @@
 		2C3441F8203D89F3008BF439 /* YouCat */ = {
 			isa = PBXGroup;
 			children = (
+				95E4E34F2307B584000032CA /* Others */,
+				95E4E34B2307B52E000032CA /* LaunchView.xib */,
+				95E4E34C2307B52E000032CA /* LaunchViewController.swift */,
+				95E4E33C2307B3E0000032CA /* Capabilities */,
+				95C62FC82307AFA900D651C4 /* Message */,
 				25D721BE21A6E0E8007F5648 /* Header */,
 				25D721C121A6E8F2007F5648 /* Login */,
 				252B900221AFDEDA00E41842 /* Setting */,
@@ -626,6 +683,51 @@
 				324630E61A7AB8CF2E43F5C8 /* Pods-YouCatUITests.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		95C62FC82307AFA900D651C4 /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				95C62FC92307AFA900D651C4 /* ConversationDetailsView.xib */,
+				95C62FCB2307AFA900D651C4 /* ConversationDetailsViewController.swift */,
+				95C62FCF2307AFA900D651C4 /* ImageMessageCell.swift */,
+				95C62FD12307AFA900D651C4 /* ImageMessageCell.xib */,
+				95C62FCA2307AFA900D651C4 /* MediaMessageCell.swift */,
+				95C62FD42307AFA900D651C4 /* MediaMessageCell.xib */,
+				95C62FD22307AFA900D651C4 /* MessageListView.xib */,
+				95C62FD02307AFA900D651C4 /* MessageListViewController.swift */,
+				95C62FCC2307AFA900D651C4 /* RecalledMessageCell.swift */,
+				95C62FCE2307AFA900D651C4 /* RecalledMessageCell.xib */,
+				95C62FCD2307AFA900D651C4 /* TextMessageCell.swift */,
+				95C62FD32307AFA900D651C4 /* TextMessageCell.xib */,
+			);
+			path = Message;
+			sourceTree = "<group>";
+		};
+		95E4E33C2307B3E0000032CA /* Capabilities */ = {
+			isa = PBXGroup;
+			children = (
+				95E4E33D2307B3E0000032CA /* Extension.swift */,
+				95E4E33E2307B3E0000032CA /* Client.swift */,
+				95E4E33F2307B3E0000032CA /* LocationManager.swift */,
+				95E4E3402307B3E0000032CA /* Configuration.swift */,
+			);
+			path = Capabilities;
+			sourceTree = "<group>";
+		};
+		95E4E34F2307B584000032CA /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				95E4E3502307B584000032CA /* ContactListView.xib */,
+				95E4E3512307B584000032CA /* FileView.xib */,
+				95E4E3522307B584000032CA /* ContactListViewController.swift */,
+				95E4E3532307B584000032CA /* AudioViewController.swift */,
+				95E4E3542307B584000032CA /* FileViewController.swift */,
+				95E4E3552307B584000032CA /* AudioView.xib */,
+				95E4E3562307B584000032CA /* TextEditView.xib */,
+				95E4E3572307B584000032CA /* TextEditViewController.swift */,
+			);
+			path = Others;
 			sourceTree = "<group>";
 		};
 		B60935539CA32EC8F5FD4621 /* Frameworks */ = {
@@ -832,9 +934,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95E4E3592307B584000032CA /* FileView.xib in Resources */,
+				95E4E35D2307B584000032CA /* AudioView.xib in Resources */,
+				95C62FDF2307AFA900D651C4 /* TextMessageCell.xib in Resources */,
+				95C62FE02307AFA900D651C4 /* MediaMessageCell.xib in Resources */,
+				95C62FD52307AFA900D651C4 /* ConversationDetailsView.xib in Resources */,
 				2C344204203D89F3008BF439 /* LaunchScreen.storyboard in Resources */,
 				252B900921B038AF00E41842 /* Localizable.strings in Resources */,
+				95E4E35E2307B584000032CA /* TextEditView.xib in Resources */,
 				2C3441FF203D89F3008BF439 /* Main.storyboard in Resources */,
+				95C62FDA2307AFA900D651C4 /* RecalledMessageCell.xib in Resources */,
+				95C62FDD2307AFA900D651C4 /* ImageMessageCell.xib in Resources */,
+				95E4E3582307B584000032CA /* ContactListView.xib in Resources */,
+				95C62FDE2307AFA900D651C4 /* MessageListView.xib in Resources */,
+				95E4E34D2307B52E000032CA /* LaunchView.xib in Resources */,
 				256299C421808002005FDDFC /* Assets.xcassets in Resources */,
 				252B901121B040B500E41842 /* InfoPlist.strings in Resources */,
 			);
@@ -863,28 +976,38 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-YouCat/Pods-YouCat-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-YouCat/Pods-YouCat-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/AlamofireImage/AlamofireImage.framework",
+				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
 				"${BUILT_PRODUCTS_DIR}/HappyDNS/HappyDNS.framework",
+				"${BUILT_PRODUCTS_DIR}/LeanCloud/LeanCloud.framework",
 				"${BUILT_PRODUCTS_DIR}/Locksmith/Locksmith.framework",
 				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
 				"${BUILT_PRODUCTS_DIR}/Qiniu/Qiniu.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftProtobuf/SwiftProtobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HappyDNS.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LeanCloud.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Locksmith.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Qiniu.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftProtobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YouCat/Pods-YouCat-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-YouCat/Pods-YouCat-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A9E3B23CCCB6AE514D996FFE /* [CP] Copy Pods Resources */ = {
@@ -892,21 +1015,17 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-YouCat/Pods-YouCat-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-YouCat/Pods-YouCat-resources.sh",
 				"${PODS_ROOT}/Weibo_SDK/libWeiboSDK/WeiboSDK.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/WeiboSDK.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YouCat/Pods-YouCat-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-YouCat/Pods-YouCat-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C9C6372F58DB14703CE1E471 /* [CP] Check Pods Manifest.lock */ = {
@@ -983,11 +1102,14 @@
 				25B878F3215CD9D900E30C91 /* MediaUIView.swift in Sources */,
 				256299C92180A6AB005FDDFC /* UserViewController.swift in Sources */,
 				25B878A121515CB300E30C91 /* UserDomain.swift in Sources */,
+				95E4E35F2307B584000032CA /* TextEditViewController.swift in Sources */,
 				253052562147F9A900BB9624 /* PublishModel.swift in Sources */,
 				2530526E214F8ADE00BB9624 /* CommentRequest.swift in Sources */,
+				95E4E3482307B3E0000032CA /* Client.swift in Sources */,
 				252B901621B5335C00E41842 /* UploadRequest.swift in Sources */,
 				253052542147F20B00BB9624 /* BaseModel.swift in Sources */,
 				252E5269217DA4C100C27826 /* FollowButton.swift in Sources */,
+				95E4E35B2307B584000032CA /* AudioViewController.swift in Sources */,
 				254C9C3121EF025C0057A023 /* ShareProtocol.swift in Sources */,
 				25288ED621B67D7100A333E6 /* LoadingView.swift in Sources */,
 				25B878EA215A3A1D00E30C91 /* RootTabbarController.swift in Sources */,
@@ -998,19 +1120,26 @@
 				25D721C321A7DE6E007F5648 /* LoginViewController.swift in Sources */,
 				2C3441FC203D89F3008BF439 /* ViewController.swift in Sources */,
 				25305270214F996D00BB9624 /* BaseRequest.swift in Sources */,
+				95E4E35A2307B584000032CA /* ContactListViewController.swift in Sources */,
 				2C827F48206F3EEB0035DCE2 /* ThemeViewController.swift in Sources */,
+				95C62FD82307AFA900D651C4 /* RecalledMessageCell.swift in Sources */,
+				95E4E34E2307B52E000032CA /* LaunchViewController.swift in Sources */,
 				2C3441FA203D89F3008BF439 /* AppDelegate.swift in Sources */,
+				95C62FDC2307AFA900D651C4 /* MessageListViewController.swift in Sources */,
+				95E4E34A2307B3E0000032CA /* Configuration.swift in Sources */,
 				2530525A2147FB0600BB9624 /* MediaModel.swift in Sources */,
 				25731CD622F172B600FB49B1 /* VideoUIView.swift in Sources */,
 				257E895A21C394990084944E /* CommentListViewController.swift in Sources */,
 				253052582147FA2900BB9624 /* UserModel.swift in Sources */,
 				25B878A82154F8B200E30C91 /* UserManager.swift in Sources */,
+				95E4E3492307B3E0000032CA /* LocationManager.swift in Sources */,
 				25562C6222760DBB004F1BD6 /* PhotoAlbumUtil.swift in Sources */,
 				252B900E21B03A5A00E41842 /* LanguageHelper.swift in Sources */,
 				25B878EF215B674000E30C91 /* StyleColor.swift in Sources */,
 				252B901821B533D800E41842 /* UploadModel.swift in Sources */,
 				252B901F21B5397B00E41842 /* UploadAction.swift in Sources */,
 				253052502147D50B00BB9624 /* BaseDomain.swift in Sources */,
+				95E4E35C2307B584000032CA /* FileViewController.swift in Sources */,
 				2538AD2721B948F30021F245 /* CommentViewController.swift in Sources */,
 				256299CD2185A049005FDDFC /* SliderView.swift in Sources */,
 				256299CF21870608005FDDFC /* PublishDetailViewCell.swift in Sources */,
@@ -1019,6 +1148,7 @@
 				252B900621B0000000E41842 /* AlertProtocol.swift in Sources */,
 				25307942213EA50F002DC02D /* Constants.swift in Sources */,
 				25305260214A759200BB9624 /* ThemeModel.swift in Sources */,
+				95E4E3472307B3E0000032CA /* Extension.swift in Sources */,
 				253BBADA219C4ACA00DAD5BB /* VideoVIew.swift in Sources */,
 				252B902321B5707400E41842 /* UpdateUserViewController.swift in Sources */,
 				2529087E21C9193300300D44 /* CommentListViewCell.swift in Sources */,
@@ -1031,10 +1161,14 @@
 				2530526B214F86B900BB9624 /* LikeRequest.swift in Sources */,
 				25562C6D22773604004F1BD6 /* UserTableViewCell.swift in Sources */,
 				25D0CCCC2179FF4C00809D3D /* ContentProtocol.swift in Sources */,
+				95C62FD92307AFA900D651C4 /* TextMessageCell.swift in Sources */,
+				95C62FD72307AFA900D651C4 /* ConversationDetailsViewController.swift in Sources */,
 				25305262214A840500BB9624 /* LikeModel.swift in Sources */,
 				25305264214AA80A00BB9624 /* CommentModel.swift in Sources */,
 				2530524B2147CC1900BB9624 /* PublishRequest.swift in Sources */,
+				95C62FD62307AFA900D651C4 /* MediaMessageCell.swift in Sources */,
 				259AC950225E32090064987F /* FavoriteViewController.swift in Sources */,
+				95C62FDB2307AFA900D651C4 /* ImageMessageCell.swift in Sources */,
 				25307944213EE556002DC02D /* URLRequest.swift in Sources */,
 				25D721C721A9A9F3007F5648 /* SetUserIconViewController.swift in Sources */,
 				25305267214BB5CA00BB9624 /* UserRequest.swift in Sources */,
@@ -1234,7 +1368,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 678ACPN786;
+				DEVELOPMENT_TEAM = 9JC986Y29M;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/ShareSDK/Required",
@@ -1272,7 +1406,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 678ACPN786;
+				DEVELOPMENT_TEAM = 9JC986Y29M;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/ShareSDK/Required",

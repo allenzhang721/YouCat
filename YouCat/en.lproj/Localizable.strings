@@ -10,6 +10,7 @@
 "UserProfile" = "的个人主页";
 "HomeLabel" = "Favorite";
 "ThemeLabel" = "Discover";
+"ChatLabel" = "Chat";
 "PublishLabel" = "posts";
 "FollowersLabel" = "followers";
 "FollowingLabel" = "following";

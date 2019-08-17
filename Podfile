@@ -8,7 +8,8 @@ target 'YouCat' do
   # Pods for YouCat
   pod 'Locksmith'
 #  pod 'Kingfisher', '~> 4.9.0'
-  pod 'Alamofire', '~> 4.6.0'
+#  pod 'Alamofire', '~> 4.6.0'
+  pod 'Alamofire', '~> 4.8.0'
   pod 'SwiftyJSON', '~>4.0.0'
   pod 'Qiniu', '~> 7.1'
   pod 'SnapKit', '~> 4.0'
@@ -16,6 +17,8 @@ target 'YouCat' do
   pod 'mob_smssdk'
   pod 'WechatOpenSDK'
   pod 'Weibo_SDK', :git => 'https://github.com/sinaweibosdk/weibo_ios_sdk.git'
+  pod 'LeanCloud', '~> 16.5.0'
+  pod 'AlamofireImage', '~> 3.5.0'
  
 
   target 'YouCatTests' do
