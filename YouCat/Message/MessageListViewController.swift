@@ -15,10 +15,13 @@ import LeanCloud
 
 class MessageListViewController: UIViewController {
     
+    @IBOutlet weak var inputButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var inputViewContainer: UIView!
     @IBOutlet weak var inputViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var inputViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var inputButtonBottomConstraint: NSLayoutConstraint!
+    
     @IBOutlet weak var inputViewTextField: UITextField!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     
@@ -88,6 +91,27 @@ class MessageListViewController: UIViewController {
         if self.conversation.isOutdated {
             self.refreshConversationData()
         }
+        
+        let insets = UIEdgeInsets(
+            top: 0,
+            left: 0,
+            bottom: self.inputViewHeightConstraint.constant + 20,
+            right: 0
+        )
+        
+        let bottomSafeAreaSize: CGFloat
+        if #available(iOS 11.0, *) {
+            bottomSafeAreaSize = self.view.safeAreaInsets.bottom
+        } else {
+            bottomSafeAreaSize = self.bottomLayoutGuide.length + 49
+        }
+        
+        self.tableView.contentInset = insets
+       
+        self.inputButtonBottomConstraint.constant = bottomSafeAreaSize + 20
+        self.inputViewBottomConstraint.constant = bottomSafeAreaSize
+//        self.inputViewContainer.layoutIfNeeded()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -106,10 +130,15 @@ class MessageListViewController: UIViewController {
     }
     
     func setupTableView() {
-        self.tableView.register(
-            UINib(nibName: "\(TextMessageCell.self)", bundle: .main),
-            forCellReuseIdentifier: "\(TextMessageCell.self)"
-        )
+//        self.tableView.register(
+//            UINib(nibName: "\(TextMessageCell.self)", bundle: .main),
+//            forCellReuseIdentifier: "\(TextMessageCell.self)"
+//        )
+        
+        self.tableView.register(UINib(nibName: "\(TextMessageCell.self)2", bundle: .main), forCellReuseIdentifier: "TextMessageLeftCell");
+        
+        self.tableView.register(UINib(nibName: "\(TextMessageCell.self)3", bundle: .main), forCellReuseIdentifier: "TextMessageRightCell");
+        
         self.tableView.register(
             UINib(nibName: "\(ImageMessageCell.self)", bundle: .main),
             forCellReuseIdentifier: "\(ImageMessageCell.self)"
@@ -224,6 +253,14 @@ class MessageListViewController: UIViewController {
             self.navigationItem.title = self.conversation.name
         }
     }
+    
+    
+    @IBAction func inputButtonClick(_ sender: Any) {
+        inputViewTextField.becomeFirstResponder()
+//        inputButton.isHidden = true
+//        inputViewContainer.isHidden = false
+    }
+    
     
 }
 
@@ -380,20 +417,23 @@ extension MessageListViewController {
             return
         }
         
-        let kbSize = kbFrame.size
-        let insets = UIEdgeInsets(
-            top: 0,
-            left: 0,
-            bottom: kbSize.height + self.inputViewHeightConstraint.constant,
-            right: 0
-        )
+        inputButton.isHidden = true
+        inputViewContainer.isHidden = false
         
         let bottomSafeAreaSize: CGFloat
         if #available(iOS 11.0, *) {
             bottomSafeAreaSize = self.view.safeAreaInsets.bottom
         } else {
-            bottomSafeAreaSize = self.bottomLayoutGuide.length
+            bottomSafeAreaSize = self.bottomLayoutGuide.length - 49
         }
+        
+        let kbSize = kbFrame.size
+        let insets = UIEdgeInsets(
+            top: 0,
+            left: 0,
+            bottom: kbSize.height + self.inputViewHeightConstraint.constant - bottomSafeAreaSize,
+            right: 0
+        )
         
         self.tableView.contentInset = insets
         self.inputViewBottomConstraint.constant = kbSize.height - bottomSafeAreaSize
@@ -404,20 +444,34 @@ extension MessageListViewController {
         }
     }
     
+    
     func keyboardWillHide(notification: Notification) {
         guard self.isKeyboardObserverActive else {
             return
         }
         
+        inputButton.isHidden = false
+        inputViewContainer.isHidden = true
+        
         let insets = UIEdgeInsets(
             top: 0,
             left: 0,
-            bottom: self.inputViewHeightConstraint.constant,
+            bottom: self.inputViewHeightConstraint.constant + 20,
             right: 0
         )
         
+        let bottomSafeAreaSize: CGFloat
+        if #available(iOS 11.0, *) {
+            bottomSafeAreaSize = self.view.safeAreaInsets.bottom
+            self.inputViewBottomConstraint.constant = 0
+        } else {
+            bottomSafeAreaSize = self.bottomLayoutGuide.length
+            self.inputViewBottomConstraint.constant = bottomSafeAreaSize
+        }
+        
+        print("sasi = \(bottomSafeAreaSize)")
         self.tableView.contentInset = insets
-        self.inputViewBottomConstraint.constant = 0
+//        self.inputViewBottomConstraint.constant = bottomSafeAreaSize
         self.inputViewContainer.layoutIfNeeded()
     }
     
@@ -652,7 +706,7 @@ extension MessageListViewController: UITableViewDelegate, UITableViewDataSource 
         let message = self.messages[indexPath.row]
         switch message {
         case let textMessage as IMTextMessage:
-            let textCell = tableView.dequeueReusableCell(withIdentifier: "\(TextMessageCell.self)") as! TextMessageCell
+            let textCell = (textMessage.ioType == .out ? tableView.dequeueReusableCell(withIdentifier: "TextMessageRightCell") : tableView.dequeueReusableCell(withIdentifier: "TextMessageLeftCell")) as! TextMessageCell
             textCell.update(with: textMessage)
             cell = textCell
         case let imageMessage as IMImageMessage:

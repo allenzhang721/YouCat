@@ -59,10 +59,10 @@ class YCRootTabbarController: UITabBarController {
     
     func register() {
         do {
-            LCApplication.logLevel = .all
+//            LCApplication.logLevel = .all
             try LCApplication.default.set(
-                id: "heQFQ0SwoQqiI3gEAcvKXjeR-gzGzoHsz",
-                key: "lNSjPPPDohJjYMJcQSxi9qAm"
+                id: "oAcgo18ahcb8MelhSPnq4pDG-gzGzoHsz",
+                key: "GmSURsjWFWU7KWEvK3lfVDLK"
             )
         } catch {
             fatalError("\(error)")
@@ -75,7 +75,7 @@ class YCRootTabbarController: UITabBarController {
     }
     
     func createMessageViewControllers() {
-        let IDSet: Set<String> = Set(arrayLiteral: "Mary")
+        let IDSet: Set<String> = Set(arrayLiteral: "喵萌管理员")
 //        clientInitializing(isReopen: true)
         var memberSet: Set<String> = IDSet
         memberSet.insert(Client.current.ID)
@@ -92,6 +92,7 @@ class YCRootTabbarController: UITabBarController {
             }
             return name
         }()
+        print("name = ", name)
 //        self.activityToggle()
         do {
             try Client.current.createConversation(clientIDs: memberSet, name: name, completion: { (result) in
@@ -124,7 +125,7 @@ class YCRootTabbarController: UITabBarController {
         do {
 //            self.activityToggle()
             
-            let clientID: String = "Robert"
+            let clientID: String = YCDeviceManager.UUID ?? "-1"
             let tag: String? = (Configuration.UserOption.isTagEnabled.boolValue ? "mobile" : nil)
             let options: IMClient.Options = Configuration.UserOption.isLocalStorageEnabled.boolValue
                 ? .default
