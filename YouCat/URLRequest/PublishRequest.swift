@@ -223,34 +223,6 @@ class YCThemePublishListRequest: YCListRequest {
     }
 }
 
-class YCTagPublishListRequest: YCListRequest {
-    
-    let tagID: String
-    
-    init(tagID: String, start: Int, count: Int) {
-        self.tagID = tagID;
-        super.init(start: start, count: count)
-    }
-    
-    override func urlPath() -> String {
-        let urlPath = PublishRequestURL.tagPublishList.description;
-        return urlPath;
-    }
-    
-    override func parameter() -> Dictionary<String, Any> {
-        let dic:Dictionary<String, Any> = [
-            Parameter(.tagID)  : self.tagID,
-            Parameter(.start)  : self.start,
-            Parameter(.count)  : self.count
-        ];
-        return dic;
-    }
-    
-    override func errorMessage() -> String {
-        return "TagPublishList"
-    }
-}
-
 class YCSearchPublishListRequest: YCListRequest {
 
     let keyWord: String;

@@ -80,12 +80,6 @@ class YCPublishDomain: YCBaseDomain {
         }
     }
     
-    func tagPublishList(tagID: String, start: Int, count: Int, completionBlock: @escaping (YCDomainListModel?) -> Void){
-        YCTagPublishListRequest(tagID: tagID, start: start, count: count).startWithComplete { (response: YCURLRequestResult) in
-            self.backPublishList(response: response, completionBlock: completionBlock)
-        }
-    }
-    
     func searchPublishList(keyWord: String, start: Int, count: Int, completionBlock: @escaping (YCDomainListModel?) -> Void) {
         YCSearchPublishListRequest(keyWord: keyWord, start: start, count: count).startWithComplete { (response: YCURLRequestResult) in
             self.backPublishList(response: response, completionBlock: completionBlock)

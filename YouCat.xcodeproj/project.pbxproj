@@ -73,6 +73,8 @@
 		257B041921E254290004FB1B /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2523378121D3A76200662885 /* libc++.tbd */; };
 		257E895A21C394990084944E /* CommentListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 257E895921C394990084944E /* CommentListViewController.swift */; };
 		259AC950225E32090064987F /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 259AC94F225E32090064987F /* FavoriteViewController.swift */; };
+		259D4D022331241C00331703 /* TagRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 259D4D012331241C00331703 /* TagRequest.swift */; };
+		259D4D0A23313E8A00331703 /* TagDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 259D4D0923313E8A00331703 /* TagDomain.swift */; };
 		25B878A121515CB300E30C91 /* UserDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B878A021515CB300E30C91 /* UserDomain.swift */; };
 		25B878A32153B84A00E30C91 /* LikeDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B878A22153B84A00E30C91 /* LikeDomain.swift */; };
 		25B878A52153CAB400E30C91 /* CommentDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B878A42153CAB400E30C91 /* CommentDomain.swift */; };
@@ -285,6 +287,8 @@
 		257B041421D642A50004FB1B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		257E895921C394990084944E /* CommentListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentListViewController.swift; sourceTree = "<group>"; };
 		259AC94F225E32090064987F /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
+		259D4D012331241C00331703 /* TagRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagRequest.swift; sourceTree = "<group>"; };
+		259D4D0923313E8A00331703 /* TagDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagDomain.swift; sourceTree = "<group>"; };
 		25B878A021515CB300E30C91 /* UserDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDomain.swift; sourceTree = "<group>"; };
 		25B878A22153B84A00E30C91 /* LikeDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeDomain.swift; sourceTree = "<group>"; };
 		25B878A42153CAB400E30C91 /* CommentDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDomain.swift; sourceTree = "<group>"; };
@@ -423,6 +427,7 @@
 				25B878A22153B84A00E30C91 /* LikeDomain.swift */,
 				25B878A42153CAB400E30C91 /* CommentDomain.swift */,
 				252B901921B5377100E41842 /* UploadDomain.swift */,
+				259D4D0923313E8A00331703 /* TagDomain.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -453,6 +458,7 @@
 				2530526D214F8ADE00BB9624 /* CommentRequest.swift */,
 				252B901521B5335C00E41842 /* UploadRequest.swift */,
 				2530526F214F996D00BB9624 /* BaseRequest.swift */,
+				259D4D012331241C00331703 /* TagRequest.swift */,
 			);
 			path = URLRequest;
 			sourceTree = "<group>";
@@ -1106,8 +1112,10 @@
 				95E4E35F2307B584000032CA /* TextEditViewController.swift in Sources */,
 				253052562147F9A900BB9624 /* PublishModel.swift in Sources */,
 				2530526E214F8ADE00BB9624 /* CommentRequest.swift in Sources */,
+				259D4D022331241C00331703 /* TagRequest.swift in Sources */,
 				95E4E3482307B3E0000032CA /* Client.swift in Sources */,
 				252B901621B5335C00E41842 /* UploadRequest.swift in Sources */,
+				259D4D0A23313E8A00331703 /* TagDomain.swift in Sources */,
 				253052542147F20B00BB9624 /* BaseModel.swift in Sources */,
 				252E5269217DA4C100C27826 /* FollowButton.swift in Sources */,
 				95E4E35B2307B584000032CA /* AudioViewController.swift in Sources */,
@@ -1368,7 +1376,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9JC986Y29M;
+				DEVELOPMENT_TEAM = 678ACPN786;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/ShareSDK/Required",
@@ -1406,7 +1414,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9JC986Y29M;
+				DEVELOPMENT_TEAM = 678ACPN786;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/ShareSDK/Required",

@@ -7,7 +7,7 @@
 //
 
 import UIKit
- import LeanCloud
+import LeanCloud
 
 class YCRootTabbarController: UITabBarController {
 

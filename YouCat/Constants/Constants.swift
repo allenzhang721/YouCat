@@ -342,6 +342,18 @@ enum ShareURL: CustomStringConvertible {
     }
 }
 
+enum TagURL: CustomStringConvertible {
+    case tagPublishList, favoriteList
+    var description: String {
+        switch self {
+        case .tagPublishList:
+            return "/tag/tagPublishList"
+        case .favoriteList:
+            return "/tag/tagFavoriteList"
+        }
+    }
+}
+
 enum ParameterKey: CustomStringConvertible{
     
     case data, code, status, start, count, total, model, list, loginUserID, deviceID, deviceType, deviceModel, deviceVersion, deviceSystem, systemVersion, softVersion, softLanguage
@@ -351,9 +363,8 @@ enum ParameterKey: CustomStringConvertible{
     case userID, uuid, uniqueID, nikeName, signature, gender, birthday, province, city, icon, relation
     case areaCode, phone, active, setPassword, weiboUser, password, newPassword
     case followersCount, followingCount
-    case publishID, content, contentType, fromType, fromID, fromURL, publishDate, user, medias, tags, publishType
+    case publishID, content, contentType, fromType, fromID, fromURL, publishDate, user, medias, publishType
     case themeID, creator, name, description, coverImage, coverVideo, themeType, styleType, publishCount, createDate
-    case tagID, tagName
     case likeID, beLikedID, beLikedType, likeDate
     case commentID, beRepliedUser, beCommentedID, beCommentedType, beRepliedID, commentType, commentDate, replyCount, listCount, replyList, contentImages
     case modelID, likeCount, commentCount, shareCount, isLike, platform, shareType
@@ -362,7 +373,7 @@ enum ParameterKey: CustomStringConvertible{
     case keyWord, type, reportType
     case focusLevel, startDate, endDate
     case token, tokenKey, tokens
-    
+    case tags, tagID, tagName, tagText
     
     var description: String {
         switch self {
@@ -520,6 +531,8 @@ enum ParameterKey: CustomStringConvertible{
             return "TagID"
         case .tagName:
             return "TagName"
+        case .tagText:
+            return "TagText"
         case .themeID:
             return "ThemeID"
         case .creator:
