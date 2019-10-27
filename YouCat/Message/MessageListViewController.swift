@@ -497,6 +497,7 @@ extension MessageListViewController {
                         let indexPath = IndexPath(row: self.messages.count - 1, section: 0)
                         self.tableView.insertRows(at: [indexPath], with: .bottom)
                         self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                        self.showFavoriteViewControllerIfNeed(message: message.content?.string ?? "")
                     }
                 case .failure(error: let error):
                     UIAlertController.show(error: error, controller: self)
@@ -505,6 +506,39 @@ extension MessageListViewController {
         } catch {
             self.activityToggle()
             UIAlertController.show(error: error, controller: self)
+        }
+    }
+    
+    func showFavoriteViewControllerIfNeed(message: String) {
+        
+        guard let result = message.tagsBy(contain: "想看") else {
+            return
+        }
+        
+        YCTagDomain().tagFavoritePublishList(tagText: result.tagText, tagNameArray: result.tags, start: 0, count: 20) {[weak self] (tagFavorite) in
+            guard let sf = self else {return}
+//            print("cccc")
+            if let list = tagFavorite, list.result{
+//                let tagText = list.tagText
+                let tags = list.tags
+//                let publish = list.modelArray
+                
+                YCTagDomain().tagPublishList(tags: tags!, start: 0, count: 20) { (modelList) in
+                    if let list = modelList {
+                        if list.result{
+                            if let modelList = list.modelArray {
+                                DispatchQueue.main.async {
+                                    let publishDetail = YCPublishDetailViewController.getInstance() as! YCPublishDetailViewController
+                                    publishDetail.contentIndex = 0
+                                    publishDetail.contents = modelList as? [YCPublishModel]
+                                    sf.navigationController?.pushViewController(publishDetail, animated: true)
+//                                    NotificationCenter.default.post(name: NSNotification.Name("RootPushPublishView"), object: publishDetail)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -877,6 +911,41 @@ extension MessageListViewController: UIImagePickerControllerDelegate, UINavigati
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
+    }
+    
+}
+
+
+extension String {
+    
+    func tagsBy(contain keyword: String) -> (tags: [String], tagText: String)? {
+        
+        let count = keyword.count
+        if (!(keyword as NSString).substring(with: NSMakeRange(0, min(count - 1, 5))).contains(keyword)) {
+            return nil;
+        }
+        
+        let range1 = (keyword as NSString).range(of: "想看")
+        let subStr = (self as NSString).substring(from: range1.location+range1.length)
+        
+        if (subStr.count <= 0) {
+            return nil;
+        }
+        
+        let tokenizer = CFStringTokenizerCreate(nil, self as CFString, CFRangeMake(0, subStr.count), kCFStringTokenizerUnitWord, nil)
+
+        CFStringTokenizerAdvanceToNextToken(tokenizer)
+        var range = CFStringTokenizerGetCurrentTokenRange(tokenizer)
+
+        var tags: [String] = [];
+        while range.length > 0 {
+            tags.append((subStr as NSString).substring(with: NSMakeRange(range.location, range.length)))
+//            print((str as NSString).substring(with: NSMakeRange(range.location, range.length)))
+            CFStringTokenizerAdvanceToNextToken(tokenizer)
+            range = CFStringTokenizerGetCurrentTokenRange(tokenizer)
+        }
+        
+        return (tags, subStr)
     }
     
 }
