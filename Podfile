@@ -8,7 +8,7 @@ target 'YouCat' do
   # Pods for YouCat
   pod 'Locksmith'
 #  pod 'Kingfisher', '~> 4.9.0'
-  pod 'Alamofire', '~> 4.6.0'
+  pod 'Alamofire', '~> 4.8.0'
   pod 'SwiftyJSON', '~>4.0.0'
   pod 'Qiniu', '~> 7.1'
   pod 'SnapKit', '~> 4.0'

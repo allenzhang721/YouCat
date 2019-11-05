@@ -152,7 +152,7 @@ class YCPublishDetailViewCell: UICollectionViewCell, YCImageProtocol, YCNumberSt
             make.bottom.equalTo(self.contentPageController.snp.top).offset(0)
         }
         self.contentLabel.textColor = YCStyleColor.white
-        self.contentLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        self.contentLabel.font = UIFont.systemFont(ofSize: 16)
         self.contentLabel.text = ""
         self.contentLabel.shadowColor = YCStyleColor.black
         self.contentLabel.shadowOffset = CGSize(width: 0, height: 0)

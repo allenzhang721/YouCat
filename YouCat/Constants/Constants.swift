@@ -50,6 +50,8 @@ struct YCScreen {
 
 struct YCSocialConfigs {
     
+    static let universalLink = "https://oia.youcat.cn"
+    
     struct weibo {
         static let appKey = "1479783390"
         static let appSecret = "d0e3f55717550bb32938d5b6c19c86ff"
@@ -73,9 +75,9 @@ enum RequestHost: CustomStringConvertible {
     var description: String {
         switch self {
         case .debug:
-            return "http://192.168.1.103:9909"
+            return "http://192.168.50.129:9909"
         case .production:
-            return "http://www.youcat.cn"
+            return "https://www.youcat.cn"
         }
     }
 }

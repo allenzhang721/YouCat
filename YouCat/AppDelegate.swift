@@ -23,22 +23,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
         WeiboSDK.registerApp(YCSocialConfigs.weibo.appKey)
         WeiboSDK.enableDebugMode(true)
         
-        WXApi.registerApp(YCSocialConfigs.weChat.appID)
+        WXApi.registerApp(YCSocialConfigs.weChat.appID, universalLink: YCSocialConfigs.universalLink)
         return true
+    }
+    
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        return WXApi.handleOpenUniversalLink(userActivity, delegate: self)
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         
-        let urlKey: String = options[UIApplication.OpenURLOptionsKey.sourceApplication] as! String
-        
-        if urlKey == "com.sina.weibo" {
-            // 新浪微博 的回调
-            return WeiboSDK.handleOpen(url, delegate: self)
-        }
-        if urlKey == "com.tencent.xin" {
+        if url.scheme == "wx78fe2e04c0038988" {
             // 微信 的回调
             return  WXApi.handleOpen(url, delegate: self)
         }
+        if url.scheme == "wb1479783390" {
+            // 新浪微博 的回调
+            return WeiboSDK.handleOpen(url, delegate: self)
+        }
+        
+//        if let urlKey: String = options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String {
+//            if urlKey == "com.sina.weibo" {
+//                // 新浪微博 的回调
+//                return WeiboSDK.handleOpen(url, delegate: self)
+//            }
+//            if urlKey == "com.tencent.xin" {
+//                // 微信 的回调
+//
+//            }
+//        }
         
         return true
     }
@@ -48,6 +61,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
         if url.scheme == "wb1479783390" {
             // 新浪微博 的回调
             return WeiboSDK.handleOpen(url, delegate: self)
+        }
+        if url.scheme == "wx78fe2e04c0038988" {
+            // 微信 的回调
+            return WXApi.handleOpen(url, delegate: self)
         }
         
         return true
@@ -106,11 +123,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
         }
     }
     
-    func onReq(_ req: BaseReq!) {
+    func onReq(_ req: BaseReq) {
         
     }
     
-    func onResp(_ resp: BaseResp!) {
+    func onResp(_ resp: BaseResp) {
         // 这里是使用异步的方式来获取的
         let sendRes: SendAuthResp? = resp as? SendAuthResp
         let queue = DispatchQueue(label: "wechatLoginQueue")

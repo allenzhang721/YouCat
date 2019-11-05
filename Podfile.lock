@@ -1,20 +1,18 @@
 PODS:
-  - Alamofire (4.6.0)
-  - HappyDNS (0.3.14)
+  - Alamofire (4.8.2)
   - Locksmith (4.0.0)
-  - MJRefresh (3.1.15.7)
-  - mob_smssdk (3.2.1):
+  - MJRefresh (3.2.0)
+  - mob_smssdk (3.2.3):
     - MOBFoundation
-  - MOBFoundation (3.1.8)
-  - Qiniu (7.2.5):
-    - HappyDNS (~> 0.3)
-  - SnapKit (4.0.0)
+  - MOBFoundation (3.2.6)
+  - Qiniu (7.2.6)
+  - SnapKit (4.2.0)
   - SwiftyJSON (4.0.0)
-  - WechatOpenSDK (1.8.2)
-  - Weibo_SDK (3.2.3)
+  - WechatOpenSDK (1.8.6)
+  - Weibo_SDK (3.2.5.1)
 
 DEPENDENCIES:
-  - Alamofire (~> 4.6.0)
+  - Alamofire (~> 4.8.0)
   - Locksmith
   - MJRefresh (~> 3.1)
   - mob_smssdk
@@ -25,9 +23,8 @@ DEPENDENCIES:
   - Weibo_SDK (from `https://github.com/sinaweibosdk/weibo_ios_sdk.git`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - Alamofire
-    - HappyDNS
     - Locksmith
     - MJRefresh
     - mob_smssdk
@@ -43,22 +40,21 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Weibo_SDK:
-    :commit: f5b138320aefe0ed20b76b8510521432f1a6c9ac
+    :commit: 649b53fde521202c1303f18c1fa4f8880ef4b993
     :git: https://github.com/sinaweibosdk/weibo_ios_sdk.git
 
 SPEC CHECKSUMS:
-  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
-  HappyDNS: dc6a164ee81979093123c241c6353bcf0218add6
+  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   Locksmith: e9bebbaaa4cee3c511bc358a44f843c3fe00e21f
-  MJRefresh: 697f8ec75ebdbe9207767bb682cf0f51b0d8a41f
-  mob_smssdk: edc462704cc07c6d245eee16c4c09ac4f4d53e61
-  MOBFoundation: 7f1e157be332576e4d45809a03bc733292c6ad8d
-  Qiniu: 909b408ee489ea54827e9717be90b94bc9dfbc48
-  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
+  MJRefresh: ed450d6eb9d3346a2cb033ab7eb6de090aeef437
+  mob_smssdk: cdb6a31d4fd4667ed928e2eca03f21ad89ebc05c
+  MOBFoundation: 08c456357888e4c984fba23bbf04cfd2f4fc1e02
+  Qiniu: 9d1f20dcc348919972b4ee1b1272f9b9d4a7e69e
+  SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
-  WechatOpenSDK: 676feec516a11173eafd1fe64b10d27babf28701
-  Weibo_SDK: 652ca78c2f7147a5de5e75e7cbea89838a81772a
+  WechatOpenSDK: 368ae03b72ee3ea1328c4f11326fbb5d2721d118
+  Weibo_SDK: 76455315cb43d6a63c1990bf91483f05a98d45fd
 
-PODFILE CHECKSUM: 3c06073a1daf80bfefa29b28a6854019acbcdef5
+PODFILE CHECKSUM: 9c15faf450f84c6ff0eaaa8501fa034dc0651e49
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.8.4
