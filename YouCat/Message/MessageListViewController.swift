@@ -388,20 +388,42 @@ extension MessageListViewController {
     }
     
     func testLocalMessage(models: [YCPublishModel], tagText: String?) {
-        
-        let message = YCSearchResultMessage()
-        message.models = models
-        message.tagText = tagText
-        var originBottomIndexPath: IndexPath?
-        if !self.messages.isEmpty {
-            originBottomIndexPath = IndexPath(row: self.messages.count - 1, section: 0)
+        mainQueueExecuting {
+            let message = YCSearchResultMessage()
+            message.models = models
+            message.tagText = tagText
+            var originBottomIndexPath: IndexPath?
+            if !self.messages.isEmpty {
+                originBottomIndexPath = IndexPath(row: self.messages.count - 1, section: 0)
+            }
+            
+            self.messages.append(message)
+            let indexPath = IndexPath(row: self.messages.count - 1, section: 0)
+            self.tableView.insertRows(at: [indexPath], with: .none)
+            self.tableView.reloadRows(at: [indexPath], with: .none)
+            if
+                let bottomIndexPath = originBottomIndexPath,
+                let bottomCell = self.tableView.cellForRow(at: bottomIndexPath),
+                self.tableView.visibleCells.contains(bottomCell)
+            {
+                self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            }
         }
         
-        self.messages.append(message)
-        let indexPath = IndexPath(row: self.messages.count - 1, section: 0)
-        self.tableView.insertRows(at: [indexPath], with: .none)
-        self.tableView.reloadRows(at: [indexPath], with: .none)
+    }
+    
+    func searchNoResultMessage() {
+        
         mainQueueExecuting {
+            let message = IMTextMessage(text: "对不起，没有找到你想看的内容")
+            var originBottomIndexPath: IndexPath?
+            if !self.messages.isEmpty {
+                originBottomIndexPath = IndexPath(row: self.messages.count - 1, section: 0)
+            }
+            self.messages.append(message)
+            let indexPath = IndexPath(row: self.messages.count - 1, section: 0)
+            self.tableView.insertRows(at: [indexPath], with: .none)
+            self.tableView.reloadRows(at: [indexPath], with: .none)
             if
                 let bottomIndexPath = originBottomIndexPath,
                 let bottomCell = self.tableView.cellForRow(at: bottomIndexPath),
@@ -552,28 +574,18 @@ extension MessageListViewController {
             guard let sf = self else {return}
 //            print("cccc")
             if let list = tagFavorite, list.result{
-//                let tagText = list.tagText
                 let tags = list.tags
-//                let publish = list.modelArray
-                
                 YCTagDomain().tagPublishList(tags: tags!, start: 0, count: 20) {[weak self] (modelList) in
-                    if let list = modelList {
-                        if list.result{
-                            if let modelList = list.modelArray {
-                                DispatchQueue.main.async {
-                                    let publishDetail = YCPublishDetailViewController.getInstance() as! YCPublishDetailViewController
-                                    publishDetail.contentIndex = 0
-                                    publishDetail.contents = modelList as? [YCPublishModel]
-                                    if let publishModels = modelList as? [YCPublishModel] {
-                                        self?.testLocalMessage(models: publishModels, tagText: tagFavorite?.tagText)
-                                    }
-//                                    sf.navigationController?.pushViewController(publishDetail, animated: true)
-//                                    NotificationCenter.default.post(name: NSNotification.Name("RootPushPublishView"), object: publishDetail)
-                                }
-                            }
-                        }
+                    if let list = modelList,
+                        let publishModels = list.modelArray as? [YCPublishModel],
+                        list.result {
+                        self?.testLocalMessage(models: publishModels, tagText: tagFavorite?.tagText)
+                    } else {
+                        sf.searchNoResultMessage()
                     }
                 }
+            } else {
+                    sf.searchNoResultMessage()
             }
         }
     }

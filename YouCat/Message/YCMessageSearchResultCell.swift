@@ -50,7 +50,7 @@ class YCMessageSearchResultCell: UITableViewCell {
         }
         
         if let tagText = message.tagText, !tagText.isEmpty {
-            self.contentLabel.text = "来看看\(tagText)吧～"
+            self.contentLabel.text = "来看看\(tagText)吧～" 
         } else {
             if let tagModel = message.models?.first?.tags.first {
                 self.contentLabel.text = "来看看\(tagModel.tagName)吧～"

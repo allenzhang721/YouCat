@@ -44,12 +44,12 @@ class TextMessageCell: UITableViewCell {
 //            self.messageTextLabel.textAlignment = .left
 //            self.messageDateLabel.textAlignment = .right
 //        }
-        self.nickNameLabel.text = ( message.ioType == .out ? "" : message.fromClientID ) ?? "-"
+        self.nickNameLabel.text = ( message.ioType == .out ? "" : message.fromClientID ) ?? ""
 //        if let locationMessage = message as? IMLocationMessage {
 //            self.messageTextLabel.text = "Latitude: \(locationMessage.latitude ?? 0)\nLongitude: \(locationMessage.longitude ?? 0)"
 //
 //        } else {
-            self.textMessageLabel.text = message.text ?? "-"
+            self.textMessageLabel.text = message.text ?? ""
 //        }
 //        if let date = message.sentDate {
 //            var dateText: String = "sent: \(dateFormatter.string(from: date))"
