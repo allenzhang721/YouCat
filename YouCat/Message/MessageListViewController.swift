@@ -387,10 +387,11 @@ extension MessageListViewController {
         }
     }
     
-    func testLocalMessage(models: [YCPublishModel]) {
+    func testLocalMessage(models: [YCPublishModel], tagText: String?) {
         
         let message = YCSearchResultMessage()
         message.models = models
+        message.tagText = tagText
         var originBottomIndexPath: IndexPath?
         if !self.messages.isEmpty {
             originBottomIndexPath = IndexPath(row: self.messages.count - 1, section: 0)
@@ -546,9 +547,7 @@ extension MessageListViewController {
         guard let result = message.tagsBy(contain: "想看") else {
             return
         }
-        
-        
-        
+
         YCTagDomain().tagFavoritePublishList(tagText: result.tagText, tagNameArray: result.tags, start: 0, count: 20) {[weak self] (tagFavorite) in
             guard let sf = self else {return}
 //            print("cccc")
@@ -565,9 +564,8 @@ extension MessageListViewController {
                                     let publishDetail = YCPublishDetailViewController.getInstance() as! YCPublishDetailViewController
                                     publishDetail.contentIndex = 0
                                     publishDetail.contents = modelList as? [YCPublishModel]
-                                    print("contents = \((modelList as? [YCPublishModel]))")
                                     if let publishModels = modelList as? [YCPublishModel] {
-                                        self?.testLocalMessage(models: publishModels)
+                                        self?.testLocalMessage(models: publishModels, tagText: tagFavorite?.tagText)
                                     }
 //                                    sf.navigationController?.pushViewController(publishDetail, animated: true)
 //                                    NotificationCenter.default.post(name: NSNotification.Name("RootPushPublishView"), object: publishDetail)

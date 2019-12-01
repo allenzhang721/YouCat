@@ -49,10 +49,15 @@ class YCMessageSearchResultCell: UITableViewCell {
             imageView3?.kf.setImage(with: URL(string: imgModel.imagePath))
         }
         
-        if let tagModel = message.models?.first?.tags.first {
-            self.contentLabel.text = "来看看\(tagModel.tagName)吧～"
-//            imageView1?.kf.setImage(with: URL(string: imgModel.imagePath))
+        if let tagText = message.tagText {
+            self.contentLabel.text = "来看看\(tagText)吧～"
+        } else {
+            if let tagModel = message.models?.first?.tags.first {
+                self.contentLabel.text = "来看看\(tagModel.tagName)吧～"
+    //            imageView1?.kf.setImage(with: URL(string: imgModel.imagePath))
+            }
         }
+
         
     }
     

@@ -15,6 +15,7 @@ class YCSearchResultMessage: IMCategorizedMessage {
         return 100
     }
     
+    var tagText: String?
     var models:[YCPublishModel]?
     
 }
