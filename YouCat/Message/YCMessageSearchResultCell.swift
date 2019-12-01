@@ -49,7 +49,7 @@ class YCMessageSearchResultCell: UITableViewCell {
             imageView3?.kf.setImage(with: URL(string: imgModel.imagePath))
         }
         
-        if let tagText = message.tagText {
+        if let tagText = message.tagText, !tagText.isEmpty {
             self.contentLabel.text = "来看看\(tagText)吧～"
         } else {
             if let tagModel = message.models?.first?.tags.first {
