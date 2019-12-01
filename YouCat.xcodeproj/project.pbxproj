@@ -100,6 +100,9 @@
 		2C827F48206F3EEB0035DCE2 /* ThemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C827F47206F3EEB0035DCE2 /* ThemeViewController.swift */; };
 		4BDCF867747000828440DF7E /* Pods_YouCatTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D76547DA6CCEE139A5F6E084 /* Pods_YouCatTests.framework */; };
 		83A6F551E87BF929BB599A40 /* Pods_YouCat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F17FB4EF2FA68C8A2CD9B94 /* Pods_YouCat.framework */; };
+		9526B104239395A6009EBBEB /* YCMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9526B103239395A6009EBBEB /* YCMessage.swift */; };
+		9526B10D23939FD0009EBBEB /* YCMessageSearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9526B10B23939FD0009EBBEB /* YCMessageSearchResultCell.swift */; };
+		9526B10E23939FD0009EBBEB /* YCMessageSearchResultCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9526B10C23939FD0009EBBEB /* YCMessageSearchResultCell.xib */; };
 		959CE20A22C0EDE600D683E7 /* ThemeTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 959CE20922C0EDE600D683E7 /* ThemeTransition.swift */; };
 		95B362412324CD0200EAAF53 /* TextMessageCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95B362402324CD0200EAAF53 /* TextMessageCell2.xib */; };
 		95B362432324D86800EAAF53 /* TextMessageCell3.xib in Resources */ = {isa = PBXBuildFile; fileRef = 95B362422324D86800EAAF53 /* TextMessageCell3.xib */; };
@@ -325,6 +328,9 @@
 		5536AD062810EA944BFD8DAA /* Pods_YouCatUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouCatUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		581287F3A5F73B04B2906D2F /* Pods-YouCatTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCatTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCatTests/Pods-YouCatTests.release.xcconfig"; sourceTree = "<group>"; };
 		7EA9D9DE110AC0A34E1D6FE9 /* Pods-YouCat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCat.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCat/Pods-YouCat.release.xcconfig"; sourceTree = "<group>"; };
+		9526B103239395A6009EBBEB /* YCMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YCMessage.swift; sourceTree = "<group>"; };
+		9526B10B23939FD0009EBBEB /* YCMessageSearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YCMessageSearchResultCell.swift; sourceTree = "<group>"; };
+		9526B10C23939FD0009EBBEB /* YCMessageSearchResultCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = YCMessageSearchResultCell.xib; sourceTree = "<group>"; };
 		959CE20922C0EDE600D683E7 /* ThemeTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ThemeTransition.swift; path = YouCat/ThemeTransition.swift; sourceTree = SOURCE_ROOT; };
 		95B362402324CD0200EAAF53 /* TextMessageCell2.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextMessageCell2.xib; sourceTree = "<group>"; };
 		95B362422324D86800EAAF53 /* TextMessageCell3.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextMessageCell3.xib; sourceTree = "<group>"; };
@@ -692,6 +698,7 @@
 		95C62FC82307AFA900D651C4 /* Message */ = {
 			isa = PBXGroup;
 			children = (
+				9526B103239395A6009EBBEB /* YCMessage.swift */,
 				95C62FC92307AFA900D651C4 /* ConversationDetailsView.xib */,
 				95C62FCB2307AFA900D651C4 /* ConversationDetailsViewController.swift */,
 				95C62FCF2307AFA900D651C4 /* ImageMessageCell.swift */,
@@ -700,6 +707,8 @@
 				95C62FD42307AFA900D651C4 /* MediaMessageCell.xib */,
 				95C62FD22307AFA900D651C4 /* MessageListView.xib */,
 				95C62FD02307AFA900D651C4 /* MessageListViewController.swift */,
+				9526B10B23939FD0009EBBEB /* YCMessageSearchResultCell.swift */,
+				9526B10C23939FD0009EBBEB /* YCMessageSearchResultCell.xib */,
 				95C62FCC2307AFA900D651C4 /* RecalledMessageCell.swift */,
 				95C62FCE2307AFA900D651C4 /* RecalledMessageCell.xib */,
 				95C62FCD2307AFA900D651C4 /* TextMessageCell.swift */,
@@ -944,6 +953,7 @@
 				95B362412324CD0200EAAF53 /* TextMessageCell2.xib in Resources */,
 				95E4E35D2307B584000032CA /* AudioView.xib in Resources */,
 				95C62FDF2307AFA900D651C4 /* TextMessageCell.xib in Resources */,
+				9526B10E23939FD0009EBBEB /* YCMessageSearchResultCell.xib in Resources */,
 				95C62FE02307AFA900D651C4 /* MediaMessageCell.xib in Resources */,
 				95C62FD52307AFA900D651C4 /* ConversationDetailsView.xib in Resources */,
 				2C344204203D89F3008BF439 /* LaunchScreen.storyboard in Resources */,
@@ -1155,6 +1165,7 @@
 				255846C122B1354300782021 /* ErrorView.swift in Sources */,
 				252B900621B0000000E41842 /* AlertProtocol.swift in Sources */,
 				25307942213EA50F002DC02D /* Constants.swift in Sources */,
+				9526B104239395A6009EBBEB /* YCMessage.swift in Sources */,
 				25305260214A759200BB9624 /* ThemeModel.swift in Sources */,
 				95E4E3472307B3E0000032CA /* Extension.swift in Sources */,
 				253BBADA219C4ACA00DAD5BB /* VideoVIew.swift in Sources */,
@@ -1175,6 +1186,7 @@
 				25305264214AA80A00BB9624 /* CommentModel.swift in Sources */,
 				2530524B2147CC1900BB9624 /* PublishRequest.swift in Sources */,
 				95C62FD62307AFA900D651C4 /* MediaMessageCell.swift in Sources */,
+				9526B10D23939FD0009EBBEB /* YCMessageSearchResultCell.swift in Sources */,
 				259AC950225E32090064987F /* FavoriteViewController.swift in Sources */,
 				95C62FDB2307AFA900D651C4 /* ImageMessageCell.swift in Sources */,
 				25307944213EE556002DC02D /* URLRequest.swift in Sources */,

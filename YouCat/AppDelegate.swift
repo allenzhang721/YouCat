@@ -8,6 +8,7 @@
 
 import UIKit
 import Kingfisher
+import LeanCloud
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDelegate{
@@ -18,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UIButton.initializeMethod()
+        CustomMessageRegister()
         self.setup()
         
         WeiboSDK.registerApp(YCSocialConfigs.weibo.appKey)
@@ -224,6 +226,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
                 YCScreen.safeArea = UIEdgeInsets(top: 22, left: 0, bottom: 0, right: 0)
                 YCScreen.fullScreenArea = UIEdgeInsets(top: 0, left: 0, bottom: 49, right: 0)
             }
+        }
+    }
+    
+    private func CustomMessageRegister() {
+        do {
+            try YCSearchResultMessage.register()
+        } catch {
+            print(error)
         }
     }
 }

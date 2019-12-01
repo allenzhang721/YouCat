@@ -139,6 +139,8 @@ class MessageListViewController: UIViewController {
         
         self.tableView.register(UINib(nibName: "\(TextMessageCell.self)3", bundle: .main), forCellReuseIdentifier: "TextMessageRightCell");
         
+        self.tableView.register(UINib(nibName: "\(YCMessageSearchResultCell.self)", bundle: .main), forCellReuseIdentifier: "MessageSearchResult")
+        
         self.tableView.register(
             UINib(nibName: "\(ImageMessageCell.self)", bundle: .main),
             forCellReuseIdentifier: "\(ImageMessageCell.self)"
@@ -164,6 +166,7 @@ class MessageListViewController: UIViewController {
             for: .valueChanged
         )
         self.tableView.refreshControl = self.refreshControl
+        self.tableView.delegate = self
     }
     
     @objc func pullToRefresh(_ sender: Any?) {
@@ -384,6 +387,32 @@ extension MessageListViewController {
         }
     }
     
+    func testLocalMessage(models: [YCPublishModel]) {
+        
+        let message = YCSearchResultMessage()
+        message.models = models
+        var originBottomIndexPath: IndexPath?
+        if !self.messages.isEmpty {
+            originBottomIndexPath = IndexPath(row: self.messages.count - 1, section: 0)
+        }
+        
+        self.messages.append(message)
+        let indexPath = IndexPath(row: self.messages.count - 1, section: 0)
+        self.tableView.insertRows(at: [indexPath], with: .none)
+        self.tableView.reloadRows(at: [indexPath], with: .none)
+        mainQueueExecuting {
+            if
+                let bottomIndexPath = originBottomIndexPath,
+                let bottomCell = self.tableView.cellForRow(at: bottomIndexPath),
+                self.tableView.visibleCells.contains(bottomCell)
+            {
+                self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            }
+            
+        }
+        
+    }
+    
 }
 
 // MARK: Keyboard
@@ -492,12 +521,15 @@ extension MessageListViewController {
                 self.activityToggle()
                 switch result {
                 case .success:
+                    
                     mainQueueExecuting {
                         self.messages.append(message)
                         let indexPath = IndexPath(row: self.messages.count - 1, section: 0)
                         self.tableView.insertRows(at: [indexPath], with: .bottom)
                         self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
-                        self.showFavoriteViewControllerIfNeed(message: message.content?.string ?? "")
+                        if let textmsg = message as? IMTextMessage {
+                            self.showFavoriteViewControllerIfNeed(message: textmsg.text ?? "")
+                        }
                     }
                 case .failure(error: let error):
                     UIAlertController.show(error: error, controller: self)
@@ -515,6 +547,8 @@ extension MessageListViewController {
             return
         }
         
+        
+        
         YCTagDomain().tagFavoritePublishList(tagText: result.tagText, tagNameArray: result.tags, start: 0, count: 20) {[weak self] (tagFavorite) in
             guard let sf = self else {return}
 //            print("cccc")
@@ -523,7 +557,7 @@ extension MessageListViewController {
                 let tags = list.tags
 //                let publish = list.modelArray
                 
-                YCTagDomain().tagPublishList(tags: tags!, start: 0, count: 20) { (modelList) in
+                YCTagDomain().tagPublishList(tags: tags!, start: 0, count: 20) {[weak self] (modelList) in
                     if let list = modelList {
                         if list.result{
                             if let modelList = list.modelArray {
@@ -531,7 +565,11 @@ extension MessageListViewController {
                                     let publishDetail = YCPublishDetailViewController.getInstance() as! YCPublishDetailViewController
                                     publishDetail.contentIndex = 0
                                     publishDetail.contents = modelList as? [YCPublishModel]
-                                    sf.navigationController?.pushViewController(publishDetail, animated: true)
+                                    print("contents = \((modelList as? [YCPublishModel]))")
+                                    if let publishModels = modelList as? [YCPublishModel] {
+                                        self?.testLocalMessage(models: publishModels)
+                                    }
+//                                    sf.navigationController?.pushViewController(publishDetail, animated: true)
 //                                    NotificationCenter.default.post(name: NSNotification.Name("RootPushPublishView"), object: publishDetail)
                                 }
                             }
@@ -785,9 +823,18 @@ extension MessageListViewController: UITableViewDelegate, UITableViewDataSource 
             let recalledCell = tableView.dequeueReusableCell(withIdentifier: "\(RecalledMessageCell.self)") as! RecalledMessageCell
             recalledCell.update(with: message as! IMRecalledMessage)
             cell = recalledCell
+            
+        case is YCSearchResultMessage:
+            let searchResultCell = tableView.dequeueReusableCell(withIdentifier: "MessageSearchResult") as! YCMessageSearchResultCell
+            searchResultCell.update(with: message as! YCSearchResultMessage)
+            cell = searchResultCell
+            
         default:
             fatalError()
         }
+        
+        cell.selectionStyle = .none
+        
         return cell
     }
     
@@ -862,6 +909,20 @@ extension MessageListViewController: UITableViewDelegate, UITableViewDataSource 
         self.inputViewTextField.resignFirstResponder()
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if let message = self.messages[indexPath.item] as? YCSearchResultMessage {
+            let publishDetail = YCPublishDetailViewController.getInstance() as! YCPublishDetailViewController
+            publishDetail.contentIndex = 0
+            publishDetail.contents = message.models
+            self.navigationController?.pushViewController(publishDetail, animated: true)
+        }
+        
+    }
+    
+
+    
+    
 }
 
 // MARK: Text Field
@@ -919,9 +980,9 @@ extension MessageListViewController: UIImagePickerControllerDelegate, UINavigati
 extension String {
     
     func tagsBy(contain keyword: String) -> (tags: [String], tagText: String)? {
-        
-        let count = keyword.count
-        if (!(keyword as NSString).substring(with: NSMakeRange(0, min(count - 1, 5))).contains(keyword)) {
+//        print("keywords = \(keyword)")
+        let count = self.count
+        if (!(self as NSString).substring(with: NSMakeRange(0, min(count - 1, 5))).contains(keyword)) {
             return nil;
         }
         
