@@ -573,9 +573,8 @@ extension MessageListViewController {
         YCTagDomain().tagFavoritePublishList(tagText: result.tagText, tagNameArray: result.tags, start: 0, count: 20) {[weak self] (tagFavorite) in
             guard let sf = self else {return}
 //            print("cccc")
-            if let list = tagFavorite, list.result{
-                let tags = list.tags
-                YCTagDomain().tagPublishList(tags: tags!, start: 0, count: 20) {[weak self] (modelList) in
+            if let list = tagFavorite, let tags = list.tags, list.result{
+                YCTagDomain().tagPublishList(tags: tags, start: 0, count: 20) {[weak self] (modelList) in
                     if let list = modelList,
                         let publishModels = list.modelArray as? [YCPublishModel],
                         list.result {
@@ -996,7 +995,7 @@ extension String {
             return nil;
         }
         
-        let range1 = (keyword as NSString).range(of: "想看")
+        let range1 = (self as NSString).range(of: keyword)
         let subStr = (self as NSString).substring(from: range1.location+range1.length)
         
         if (subStr.count <= 0) {

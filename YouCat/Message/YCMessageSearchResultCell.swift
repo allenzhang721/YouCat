@@ -33,20 +33,16 @@ class YCMessageSearchResultCell: UITableViewCell {
     }
     
     func update(with message: YCSearchResultMessage) {
-        print("hshshshshsh")
-        if let imgModel = message.models?.first?.medias.first as? YCImageModel {
-            print("hshshshshsh2")
-            imageView1?.kf.setImage(with: URL(string: imgModel.imagePath))
-        }
         
-        if let imgModel = message.models?[1].medias.first as? YCImageModel {
-            print("hshshshshsh2")
-            imageView2?.kf.setImage(with: URL(string: imgModel.imagePath))
-        }
-        
-        if let imgModel = message.models?[2].medias.first as? YCImageModel {
-            print("hshshshshsh2")
-            imageView3?.kf.setImage(with: URL(string: imgModel.imagePath))
+        if let imgs = message.models?.compactMap({ (publishModel) -> YCImageModel? in
+            return publishModel.medias.first as? YCImageModel
+        }), imgs.count > 0 {
+            
+            let imgViews = [imageView1, imageView2, imageView3]
+            let maxIndex = imgs.count - 1
+            for (i, imgView) in imgViews.enumerated() {
+                imgView?.kf.setImage(with: URL(string: imgs[min(i, maxIndex)].imagePath))
+            }
         }
         
         if let tagText = message.tagText, !tagText.isEmpty {
