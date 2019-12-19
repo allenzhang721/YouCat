@@ -23,4 +23,4 @@ class YCBaseModel {
     func getData() -> [String: Any] {
         return [:]
     }
-}
+} 

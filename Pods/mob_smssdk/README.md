@@ -4,7 +4,7 @@
 
 **Current SMSSDK version**
 
-- iOS v3.2.0
+- iOS v3.2.3
 
 **中文集成文档**
 
@@ -21,7 +21,7 @@ If you use cocoaPods ,now ,it's easily to import SMSSDK liking this:
 
 > * main module(necessary)
 
-> * pod "SMSSDK"
+> * pod "mob_smssdk"
 
 Yeah, you are right,it's over using cocoaPods to import SMSSDK. The next is to import the file's header and use the API of the SMSSDK what you wanted.
 
@@ -48,7 +48,7 @@ Drag  this folder into the project:
 Required:
 
 > *  libz.dylib
-> * libstdc++.dylib
+> * libc++.dylib (libstdc++.dylib这个库在XCode10之后以libc++替代)
 
 Show you like this：
 ![](http://upload-images.jianshu.io/upload_images/4131265-6644e7b04dfd6235.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
@@ -71,7 +71,7 @@ In the SMSSDK file ,it contains all the API in the SDK, and here,you can use any
 
 if (!error)
 {
-// 请求成功
+// 请求成功 
 }
 else
 {

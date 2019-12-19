@@ -4,15 +4,15 @@
   "summary": "WeiboSDK on iOS.",
   "description": "New weibosdk pod.",
   "authors": {
-    "jingyu11": "jingyu11@staff.weibo.com"
+    "meimei": "meimei@staff.weibo.com"
   },
-  "version": "3.2.3",
+  "version": "3.2.5.1",
   "source": {
     "git": "https://github.com/sinaweibosdk/weibo_ios_sdk.git",
-    "tag": "3.2.3"
+    "tag": "3.2.5.1"
   },
   "platforms": {
-    "ios": "6.0"
+    "ios": "9.0"
   },
   "requires_arc": false,
   "license": "MIT",
@@ -29,7 +29,8 @@
     "UIKit",
     "Foundation",
     "CoreGraphics",
-    "CoreTelephony"
+    "CoreTelephony",
+    "WebKit"
   ],
   "libraries": [
     "sqlite3",

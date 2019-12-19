@@ -25,7 +25,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
         WeiboSDK.registerApp(YCSocialConfigs.weibo.appKey)
         WeiboSDK.enableDebugMode(true)
         
-        WXApi.registerApp(YCSocialConfigs.weChat.appID)
+//        WXApi.registerApp(YCSocialConfigs.weChat.appID)
+        
+        WXApi.registerApp(YCSocialConfigs.weChat.appID, universalLink: "")
         return true
     }
     

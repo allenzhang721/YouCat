@@ -12,7 +12,7 @@ target 'YouCat' do
   pod 'Alamofire', '~> 4.8.0'
   pod 'SwiftyJSON', '~>4.0.0'
   pod 'Qiniu', '~> 7.1'
-  pod 'SnapKit', '~> 4.0'
+  pod 'SnapKit', '~> 5.0'
   pod 'MJRefresh', '~> 3.1'
   pod 'mob_smssdk'
   pod 'WechatOpenSDK'
