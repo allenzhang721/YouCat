@@ -40,22 +40,13 @@ class YCThemeDomain: YCBaseDomain {
     
     func themeDetail(themeID: String, completionBlock: @escaping (YCDomainModel?) -> Void) {
         YCThemeDetailRequest(themeID: themeID).startWithComplete { (response: YCURLRequestResult) in
-            switch response{
-            case .success(let v):
-                let json:JSON = JSON(v)
-                if self.checkResult(json){
-                    let modelJSON = json[Parameter(.model)]
-                    completionBlock(YCDomainModel(result: true, baseModel: YCThemeDetailModel(modelJSON)))
-                }else {
-                    let errorMessage = self.codeMessage(json)
-                    completionBlock(YCDomainModel(result: false, message: errorMessage))
-                }
-                break;
-            case .failure:
-                let errorMessage = CodeMessage(code: "000")
-                completionBlock(YCDomainModel(result: false, message: errorMessage))
-                break
-            }
+            self.backThemeDetailModel(response: response, completionBlock: completionBlock)
+        }
+    }
+    
+    func themeDetailByUUID(uuid: String, completionBlock: @escaping (YCDomainModel?) -> Void) {
+        YCThemeDetailByUUIDRequest(uuid: uuid).startWithComplete { (response: YCURLRequestResult) in
+            self.backThemeDetailModel(response: response, completionBlock: completionBlock)
         }
     }
     
@@ -150,6 +141,25 @@ class YCThemeDomain: YCBaseDomain {
             if self.checkResult(json){
                 let modelJSON = json[Parameter(.model)]
                 completionBlock(YCDomainModel(result: true, baseModel: YCThemeModel(modelJSON)))
+            }else {
+                let errorMessage = self.codeMessage(json)
+                completionBlock(YCDomainModel(result: false, message: errorMessage))
+            }
+            break;
+        case .failure:
+            let errorMessage = CodeMessage(code: "000")
+            completionBlock(YCDomainModel(result: false, message: errorMessage))
+            break
+        }
+    }
+    
+    func backThemeDetailModel(response: YCURLRequestResult<Any>, completionBlock: @escaping (YCDomainModel?) -> Void) {
+        switch response{
+        case .success(let v):
+            let json:JSON = JSON(v)
+            if self.checkResult(json){
+                let modelJSON = json[Parameter(.model)]
+                completionBlock(YCDomainModel(result: true, baseModel: YCThemeDetailModel(modelJSON)))
             }else {
                 let errorMessage = self.codeMessage(json)
                 completionBlock(YCDomainModel(result: false, message: errorMessage))

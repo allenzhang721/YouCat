@@ -28,7 +28,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
     }
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        return WXApi.handleOpenUniversalLink(userActivity, delegate: self)
+        if let a = userActivity.webpageURL {
+            let des = a.description
+            print("webpageURL = ",des)
+            if des.contains(YCSocialConfigs.universalLink) {
+                var parament: [String : String] = [:]
+                let uniLink = YCSocialConfigs.universalLink + "/"
+                var newStr = "";
+                if des.contains("?"){
+                    newStr = des.ycSubString(fromStr: uniLink, toStr: "?")
+                    let parStrs = des.ycSubString(fromStr: "?", offsetBy: 1)
+                    let parStrings: [String] = parStrs.split(separator: "&").compactMap { "\($0)" }
+                    for parStr in parStrings {
+                        let name = parStr.ycSubString(toStr: "=", offsetBy: -1)
+                        let value = parStr.ycSubString(fromStr: "=", offsetBy: 1)
+                        parament[name] = value
+                    }
+                }else {
+                    newStr = des.ycSubString(from: uniLink.count)
+                }
+                if newStr.contains("wx") {
+                    return WXApi.handleOpenUniversalLink(userActivity, delegate: self)
+                }else if newStr.contains("user") {
+                    self.universalLinkUser(par: parament)
+                }else if newStr.contains("publish"){
+                    self.universalLinkPublish(par: parament)
+                }else if newStr.contains("theme") {
+                    self.universalLinkTheme(par: parament)
+                }
+            }else {
+                return false
+            }
+        }
+        return false
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
@@ -240,6 +272,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
                 // Fallback on earlier versions
                 YCScreen.safeArea = UIEdgeInsets(top: 22, left: 0, bottom: 0, right: 0)
                 YCScreen.fullScreenArea = UIEdgeInsets(top: 0, left: 0, bottom: 49, right: 0)
+            }
+        }
+    }
+    
+    func universalLinkUser(par: [String:String]) {
+        if par.keys.contains("uid"), let uuid = par["uid"]{
+            YCUserDomain().userDetailByUUID(uuid: uuid) { (model) in
+                if let mo = model, mo.result, let userDetail = mo.baseModel as? YCUserDetailModel {
+                    NotificationCenter.default.post(name: NSNotification.Name("UniversalLinkUserView"), object: userDetail)
+                }
+            }
+        }
+    }
+    
+    func universalLinkPublish(par: [String:String]) {
+        if par.keys.contains("uid"), let uuid = par["uid"]{
+            YCPublishDomain().publishDetaiByUUID(uuid: uuid) { (model) in
+                if let mo = model, mo.result, let publish = mo.baseModel as? YCPublishModel {
+                    NotificationCenter.default.post(name: NSNotification.Name("UniversalLinkPublishView"), object: publish)
+                }
+            }
+        }
+    }
+    
+    func universalLinkTheme(par: [String:String]) {
+        if par.keys.contains("uid"), let uuid = par["uid"]{
+            YCThemeDomain().themeDetailByUUID(uuid: uuid) { (model) in
+                if let mo = model, mo.result, let themeDetail = mo.baseModel as? YCThemeDetailModel{
+                    NotificationCenter.default.post(name: NSNotification.Name("UniversalLinkThemeView"), object: themeDetail)
+                }
             }
         }
     }

@@ -521,6 +521,31 @@ class YCUserDetailRequest: YCBaseRequest {
     }
 }
 
+class YCUserDetailByUUIDRequest: YCBaseRequest {
+    
+    let uuid: String;
+    
+    init(uuid: String){
+        self.uuid = uuid
+    }
+    
+    override func urlPath() -> String {
+        let urlPath = UserRequestURL.userDetailByUUID.description
+        return urlPath
+    }
+    
+    override func parameter() -> Dictionary<String, Any> {
+        let dic: [String: Any] = [
+            Parameter(.uuid): self.uuid
+        ];
+        return dic;
+    }
+    
+    override func errorMessage() -> String {
+        return "UserDetailByUUID"
+    }
+}
+
 class YCFollowUserRequest: YCBaseRequest {
     
     let userID: String;

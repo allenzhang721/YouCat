@@ -41,6 +41,8 @@ class YCPublishDetailViewController: YCViewController {
         }
     }
     
+    var isPresent = false
+
     var videoMedias: [YCMediaViewModel] = []
     
     let refreshCount = 20
@@ -76,6 +78,15 @@ class YCPublishDetailViewController: YCViewController {
         super.viewWillAppear(animated)
         if self.isFirstShow {
             self.showView()
+        }
+        if let closeButton = self.view.viewWithTag(11) as? UIButton {
+            if self.isPresent {
+                closeButton.setImage(UIImage(named: "close_white"), for: .normal)
+                closeButton.setImage(UIImage(named: "close_white"), for: .highlighted)
+            }else {
+                closeButton.setImage(UIImage(named: "back_white"), for: .normal)
+                closeButton.setImage(UIImage(named: "back_white"), for: .highlighted)
+            }
         }
     }
     
@@ -159,6 +170,7 @@ class YCPublishDetailViewController: YCViewController {
         closeButton.setImage(UIImage(named: "back_white"), for: .normal)
         closeButton.setImage(UIImage(named: "back_white"), for: .highlighted)
         closeButton.addTarget(self, action: #selector(self.closeButtonClick), for: .touchUpInside)
+        closeButton.tag = 11
         self.view.addSubview(closeButton)
         closeButton.snp.makeConstraints { (make) in
             make.left.equalTo(10)
@@ -335,6 +347,7 @@ class YCPublishDetailViewController: YCViewController {
         self.collectionView.reloadData()
         self.isFirstShow = true
         self.loadResourceIndex = -1
+        self.isPresent = false
         for mediaModel in self.videoMedias.filter({$0.unUsed == false}) {
             self.releaseMediaViewModel(mediaModel: mediaModel)
         }
@@ -646,7 +659,13 @@ extension YCPublishDetailViewController: YCCollectionViewWaterfallLayoutDelegate
     }
     
     func viewCloseHander() {
-        self.navigationController?.popViewController(animated: true)
+        if self.isPresent {
+            if let nav = self.navigationController {
+                nav.dismiss(animated: true, completion: nil)
+            }
+        }else {
+            self.navigationController?.popViewController(animated: true)
+        }
     }
 }
 
@@ -814,13 +833,11 @@ extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLogi
                             })
                         }else if index == 4 {
                             if let img = (view as! YCImageView).img?.image {
-                                
                                 YCPhotoAlbumUtil.saveImageInAlbum(image: img, albumName: YCLanguageHelper.getString(key: "DefaultName"), completion: { (result) in
                                     switch result{
                                     case .success:
-                                        let showMessage = YCLanguageHelper.getString(key:
-                                            "SavePhotoSuccessLabel")
-                                        self.showTempAlert("", alertMessage: showMessage, view: self, completionBlock: nil)
+                                         let showMessage = YCLanguageHelper.getString(key:"SavePhotoSuccessLabel")
+                                         self.showTempAlert("", alertMessage: showMessage, view: self, completionBlock: nil)
                                     case .denied:
                                         gotoSetting(title: "", mesage: YCLanguageHelper.getString(key: "LibraryAccessTitle"), view: self)
                                     case .error:

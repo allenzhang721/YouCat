@@ -32,6 +32,8 @@ class YCThemeDetailViewController: YCViewController, YCImageProtocol, YCContentS
         }
     }
     
+    var isPresent = false
+    
     let refreshCount = 40
     
     var themeModel: YCThemeModel?
@@ -62,7 +64,7 @@ class YCThemeDetailViewController: YCViewController, YCImageProtocol, YCContentS
     var isLoginChange = false
     
     var maxScrollHeight: CGFloat = 44
-
+    
     override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -515,6 +517,7 @@ class YCThemeDetailViewController: YCViewController, YCImageProtocol, YCContentS
         self.collectionView.reloadData()
         self.footerFresh.isHidden = true
         self.isFirstShow = true
+        self.isPresent = false
         self.followButton.status = .Unfollow
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("LoginUserChange"), object: nil)
         NotificationCenter.default.removeObserver(self, name:
@@ -583,8 +586,15 @@ extension YCThemeDetailViewController: YCCollectionViewWaterfallLayoutDelegate {
             publishDetail.contentID = themeModel.themeID
         }
         publishDetail.contentValue = ["ThemeType": self.themeType]
-        self.isGoto = true
-        NotificationCenter.default.post(name: NSNotification.Name("RootPushPublishView"), object: publishDetail)
+        if self.isPresent {
+            if let nav = self.navigationController {
+                self.isGoto = true
+                nav.pushViewController(publishDetail, animated: true)
+            }
+        }else {
+            NotificationCenter.default.post(name: NSNotification.Name("RootPushPublishView"), object: publishDetail)
+        }
+        
 //        let navigationController = UINavigationController(rootViewController: publishDetail)
 //        navigationController.isNavigationBarHidden = true
 //        self.present(navigationController, animated: true) {
@@ -648,7 +658,13 @@ extension YCThemeDetailViewController: YCPublishCollectionViewCellDelegate, YCLo
         if self.collectionView.isDecelerating {
             self.killScroll()
         }else {
-            self.navigationController?.popViewController(animated: true)
+            if self.isPresent {
+                if let nv = self.navigationController {
+                    nv.dismiss(animated: true, completion: nil)
+                }
+            }else {
+                self.navigationController?.popViewController(animated: true)
+            }
         }
     }
     

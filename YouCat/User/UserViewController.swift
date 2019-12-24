@@ -50,7 +50,8 @@ class YCUserViewController: YCViewController, YCImageProtocol, YCNumberStringPro
     var isFirstShow: Bool = true
     var isResetUserInfo: Bool = false
     var isSetting: Bool = false
-
+    var isPresent: Bool = false
+    
     var userModel: YCUserModel?
     var userDetailModel: YCUserDetailModel?
     
@@ -95,6 +96,15 @@ class YCUserViewController: YCViewController, YCImageProtocol, YCNumberStringPro
         if self.isFirstShow || self.isSetting || self.isResetUserInfo {
             self.setValue(userModel: self.userModel)
             self.userDetail()
+        }
+        if let closeButton = self.view.viewWithTag(11) as? UIButton {
+            if self.isPresent {
+                closeButton.setImage(UIImage(named: "close_black"), for: .normal)
+                closeButton.setImage(UIImage(named: "close_black"), for: .highlighted)
+            }else {
+                closeButton.setImage(UIImage(named: "back_black"), for: .normal)
+                closeButton.setImage(UIImage(named: "back_black"), for: .highlighted)
+            }
         }
     }
     
@@ -162,6 +172,7 @@ class YCUserViewController: YCViewController, YCImageProtocol, YCNumberStringPro
         backButton.setImage(UIImage(named: "back_black"), for: .normal)
         backButton.setImage(UIImage(named: "back_black"), for: .highlighted)
         backButton.addTarget(self, action: #selector(self.backButtonClick), for: .touchUpInside)
+        backButton.tag = 11
         self.view.addSubview(backButton)
         backButton.snp.makeConstraints { (make) in
             make.top.equalTo(YCScreen.safeArea.top)
@@ -583,10 +594,16 @@ class YCUserViewController: YCViewController, YCImageProtocol, YCNumberStringPro
     }
     
     @objc func backButtonClick(){
-        if let delegate = self.delegate, let relationUser = self.userModel as? YCRelationUserModel {
-            delegate.backUser(user: relationUser)
+        if self.isPresent {
+            if let nav = self.navigationController {
+                nav.dismiss(animated: true, completion: nil)
+            }
+        }else {
+            if let delegate = self.delegate, let relationUser = self.userModel as? YCRelationUserModel {
+                delegate.backUser(user: relationUser)
+            }
+            self.navigationController?.popViewController(animated: true)
         }
-        self.navigationController?.popViewController(animated: true)
     }
     
     func updatePublishDate(modelList: Array<YCBaseModel>) -> Bool{
@@ -640,6 +657,7 @@ class YCUserViewController: YCViewController, YCImageProtocol, YCNumberStringPro
         self.postButton.status = .Selected
         self.likeButton.status = .Default
         self.delegate = nil
+        self.isPresent = false
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("LoginUserChange"), object: nil)
         NotificationCenter.default.removeObserver(self, name:
             NSNotification.Name("FollowUser"), object: nil)

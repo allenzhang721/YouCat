@@ -138,6 +138,31 @@ class YCThemeDetailRequest: YCThemeIDRequest {
     }
 }
 
+class YCThemeDetailByUUIDRequest: YCBaseRequest {
+    let uuid: String;
+    
+    init(uuid: String) {
+        self.uuid = uuid;
+        super.init()
+    }
+    
+    override func urlPath() -> String {
+        let urlPath = ThemeRequestURL.themeDetailByUUID.description;
+        return urlPath;
+    }
+    
+    override func parameter() -> Dictionary<String, Any> {
+        let dic: [String: Any] = [
+            Parameter(.uuid): self.uuid
+        ];
+        return dic;
+    }
+    
+    override func errorMessage() -> String {
+        return "ThemeDetailByUUID"
+    }
+}
+
 class YCThemeListRequest: YCListRequest {
     
     override func urlPath() -> String {

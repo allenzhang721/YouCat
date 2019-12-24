@@ -274,7 +274,7 @@ extension YCThemeViewController: UITableViewDataSource {
     }
 }
 
-let transitionDelegate = YCThemeTransition()
+//let transitionDelegate = YCThemeTransition()
 let navigationTransitionDelegate = ThemeNavigationTransition()
 
 extension YCThemeViewController: UITableViewDelegate {

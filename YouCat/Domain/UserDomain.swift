@@ -119,6 +119,27 @@ class YCUserDomain: YCBaseDomain {
         }
     }
     
+    func userDetailByUUID(uuid: String, completionBlock: @escaping (YCDomainModel?) -> Void){
+        YCUserDetailByUUIDRequest(uuid: uuid).startWithComplete { (response: YCURLRequestResult) in
+            switch response{
+            case .success(let v):
+                let json:JSON = JSON(v)
+                if self.checkResult(json){
+                    let modelJSON = json[Parameter(.model)]
+                    completionBlock(YCDomainModel(result: true, baseModel: YCUserDetailModel(modelJSON)))
+                }else {
+                    let errorMessage = self.codeMessage(json)
+                    completionBlock(YCDomainModel(result: false, message: errorMessage))
+                }
+                break;
+            case .failure:
+                let errorMessage = CodeMessage(code: "000")
+                completionBlock(YCDomainModel(result: false, message: errorMessage))
+                break
+            }
+        }
+    }
+    
     func followUser(userID: String, completionBlock: @escaping (YCDomainResult?) -> Void){
         YCFollowUserRequest(userID: userID).startWithComplete { (response: YCURLRequestResult) in
             self.backUserResult(response: response, completionBlock: completionBlock)

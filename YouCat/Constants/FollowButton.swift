@@ -325,3 +325,92 @@ class YCSelectedButton: UIView{
         }
     }
 }
+
+extension String {
+    /** 从头开始切,切到哪里你来定*/
+    func ycSubString(to: Int) -> String {
+        if self.containIndex(nums: to) {
+            let index = self.index(self.startIndex, offsetBy: to, limitedBy: self.endIndex)
+            return (String(self[self.startIndex...index!]))
+        } else {
+            return ""
+        }
+    }
+    
+    func ycSubString(toStr: String, offsetBy: Int = 0) -> String {
+        let to = self.positionOf(sub: toStr) + offsetBy
+        if self.containIndex(nums: to) {
+            let index = self.index(self.startIndex, offsetBy: to, limitedBy: self.endIndex)
+            return (String(self[self.startIndex...index!]))
+        } else {
+            return ""
+        }
+    }
+    
+    /** 从哪开始,一直切到尾*/
+    func ycSubString(from: Int) -> String {
+        if self.containIndex(nums: from) {
+            let index = self.index(self.startIndex, offsetBy: from, limitedBy: self.endIndex)
+            return (String(self[index!..<(self.endIndex)]))
+        } else {
+            return ""
+        }
+    }
+    
+    func ycSubString(fromStr: String, offsetBy: Int = 0) -> String {
+        let from = self.positionOf(sub: fromStr) + offsetBy
+        if self.containIndex( nums: from) {
+            let index = self.index(self.startIndex, offsetBy: from, limitedBy: self.endIndex)
+            return (String(self[index!..<(self.endIndex)]))
+        } else {
+            return ""
+        }
+    }
+    
+    /** 从哪开始,切到哪里*/
+    func ycSubString(from: Int, to: Int) -> String {
+        if self.containIndex(nums: from) && self.containIndex(nums: to) {
+            let indexFrom = self.index(self.startIndex, offsetBy: from, limitedBy: self.endIndex)
+            let indexTo = self.index(self.startIndex, offsetBy: to, limitedBy: self.endIndex)
+            return (String(self[indexFrom!...indexTo!]))
+        } else {
+            return ""
+        }
+    }
+    
+    /**从那个字符串开始切,切到那个字符串(需两个不同的字符串)*/
+    func ycSubString(fromStr: String, toStr: String) -> String {
+        let from = self.positionOf(sub: fromStr)
+        let to = self.positionOf(sub: toStr)
+        if self.containIndex(nums: from) && self.containIndex(nums: to) {
+            let indexFrom = self.index(self.startIndex, offsetBy: from + fromStr.count, limitedBy: self.endIndex)
+            let indexTo = self.index(self.startIndex, offsetBy: to, limitedBy: self.endIndex)
+            return (String(self[indexFrom!..<indexTo!]))
+        } else {
+            return ""
+        }
+    }
+    
+    func positionOf(sub:String, backwards:Bool = false)->Int {
+        var pos = -1
+        if let range = range(of:sub, options: backwards ? .backwards : .literal ) {
+            if !range.isEmpty {
+                pos = self.distance(from:startIndex, to:range.lowerBound)
+            }
+        }
+        return pos
+    }
+    
+
+    func containIndex(nums: Int) -> Bool{
+        if nums > (self.count - 1) {
+            print("NSString+BDCreatString: 字符串位置错误")
+            return false
+        } else if nums < 0 {
+            print("NSString+BDCreatString: 字符串位置错误")
+            return false
+        } else {
+            return true
+        }
+    }
+}

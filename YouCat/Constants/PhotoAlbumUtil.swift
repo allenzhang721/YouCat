@@ -73,11 +73,13 @@ class YCPhotoAlbumUtil: NSObject {
                 albumChangeRequset!.addAssets([assetPlaceholder!]  as NSArray)
             }
         }) { (isSuccess: Bool, error: Error?) in
-            if isSuccess {
-                completion?(.success)
-            } else{
-                print(error!.localizedDescription)
-                completion?(.error)
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                if isSuccess {
+                    completion?(.success)
+                } else{
+                    print(error!.localizedDescription)
+                    completion?(.error)
+                }
             }
         }
     }

@@ -88,6 +88,7 @@ enum PublishRequestURL: CustomStringConvertible {
     case userLikePublishList, userFollowPublishList, tagPublishList
     case searchPublishList, searchUserPublishList, searchThemePublishList, searchTagPublishList
     case activePublish, inActivePublish, retryCrawlPublish
+    case publishDetail, publishDetailByUUID
     var description: String {
         switch self {
         case .removePublish:
@@ -120,6 +121,10 @@ enum PublishRequestURL: CustomStringConvertible {
             return "/publish/searchThemePublishList"
         case .searchTagPublishList:
             return "/publish/searchTagPublishList"
+        case .publishDetail:
+            return "/publish/publishDetail"
+        case .publishDetailByUUID:
+            return "/publish/publishDetailByUUID"
         default:
             return ""
         }
@@ -130,7 +135,7 @@ enum UserRequestURL: CustomStringConvertible {
     case setManager
     case loginByPassword, loginByPhone, loginByWeibo, loginByWeChat
     case updatePassword, updateUniqueID, updateUserInfo, updateNikeName, updateSign, updateGender, updateBirthday, updateIcon, updateAddress
-    case userDetail
+    case userDetail, userDetailByUUID
     case followUser, unfollowUser, blockUser
     case followingList, followersList, blockList, themeAuthorList, followThemeUserList, blockThemeUserList
     case searchUserList
@@ -164,6 +169,8 @@ enum UserRequestURL: CustomStringConvertible {
             return "/user/updateAddress"
         case .userDetail:
             return "/user/userDetail"
+        case .userDetailByUUID:
+            return "/user/userDetailByUUID"
         case .followUser:
             return "/user/followUser"
         case .unfollowUser:
@@ -191,7 +198,7 @@ enum UserRequestURL: CustomStringConvertible {
 }
 
 enum ThemeRequestURL: CustomStringConvertible {
-    case addTheme, updateTheme, removeTheme, themeDetail
+    case addTheme, updateTheme, removeTheme, themeDetail, themeDetailByUUID
     case tradeThemeCreator, addThemeAuthor, removeThemeAuthor
     case themeList, topThemeList, followThemeList, blockThemeList, publishThemeList, searchThemeList
     case addPublishToTheme, removeThemePublish
@@ -206,6 +213,8 @@ enum ThemeRequestURL: CustomStringConvertible {
             return "/theme/removeTheme"
         case .themeDetail:
             return "/theme/themeDetail"
+        case .themeDetailByUUID:
+            return "/theme/themeDetailByUUID"
         case .themeList:
             return "/theme/themeList"
         case .topThemeList:

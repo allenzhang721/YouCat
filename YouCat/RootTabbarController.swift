@@ -142,3 +142,24 @@ extension YCViewController:UIGestureRecognizerDelegate, UINavigationControllerDe
         return true
     }
 }
+
+extension UIViewController
+{
+    // 获取当前显示的ViewController
+    class func currentViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController?
+    {
+        if let view = base as? ViewController {
+            return currentViewController(base: view.rootNav)
+        }
+        if let nav = base as? UINavigationController{
+             return currentViewController(base: nav.visibleViewController)
+        }
+        if let tab = base as? UITabBarController{
+             return currentViewController(base: tab.selectedViewController)
+        }
+        if let presented = base?.presentedViewController{
+             return currentViewController(base: presented)
+        }
+        return base
+    }
+}
