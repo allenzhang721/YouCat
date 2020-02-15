@@ -1254,7 +1254,7 @@
 					"$(PROJECT_DIR)/ShareSDK/ShareSDK/Support/PlatformSDK/SinaWeiboSDK",
 					"$(PROJECT_DIR)/ShareSDK/ShareSDK/Support/PlatformSDK/WeChatSDK",
 				);
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.botai.YouCat;
 				PRODUCT_NAME = "喵萌";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1295,7 +1295,7 @@
 					"$(PROJECT_DIR)/ShareSDK/ShareSDK/Support/PlatformSDK/SinaWeiboSDK",
 					"$(PROJECT_DIR)/ShareSDK/ShareSDK/Support/PlatformSDK/WeChatSDK",
 				);
-				MARKETING_VERSION = 1.1.7;
+				MARKETING_VERSION = 1.1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.botai.YouCat;
 				PRODUCT_NAME = "喵萌";
 				PROVISIONING_PROFILE_SPECIFIER = "";

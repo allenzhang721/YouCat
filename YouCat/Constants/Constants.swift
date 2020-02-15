@@ -75,7 +75,7 @@ enum RequestHost: CustomStringConvertible {
     var description: String {
         switch self {
         case .debug:
-            return "http://192.168.50.129:9909"
+            return "http://0.0.0.0:9909"
         case .production:
             return "https://www.youcat.cn"
         }

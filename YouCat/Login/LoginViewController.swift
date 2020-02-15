@@ -162,7 +162,7 @@ class YCLoginViewController: UIViewController, YCAlertProtocol {
         self.passwordLoginButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         self.passwordLoginButton.addTarget(self, action: #selector(self.passwordLoginButtonClick), for: .touchUpInside)
         self.passwordLoginButton.alpha = 1
-        self.passwordLoginButton.isHidden = true
+//        self.passwordLoginButton.isHidden = true
         
         self.codeLoginButton = UIButton()
         operateView.addSubview(self.codeLoginButton)

@@ -243,6 +243,7 @@ class YCThemeDetailViewController: YCViewController, YCImageProtocol, YCContentS
         let wGap = YCScreen.bounds.width * 0.06
         
         self.themeNameLabel = UILabel(frame: CGRect(x:offset + 20, y:0, width: bounds.width - wGap*2 - 170, height: 36))
+        self.themeNameLabel.numberOfLines = 0
         self.topView.addSubview(self.themeNameLabel)
         self.themeNameLabel.textColor = YCStyleColor.black
         self.themeNameLabel.font = UIFont.boldSystemFont(ofSize: 32)
@@ -326,11 +327,12 @@ class YCThemeDetailViewController: YCViewController, YCImageProtocol, YCContentS
             self.themeDescLabel.text = ""
             self.followButton.status = .Unfollow
         }
+       
+        let wGap = bounds.width * 0.06
+        self.themeNameLabel.frame.size.width = bounds.width - wGap*2 - 125
+        self.themeDescLabel.frame.size.width = bounds.width - wGap*2 - 50
         self.themeNameLabel.sizeToFit()
         self.themeDescLabel.sizeToFit()
-        let wGap = bounds.width * 0.06
-        self.themeNameLabel.frame.size.width = bounds.width - wGap*2 - 170
-        self.themeDescLabel.frame.size.width = bounds.width - wGap*2 - 50
         var topH:CGFloat = 1
         switch stypleType {
         case 1:
