@@ -58,7 +58,6 @@
 		256299C421808002005FDDFC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 256299C321808002005FDDFC /* Assets.xcassets */; };
 		256299C92180A6AB005FDDFC /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256299C82180A6AB005FDDFC /* UserViewController.swift */; };
 		256299CB21849004005FDDFC /* PublishDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256299CA21849004005FDDFC /* PublishDetailViewController.swift */; };
-		256299CD2185A049005FDDFC /* SliderView_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256299CC2185A049005FDDFC /* SliderView_test.swift */; };
 		256299CF21870608005FDDFC /* PublishDetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256299CE21870608005FDDFC /* PublishDetailViewCell.swift */; };
 		25731CD622F172B600FB49B1 /* VideoUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25731CD522F172B600FB49B1 /* VideoUIView.swift */; };
 		257B040721D642180004FB1B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 257B040621D642180004FB1B /* QuartzCore.framework */; };
@@ -98,22 +97,21 @@
 		2C827F48206F3EEB0035DCE2 /* ThemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C827F47206F3EEB0035DCE2 /* ThemeViewController.swift */; };
 		4BDCF867747000828440DF7E /* Pods_YouCatTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D76547DA6CCEE139A5F6E084 /* Pods_YouCatTests.framework */; };
 		83A6F551E87BF929BB599A40 /* Pods_YouCat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F17FB4EF2FA68C8A2CD9B94 /* Pods_YouCat.framework */; };
-
-		951F7E7822567DE00066589F /* YCAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 951F7E7722567DE00066589F /* YCAssets.xcassets */; };
-		952318012277FA940092B8B4 /* QCMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952317FF2277FA940092B8B4 /* QCMethod.swift */; };
-		952318022277FA940092B8B4 /* CircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952318002277FA940092B8B4 /* CircleProgressView.swift */; };
-		9529EC8A225676BF006E0CC4 /* YCPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC86225676BE006E0CC4 /* YCPreviewViewController.swift */; };
-		9529EC8B225676BF006E0CC4 /* YCImagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC87225676BE006E0CC4 /* YCImagePickerViewController.swift */; };
-		9529EC8C225676BF006E0CC4 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC88225676BE006E0CC4 /* CameraController.swift */; };
-		9529EC8D225676BF006E0CC4 /* YCCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC89225676BF006E0CC4 /* YCCaptureViewController.swift */; };
-		9529EC8F22567779006E0CC4 /* YCDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9529EC8E22567779006E0CC4 /* YCDemoViewController.swift */; };
-		9529EC912256778B006E0CC4 /* YCCapture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9529EC902256778B006E0CC4 /* YCCapture.storyboard */; };
-		953EF1782270CF88001D8D86 /* YCClip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 953EF1762270CF88001D8D86 /* YCClip.storyboard */; };
-		953EF1792270CF88001D8D86 /* YCClipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953EF1772270CF88001D8D86 /* YCClipViewController.swift */; };
-
+		9534A85123F95A850096F41B /* YCPhotos.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9534A84423F95A850096F41B /* YCPhotos.storyboard */; };
+		9534A85223F95A850096F41B /* YCCapture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9534A84523F95A850096F41B /* YCCapture.storyboard */; };
+		9534A85323F95A850096F41B /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9534A84623F95A850096F41B /* CameraController.swift */; };
+		9534A85423F95A850096F41B /* YCCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9534A84723F95A850096F41B /* YCCaptureViewController.swift */; };
+		9534A85523F95A850096F41B /* YCImagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9534A84823F95A850096F41B /* YCImagePickerViewController.swift */; };
+		9534A85623F95A850096F41B /* QCMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9534A84923F95A850096F41B /* QCMethod.swift */; };
+		9534A85723F95A850096F41B /* YCDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9534A84A23F95A850096F41B /* YCDemoViewController.swift */; };
+		9534A85823F95A850096F41B /* YCAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9534A84B23F95A850096F41B /* YCAssets.xcassets */; };
+		9534A85923F95A850096F41B /* YCClip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9534A84C23F95A850096F41B /* YCClip.storyboard */; };
+		9534A85A23F95A850096F41B /* YCPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9534A84D23F95A850096F41B /* YCPreviewViewController.swift */; };
+		9534A85B23F95A850096F41B /* YCClipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9534A84E23F95A850096F41B /* YCClipViewController.swift */; };
+		9534A85C23F95A850096F41B /* YCPhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9534A84F23F95A850096F41B /* YCPhotosViewController.swift */; };
+		9534A85D23F95A850096F41B /* CircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9534A85023F95A850096F41B /* CircleProgressView.swift */; };
 		959CE20A22C0EDE600D683E7 /* ThemeTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 959CE20922C0EDE600D683E7 /* ThemeTransition.swift */; };
 		95C175CB22D0912A006DE231 /* ThemeNavigationTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C175CA22D0912A006DE231 /* ThemeNavigationTransition.swift */; };
-
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -260,7 +258,6 @@
 		256299C321808002005FDDFC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = YouCat/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		256299C82180A6AB005FDDFC /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 		256299CA21849004005FDDFC /* PublishDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishDetailViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
-		256299CC2185A049005FDDFC /* SliderView_test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView_test.swift; sourceTree = "<group>"; };
 		256299CE21870608005FDDFC /* PublishDetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishDetailViewCell.swift; sourceTree = "<group>"; };
 		25731CD522F172B600FB49B1 /* VideoUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoUIView.swift; sourceTree = "<group>"; };
 		257B040621D642180004FB1B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -310,22 +307,21 @@
 		5536AD062810EA944BFD8DAA /* Pods_YouCatUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouCatUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		581287F3A5F73B04B2906D2F /* Pods-YouCatTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCatTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCatTests/Pods-YouCatTests.release.xcconfig"; sourceTree = "<group>"; };
 		7EA9D9DE110AC0A34E1D6FE9 /* Pods-YouCat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCat.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCat/Pods-YouCat.release.xcconfig"; sourceTree = "<group>"; };
-
-		951F7E7722567DE00066589F /* YCAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = YCAssets.xcassets; sourceTree = "<group>"; };
-		952317FF2277FA940092B8B4 /* QCMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCMethod.swift; sourceTree = "<group>"; };
-		952318002277FA940092B8B4 /* CircleProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleProgressView.swift; sourceTree = "<group>"; };
-		9529EC86225676BE006E0CC4 /* YCPreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCPreviewViewController.swift; sourceTree = "<group>"; };
-		9529EC87225676BE006E0CC4 /* YCImagePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCImagePickerViewController.swift; sourceTree = "<group>"; };
-		9529EC88225676BE006E0CC4 /* CameraController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
-		9529EC89225676BF006E0CC4 /* YCCaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCCaptureViewController.swift; sourceTree = "<group>"; };
-		9529EC8E22567779006E0CC4 /* YCDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YCDemoViewController.swift; sourceTree = "<group>"; };
-		9529EC902256778B006E0CC4 /* YCCapture.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = YCCapture.storyboard; sourceTree = "<group>"; };
-		953EF1762270CF88001D8D86 /* YCClip.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = YCClip.storyboard; sourceTree = "<group>"; };
-		953EF1772270CF88001D8D86 /* YCClipViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCClipViewController.swift; sourceTree = "<group>"; };
-
+		9534A84423F95A850096F41B /* YCPhotos.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = YCPhotos.storyboard; sourceTree = "<group>"; };
+		9534A84523F95A850096F41B /* YCCapture.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = YCCapture.storyboard; sourceTree = "<group>"; };
+		9534A84623F95A850096F41B /* CameraController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
+		9534A84723F95A850096F41B /* YCCaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCCaptureViewController.swift; sourceTree = "<group>"; };
+		9534A84823F95A850096F41B /* YCImagePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCImagePickerViewController.swift; sourceTree = "<group>"; };
+		9534A84923F95A850096F41B /* QCMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCMethod.swift; sourceTree = "<group>"; };
+		9534A84A23F95A850096F41B /* YCDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCDemoViewController.swift; sourceTree = "<group>"; };
+		9534A84B23F95A850096F41B /* YCAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = YCAssets.xcassets; sourceTree = "<group>"; };
+		9534A84C23F95A850096F41B /* YCClip.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = YCClip.storyboard; sourceTree = "<group>"; };
+		9534A84D23F95A850096F41B /* YCPreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCPreviewViewController.swift; sourceTree = "<group>"; };
+		9534A84E23F95A850096F41B /* YCClipViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCClipViewController.swift; sourceTree = "<group>"; };
+		9534A84F23F95A850096F41B /* YCPhotosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCPhotosViewController.swift; sourceTree = "<group>"; };
+		9534A85023F95A850096F41B /* CircleProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleProgressView.swift; sourceTree = "<group>"; };
 		959CE20922C0EDE600D683E7 /* ThemeTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ThemeTransition.swift; path = YouCat/ThemeTransition.swift; sourceTree = SOURCE_ROOT; };
 		95C175CA22D0912A006DE231 /* ThemeNavigationTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeNavigationTransition.swift; sourceTree = "<group>"; };
-
 		D76547DA6CCEE139A5F6E084 /* Pods_YouCatTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouCatTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E309D7DCD1368C5CF318F47C /* Pods-YouCatTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCatTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouCatTests/Pods-YouCatTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -566,11 +562,8 @@
 		2C3441F8203D89F3008BF439 /* YouCat */ = {
 			isa = PBXGroup;
 			children = (
-
-				9529EC85225676A2006E0CC4 /* Capture */,
-
+				9534A84323F95A850096F41B /* Capture */,
 				25F66319237025DC0008D18D /* 喵萌.entitlements */,
-
 				25D721BE21A6E0E8007F5648 /* Header */,
 				25D721C121A6E8F2007F5648 /* Login */,
 				252B900221AFDEDA00E41842 /* Setting */,
@@ -589,7 +582,6 @@
 				2C3441F9203D89F3008BF439 /* AppDelegate.swift */,
 				256299C321808002005FDDFC /* Assets.xcassets */,
 				25B878E9215A3A1D00E30C91 /* RootTabbarController.swift */,
-				256299CC2185A049005FDDFC /* SliderView_test.swift */,
 				253BBAD9219C4AC900DAD5BB /* VideoVIew_test.swift */,
 				2C3441FB203D89F3008BF439 /* ViewController.swift */,
 				2C3441FD203D89F3008BF439 /* Main.storyboard */,
@@ -662,20 +654,22 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		9529EC85225676A2006E0CC4 /* Capture */ = {
+		9534A84323F95A850096F41B /* Capture */ = {
 			isa = PBXGroup;
 			children = (
-				9529EC88225676BE006E0CC4 /* CameraController.swift */,
-				952318002277FA940092B8B4 /* CircleProgressView.swift */,
-				952317FF2277FA940092B8B4 /* QCMethod.swift */,
-				9529EC89225676BF006E0CC4 /* YCCaptureViewController.swift */,
-				9529EC87225676BE006E0CC4 /* YCImagePickerViewController.swift */,
-				9529EC86225676BE006E0CC4 /* YCPreviewViewController.swift */,
-				953EF1772270CF88001D8D86 /* YCClipViewController.swift */,
-				953EF1762270CF88001D8D86 /* YCClip.storyboard */,
-				9529EC8E22567779006E0CC4 /* YCDemoViewController.swift */,
-				9529EC902256778B006E0CC4 /* YCCapture.storyboard */,
-				951F7E7722567DE00066589F /* YCAssets.xcassets */,
+				9534A84423F95A850096F41B /* YCPhotos.storyboard */,
+				9534A84523F95A850096F41B /* YCCapture.storyboard */,
+				9534A84623F95A850096F41B /* CameraController.swift */,
+				9534A84723F95A850096F41B /* YCCaptureViewController.swift */,
+				9534A84823F95A850096F41B /* YCImagePickerViewController.swift */,
+				9534A84923F95A850096F41B /* QCMethod.swift */,
+				9534A84A23F95A850096F41B /* YCDemoViewController.swift */,
+				9534A84B23F95A850096F41B /* YCAssets.xcassets */,
+				9534A84C23F95A850096F41B /* YCClip.storyboard */,
+				9534A84D23F95A850096F41B /* YCPreviewViewController.swift */,
+				9534A84E23F95A850096F41B /* YCClipViewController.swift */,
+				9534A84F23F95A850096F41B /* YCPhotosViewController.swift */,
+				9534A85023F95A850096F41B /* CircleProgressView.swift */,
 			);
 			path = Capture;
 			sourceTree = "<group>";
@@ -885,12 +879,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C344204203D89F3008BF439 /* LaunchScreen.storyboard in Resources */,
-				951F7E7822567DE00066589F /* YCAssets.xcassets in Resources */,
-				9529EC912256778B006E0CC4 /* YCCapture.storyboard in Resources */,
 				252B900921B038AF00E41842 /* Localizable.strings in Resources */,
-				953EF1782270CF88001D8D86 /* YCClip.storyboard in Resources */,
 				2C3441FF203D89F3008BF439 /* Main.storyboard in Resources */,
+				9534A85123F95A850096F41B /* YCPhotos.storyboard in Resources */,
+				9534A85823F95A850096F41B /* YCAssets.xcassets in Resources */,
 				256299C421808002005FDDFC /* Assets.xcassets in Resources */,
+				9534A85923F95A850096F41B /* YCClip.storyboard in Resources */,
+				9534A85223F95A850096F41B /* YCCapture.storyboard in Resources */,
 				252B901121B040B500E41842 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1022,7 +1017,6 @@
 				256299C0217DEB41005FDDFC /* PublishCollectionViewCell.swift in Sources */,
 				256299CB21849004005FDDFC /* PublishDetailViewController.swift in Sources */,
 				252B902121B539B700E41842 /* UploadController.swift in Sources */,
-				9529EC8F22567779006E0CC4 /* YCDemoViewController.swift in Sources */,
 				25B878F1215BA01A00E30C91 /* ImageController.swift in Sources */,
 				25B878AA215510C200E30C91 /* DeviceManager.swift in Sources */,
 				959CE20A22C0EDE600D683E7 /* ThemeTransition.swift in Sources */,
@@ -1037,45 +1031,35 @@
 				2530526E214F8ADE00BB9624 /* CommentRequest.swift in Sources */,
 				252B901621B5335C00E41842 /* UploadRequest.swift in Sources */,
 				253052542147F20B00BB9624 /* BaseModel.swift in Sources */,
+				9534A85A23F95A850096F41B /* YCPreviewViewController.swift in Sources */,
 				252E5269217DA4C100C27826 /* FollowButton.swift in Sources */,
 				254C9C3121EF025C0057A023 /* ShareProtocol.swift in Sources */,
 				25288ED621B67D7100A333E6 /* LoadingView.swift in Sources */,
 				25B878EA215A3A1D00E30C91 /* RootTabbarController.swift in Sources */,
 				25B878A52153CAB400E30C91 /* CommentDomain.swift in Sources */,
 				25305269214C237C00BB9624 /* ThemeRequest.swift in Sources */,
+				9534A85D23F95A850096F41B /* CircleProgressView.swift in Sources */,
 				25D721C521A7E737007F5648 /* LoginProtocol.swift in Sources */,
+				9534A85323F95A850096F41B /* CameraController.swift in Sources */,
 				25368B76217A12EA00C3EB56 /* ThemeTableViewCell.swift in Sources */,
-				9529EC8B225676BF006E0CC4 /* YCImagePickerViewController.swift in Sources */,
 				25D721C321A7DE6E007F5648 /* LoginViewController.swift in Sources */,
 				2C3441FC203D89F3008BF439 /* ViewController.swift in Sources */,
 				25305270214F996D00BB9624 /* BaseRequest.swift in Sources */,
 				2C827F48206F3EEB0035DCE2 /* ThemeViewController.swift in Sources */,
 				2C3441FA203D89F3008BF439 /* AppDelegate.swift in Sources */,
-				9529EC8C225676BF006E0CC4 /* CameraController.swift in Sources */,
 				2530525A2147FB0600BB9624 /* MediaModel.swift in Sources */,
 				25731CD622F172B600FB49B1 /* VideoUIView.swift in Sources */,
 				257E895A21C394990084944E /* CommentListViewController.swift in Sources */,
 				253052582147FA2900BB9624 /* UserModel.swift in Sources */,
-				952318022277FA940092B8B4 /* CircleProgressView.swift in Sources */,
 				25B878A82154F8B200E30C91 /* UserManager.swift in Sources */,
-
-				9529EC8A225676BF006E0CC4 /* YCPreviewViewController.swift in Sources */,
-
 				25562C6222760DBB004F1BD6 /* PhotoAlbumUtil.swift in Sources */,
-
 				252B900E21B03A5A00E41842 /* LanguageHelper.swift in Sources */,
+				9534A85B23F95A850096F41B /* YCClipViewController.swift in Sources */,
 				25B878EF215B674000E30C91 /* StyleColor.swift in Sources */,
 				252B901821B533D800E41842 /* UploadModel.swift in Sources */,
 				252B901F21B5397B00E41842 /* UploadAction.swift in Sources */,
 				253052502147D50B00BB9624 /* BaseDomain.swift in Sources */,
-				952318012277FA940092B8B4 /* QCMethod.swift in Sources */,
 				2538AD2721B948F30021F245 /* CommentViewController.swift in Sources */,
-
-				953EF1792270CF88001D8D86 /* YCClipViewController.swift in Sources */,
-				256299CD2185A049005FDDFC /* SliderView.swift in Sources */,
-
-				256299CD2185A049005FDDFC /* SliderView_test.swift in Sources */,
-
 				256299CF21870608005FDDFC /* PublishDetailViewCell.swift in Sources */,
 				25D0CCCA2179EF8600809D3D /* DateManager.swift in Sources */,
 				255846C122B1354300782021 /* ErrorView.swift in Sources */,
@@ -1084,19 +1068,19 @@
 				25305260214A759200BB9624 /* ThemeModel.swift in Sources */,
 				253BBADA219C4ACA00DAD5BB /* VideoVIew_test.swift in Sources */,
 				252B902321B5707400E41842 /* UpdateUserViewController.swift in Sources */,
+				9534A85423F95A850096F41B /* YCCaptureViewController.swift in Sources */,
 				2529087E21C9193300300D44 /* CommentListViewCell.swift in Sources */,
+				9534A85723F95A850096F41B /* YCDemoViewController.swift in Sources */,
 				25562C6A22772C96004F1BD6 /* UserListViewController.swift in Sources */,
 				95C175CB22D0912A006DE231 /* ThemeNavigationTransition.swift in Sources */,
 				252B900421AFDEF100E41842 /* SettingViewController.swift in Sources */,
 				253052722150DFE000BB9624 /* ThemeDomain.swift in Sources */,
 				256299C221802589005FDDFC /* PublishCollectionViewLayout.swift in Sources */,
 				25B878EC215A72F000E30C91 /* PublishTableViewCell.swift in Sources */,
+				9534A85523F95A850096F41B /* YCImagePickerViewController.swift in Sources */,
 				2530526B214F86B900BB9624 /* LikeRequest.swift in Sources */,
-
-				9529EC8D225676BF006E0CC4 /* YCCaptureViewController.swift in Sources */,
-
 				25562C6D22773604004F1BD6 /* UserTableViewCell.swift in Sources */,
-
+				9534A85623F95A850096F41B /* QCMethod.swift in Sources */,
 				25D0CCCC2179FF4C00809D3D /* ContentProtocol.swift in Sources */,
 				25305262214A840500BB9624 /* LikeModel.swift in Sources */,
 				25305264214AA80A00BB9624 /* CommentModel.swift in Sources */,
@@ -1106,6 +1090,7 @@
 				25D721C721A9A9F3007F5648 /* SetUserIconViewController.swift in Sources */,
 				25305267214BB5CA00BB9624 /* UserRequest.swift in Sources */,
 				252E5267217DA3AE00C27826 /* ThemeDetailViewController.swift in Sources */,
+				9534A85C23F95A850096F41B /* YCPhotosViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1303,7 +1288,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 678ACPN786;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/ShareSDK/Required",
