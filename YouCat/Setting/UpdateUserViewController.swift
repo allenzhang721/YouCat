@@ -83,7 +83,7 @@ class YCUpdateNicknameViewController: UIViewController, YCContentStringProtocol,
         self.nicknameTextField.snp.makeConstraints { (make) in
             make.left.equalTo(22)
             make.right.equalTo(-22)
-            make.top.equalTo(YCScreen.safeArea.top+54)
+            make.top.equalTo(YCScreen.safeArea.top+64)
             make.height.equalTo(38)
         }
         self.nicknameTextField.delegate = self
@@ -161,13 +161,23 @@ class YCUpdateNicknameViewController: UIViewController, YCContentStringProtocol,
         let title = UILabel()
         self.view.addSubview(title)
         title.snp.makeConstraints { (make) in
-            make.centerY.equalTo(saveButton).offset(0)
+            make.centerY.equalTo(self.saveButton).offset(0)
             make.centerX.equalTo(self.view).offset(0)
         }
         title.textColor = YCStyleColor.black
         title.font = UIFont.systemFont(ofSize: 18)
         title.textAlignment = .center
         title.text = YCLanguageHelper.getString(key: "EditNicknameTitle")
+        
+        let lineView_1 = UIView()
+        self.view.addSubview(lineView_1)
+        lineView_1.snp.makeConstraints { (make) in
+            make.top.equalTo(self.saveButton.snp.bottom).offset(0)
+            make.left.equalTo(0)
+            make.right.equalTo(0)
+            make.height.equalTo(0.5)
+        }
+        lineView_1.backgroundColor = YCStyleColor.grayWhite
     }
 }
 
@@ -365,7 +375,7 @@ class YCUpdateSignViewController: UIViewController, YCContentStringProtocol, YCA
         self.signTextView.snp.makeConstraints { (make) in
             make.left.equalTo(22)
             make.right.equalTo(-22)
-            make.top.equalTo(YCScreen.safeArea.top+54)
+            make.top.equalTo(YCScreen.safeArea.top+64)
         }
         self.signTextView.delegate = self
         self.signTextView.isScrollEnabled = false
@@ -452,13 +462,23 @@ class YCUpdateSignViewController: UIViewController, YCContentStringProtocol, YCA
         let title = UILabel()
         self.view.addSubview(title)
         title.snp.makeConstraints { (make) in
-            make.centerY.equalTo(saveButton).offset(0)
+            make.centerY.equalTo(self.saveButton).offset(0)
             make.centerX.equalTo(self.view).offset(0)
         }
         title.textColor = YCStyleColor.black
         title.font = UIFont.systemFont(ofSize: 18)
         title.textAlignment = .center
         title.text = YCLanguageHelper.getString(key: "EditBioTitle")
+        
+        let lineView_1 = UIView()
+        self.view.addSubview(lineView_1)
+        lineView_1.snp.makeConstraints { (make) in
+            make.top.equalTo(self.saveButton.snp.bottom).offset(0)
+            make.left.equalTo(0)
+            make.right.equalTo(0)
+            make.height.equalTo(0.5)
+        }
+        lineView_1.backgroundColor = YCStyleColor.grayWhite
     }
 }
 

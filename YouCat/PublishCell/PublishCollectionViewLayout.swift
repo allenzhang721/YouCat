@@ -34,13 +34,13 @@ class YCCollectionViewWaterfallLayout: UICollectionViewLayout {
         }
     }
     
-    public var minimumLineSpacing: Float = 10.0 {
+    public var minimumLineSpacing: Float = 20.0 {
         didSet {
             self.invalidateIfNotEqual(oldValue: oldValue as AnyObject, newValue: minimumLineSpacing as AnyObject)
         }
     }
     
-    public var minimumInteritemSpacing: Float = 10.0 {
+    public var minimumInteritemSpacing: Float = 20.0 {
         didSet {
             self.invalidateIfNotEqual(oldValue: oldValue as AnyObject, newValue: minimumInteritemSpacing as AnyObject)
         }

@@ -16,29 +16,74 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
     
     var window: UIWindow?
 
-    private func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UIButton.initializeMethod()
         self.setup()
         
         WeiboSDK.registerApp(YCSocialConfigs.weibo.appKey)
         WeiboSDK.enableDebugMode(true)
         
-        WXApi.registerApp(YCSocialConfigs.weChat.appID)
+        WXApi.registerApp(YCSocialConfigs.weChat.appID, universalLink: YCSocialConfigs.universalLink)
         return true
     }
     
-    private func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        
-        let urlKey: String = options[UIApplication.OpenURLOptionsKey.sourceApplication] as! String
-        
-        if urlKey == "com.sina.weibo" {
-            // 新浪微博 的回调
-            return WeiboSDK.handleOpen(url, delegate: self)
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        if let a = userActivity.webpageURL {
+            let des = a.description
+            print("webpageURL = ",des)
+            if des.contains(YCSocialConfigs.universalLink) {
+                var parament: [String : String] = [:]
+                let uniLink = YCSocialConfigs.universalLink + "/"
+                var newStr = "";
+                if des.contains("?"){
+                    newStr = des.ycSubString(fromStr: uniLink, toStr: "?")
+                    let parStrs = des.ycSubString(fromStr: "?", offsetBy: 1)
+                    let parStrings: [String] = parStrs.split(separator: "&").compactMap { "\($0)" }
+                    for parStr in parStrings {
+                        let name = parStr.ycSubString(toStr: "=", offsetBy: -1)
+                        let value = parStr.ycSubString(fromStr: "=", offsetBy: 1)
+                        parament[name] = value
+                    }
+                }else {
+                    newStr = des.ycSubString(from: uniLink.count)
+                }
+                if newStr.contains("wx") {
+                    return WXApi.handleOpenUniversalLink(userActivity, delegate: self)
+                }else if newStr.contains("user") {
+                    self.universalLinkUser(par: parament)
+                }else if newStr.contains("publish"){
+                    self.universalLinkPublish(par: parament)
+                }else if newStr.contains("theme") {
+                    self.universalLinkTheme(par: parament)
+                }
+            }else {
+                return false
+            }
         }
-        if urlKey == "com.tencent.xin" {
+        return false
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        
+        if url.scheme == "wx78fe2e04c0038988" {
             // 微信 的回调
             return  WXApi.handleOpen(url, delegate: self)
         }
+        if url.scheme == "wb1479783390" {
+            // 新浪微博 的回调
+            return WeiboSDK.handleOpen(url, delegate: self)
+        }
+        
+//        if let urlKey: String = options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String {
+//            if urlKey == "com.sina.weibo" {
+//                // 新浪微博 的回调
+//                return WeiboSDK.handleOpen(url, delegate: self)
+//            }
+//            if urlKey == "com.tencent.xin" {
+//                // 微信 的回调
+//
+//            }
+//        }
         
         return true
     }
@@ -48,6 +93,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
         if url.scheme == "wb1479783390" {
             // 新浪微博 的回调
             return WeiboSDK.handleOpen(url, delegate: self)
+        }
+        if url.scheme == "wx78fe2e04c0038988" {
+            // 微信 的回调
+            return WXApi.handleOpen(url, delegate: self)
         }
         
         return true
@@ -106,11 +155,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
         }
     }
     
-    func onReq(_ req: BaseReq!) {
+    func onReq(_ req: BaseReq) {
         
     }
     
-    func onResp(_ resp: BaseResp!) {
+    func onResp(_ resp: BaseResp) {
         // 这里是使用异步的方式来获取的
         let sendRes: SendAuthResp? = resp as? SendAuthResp
         let queue = DispatchQueue(label: "wechatLoginQueue")
@@ -191,7 +240,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
     }
 
     func setup() {
-        ImageCache.default.maxMemoryCost = UInt(200 * 1024 * 1024) // Allen: 200 MB
+        ImageCache.default.maxMemoryCost = UInt(512 * 1024 * 1024) // Allen: 256 MB
         // Override point for customization after application launch.
         #if DEBUG
             FilePath.baseURL = RequestHost.debug.description;
@@ -215,12 +264,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WeiboSDKDelegate, WXApiDe
                     if top == 0 {
                         top = 22
                     }
-                    let bottom = top==44 ? 34 : 0
-                    YCScreen.safeArea = UIEdgeInsets(top: top, left: 0, bottom: CGFloat(bottom), right: 0)
+
+                    let bottom: CGFloat = top==44 ? 34 : 0
+                    YCScreen.safeArea = UIEdgeInsets(top: top, left: 0, bottom: bottom, right: 0)
+                    YCScreen.fullScreenArea = UIEdgeInsets(top: 0, left: 0, bottom: bottom+49, right: 0)
                 }
             } else {
                 // Fallback on earlier versions
                 YCScreen.safeArea = UIEdgeInsets(top: 22, left: 0, bottom: 0, right: 0)
+                YCScreen.fullScreenArea = UIEdgeInsets(top: 0, left: 0, bottom: 49, right: 0)
+            }
+        }
+    }
+    
+    func universalLinkUser(par: [String:String]) {
+        if par.keys.contains("uid"), let uuid = par["uid"]{
+            YCUserDomain().userDetailByUUID(uuid: uuid) { (model) in
+                if let mo = model, mo.result, let userDetail = mo.baseModel as? YCUserDetailModel {
+                    NotificationCenter.default.post(name: NSNotification.Name("UniversalLinkUserView"), object: userDetail)
+                }
+            }
+        }
+    }
+    
+    func universalLinkPublish(par: [String:String]) {
+        if par.keys.contains("uid"), let uuid = par["uid"]{
+            YCPublishDomain().publishDetaiByUUID(uuid: uuid) { (model) in
+                if let mo = model, mo.result, let publish = mo.baseModel as? YCPublishModel {
+                    NotificationCenter.default.post(name: NSNotification.Name("UniversalLinkPublishView"), object: publish)
+                }
+            }
+        }
+    }
+    
+    func universalLinkTheme(par: [String:String]) {
+        if par.keys.contains("uid"), let uuid = par["uid"]{
+            YCThemeDomain().themeDetailByUUID(uuid: uuid) { (model) in
+                if let mo = model, mo.result, let themeDetail = mo.baseModel as? YCThemeDetailModel{
+                    NotificationCenter.default.post(name: NSNotification.Name("UniversalLinkThemeView"), object: themeDetail)
+                }
             }
         }
     }

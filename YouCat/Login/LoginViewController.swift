@@ -64,7 +64,9 @@ class YCLoginViewController: UIViewController, YCAlertProtocol {
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = true
         super.viewWillAppear(animated)
-        self.phoneTextInput.becomeFirstResponder()
+        if(YCScreen.bounds.height > 568) {
+            self.phoneTextInput.becomeFirstResponder()
+        }
         
         if WXApi.isWXAppInstalled() {
             self.wechatLoginButton.isHidden = false
@@ -77,11 +79,12 @@ class YCLoginViewController: UIViewController, YCAlertProtocol {
             self.weiboLoginButton.isHidden = true
         }
         if !self.weiboLoginButton.isHidden && !self.wechatLoginButton.isHidden {
+            let centXGap = YCScreen.bounds.width/8
             self.weiboLoginButton.snp.updateConstraints { (make) in
-                make.centerX.equalTo(self.loginButton).offset(32)
+                make.centerX.equalTo(self.loginButton).offset(centXGap)
             }
             self.wechatLoginButton.snp.updateConstraints { (make) in
-                make.centerX.equalTo(self.loginButton).offset(-32)
+                make.centerX.equalTo(self.loginButton).offset(0-centXGap)
             }
             self.loginOtherLabel.isHidden = false
         }else if !self.weiboLoginButton.isHidden {
@@ -159,6 +162,7 @@ class YCLoginViewController: UIViewController, YCAlertProtocol {
         self.passwordLoginButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         self.passwordLoginButton.addTarget(self, action: #selector(self.passwordLoginButtonClick), for: .touchUpInside)
         self.passwordLoginButton.alpha = 1
+//        self.passwordLoginButton.isHidden = true
         
         self.codeLoginButton = UIButton()
         operateView.addSubview(self.codeLoginButton)
@@ -179,7 +183,7 @@ class YCLoginViewController: UIViewController, YCAlertProtocol {
         self.titleLabel = UILabel()
         self.view.addSubview(self.titleLabel)
         self.titleLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.passwordLoginButton.snp.bottom).offset(15)
+            make.top.equalTo(self.passwordLoginButton.snp.bottom).offset(5)
             make.right.equalTo(0)
             make.left.equalTo(0)
         }
@@ -191,12 +195,12 @@ class YCLoginViewController: UIViewController, YCAlertProtocol {
         let phoneView = UIView()
         self.view.addSubview(phoneView)
         phoneView.snp.makeConstraints { (make) in
-            make.top.equalTo(titleLabel.snp.bottom).offset(15)
+            make.top.equalTo(titleLabel.snp.bottom).offset(30)
             make.centerX.equalTo(titleLabel).offset(0)
             make.width.equalTo(280)
             make.height.equalTo(44)
         }
-        phoneView.layer.borderColor = YCStyleColor.red.cgColor
+        phoneView.layer.borderColor = YCStyleColor.gray.cgColor
         phoneView.layer.borderWidth = 1
         phoneView.layer.cornerRadius = 4
         
@@ -221,7 +225,7 @@ class YCLoginViewController: UIViewController, YCAlertProtocol {
             make.width.equalTo(1)
             make.height.equalTo(28)
         }
-        lineView.backgroundColor = YCStyleColor.red
+        lineView.backgroundColor = YCStyleColor.gray
         
         self.phoneTextInput = UITextField()
         self.view.addSubview(self.phoneTextInput)
@@ -242,7 +246,7 @@ class YCLoginViewController: UIViewController, YCAlertProtocol {
         self.codeLoginView = UIView()
         self.view.addSubview(self.codeLoginView)
         self.codeLoginView.snp.makeConstraints { (make) in
-            make.top.equalTo(phoneView.snp.bottom).offset(10)
+            make.top.equalTo(phoneView.snp.bottom).offset(20)
             make.centerX.equalTo(titleLabel).offset(0)
             make.width.equalTo(280)
             make.height.equalTo(44)
@@ -256,7 +260,7 @@ class YCLoginViewController: UIViewController, YCAlertProtocol {
             make.height.equalTo(self.codeLoginView)
             make.width.equalTo(190)
         }
-        codeInputView.layer.borderColor = YCStyleColor.red.cgColor
+        codeInputView.layer.borderColor = YCStyleColor.gray.cgColor
         codeInputView.layer.borderWidth = 1
         codeInputView.layer.cornerRadius = 4
         
@@ -284,7 +288,7 @@ class YCLoginViewController: UIViewController, YCAlertProtocol {
             make.height.equalTo(self.codeLoginView)
             make.width.equalTo(85)
         }
-        sendCodeLabelView.layer.borderColor = YCStyleColor.red.cgColor
+        sendCodeLabelView.layer.borderColor = YCStyleColor.gray.cgColor
         sendCodeLabelView.layer.borderWidth = 1
         sendCodeLabelView.layer.cornerRadius = 4
         
@@ -308,12 +312,12 @@ class YCLoginViewController: UIViewController, YCAlertProtocol {
         self.passwordLoginView = UIView()
         self.view.addSubview(self.passwordLoginView)
         self.passwordLoginView.snp.makeConstraints { (make) in
-            make.top.equalTo(phoneView.snp.bottom).offset(10)
+            make.top.equalTo(phoneView.snp.bottom).offset(20)
             make.centerX.equalTo(titleLabel).offset(0)
             make.width.equalTo(280)
             make.height.equalTo(44)
         }
-        self.passwordLoginView.layer.borderColor = YCStyleColor.red.cgColor
+        self.passwordLoginView.layer.borderColor = YCStyleColor.gray.cgColor
         self.passwordLoginView.layer.borderWidth = 1
         self.passwordLoginView.layer.cornerRadius = 4
         self.passwordLoginView.alpha = 0
@@ -338,37 +342,38 @@ class YCLoginViewController: UIViewController, YCAlertProtocol {
         
         self.loginButton = UIButton()
         self.view.addSubview(self.loginButton)
-        var gap = 20
-        if YCScreen.bounds.height < 600 {
-            gap = 10
-        }
         self.loginButton.snp.makeConstraints { (make) in
-            make.top.equalTo(self.codeLoginView.snp.bottom).offset(gap)
+            make.top.equalTo(self.codeLoginView.snp.bottom).offset(20)
             make.centerX.equalTo(self.codeLoginView).offset(0)
-            make.width.equalTo(150)
+            make.width.equalTo(280)
             make.height.equalTo(44)
         }
-        self.loginButton.setTitleColor(YCStyleColor.red, for: .normal)
+        self.loginButton.backgroundColor = YCStyleColor.red
+        self.loginButton.layer.borderColor = YCStyleColor.red.cgColor
+        self.loginButton.layer.borderWidth = 1
+        self.loginButton.layer.cornerRadius = 4
+        self.loginButton.setTitleColor(YCStyleColor.white, for: .normal)
         self.loginButton.setTitle(YCLanguageHelper.getString(key: "LoginLabel"), for: .normal)
-        self.loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 32)
+        self.loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         self.loginButton.addTarget(self, action: #selector(self.loginButtonClick), for: .touchUpInside)
         self.loginOtherLabel = UILabel()
         self.view.addSubview(self.loginOtherLabel)
         self.loginOtherLabel.snp.makeConstraints { (make) in
-            make.centerY.equalTo(self.view).offset(0)
+            make.centerY.equalTo(self.loginButton.snp.bottom).offset(50)
             make.right.equalTo(0)
             make.left.equalTo(0)
         }
         self.loginOtherLabel.textAlignment = .center
-        self.loginOtherLabel.textColor = YCStyleColor.black
+        self.loginOtherLabel.textColor = YCStyleColor.gray
         self.loginOtherLabel.font = UIFont.systemFont(ofSize: 12)
         self.loginOtherLabel.text = YCLanguageHelper.getString(key: "LoginOtherAccountLabel")
         
+        let centXGap = YCScreen.bounds.width / 4
         self.weiboLoginButton = UIButton()
         self.view.addSubview(self.weiboLoginButton)
         self.weiboLoginButton.snp.makeConstraints { (make) in
-            make.top.equalTo(self.loginOtherLabel.snp.bottom).offset(gap)
-            make.centerX.equalTo(self.loginButton).offset(32)
+            make.top.equalTo(self.loginOtherLabel.snp.bottom).offset(20)
+            make.centerX.equalTo(self.loginButton).offset(centXGap)
             make.width.equalTo(44)
             make.height.equalTo(44)
         }
@@ -379,8 +384,8 @@ class YCLoginViewController: UIViewController, YCAlertProtocol {
         self.wechatLoginButton = UIButton()
         self.view.addSubview(self.wechatLoginButton)
         self.wechatLoginButton.snp.makeConstraints { (make) in
-            make.top.equalTo(self.loginOtherLabel.snp.bottom).offset(gap)
-            make.centerX.equalTo(self.loginButton).offset(-32)
+            make.top.equalTo(self.loginOtherLabel.snp.bottom).offset(20)
+            make.centerX.equalTo(self.loginButton).offset(0-centXGap)
             make.width.equalTo(44)
             make.height.equalTo(44)
         }
@@ -598,7 +603,16 @@ extension YCLoginViewController {
             self.passwordLoginView.alpha = 1
             self.passwordTextInput.alpha = 1
         }) { (_) in
-            self.phoneTextInput.becomeFirstResponder()
+            if YCScreen.bounds.height > 568 {
+                self.phoneTextInput.becomeFirstResponder()
+            }else {
+                if self.phoneTextInput.isFirstResponder {
+                    self.phoneTextInput.resignFirstResponder()
+                }
+                if self.codeTextInput.isFirstResponder {
+                    self.codeTextInput.resignFirstResponder()
+                }
+            }
             self.isCodeLogin = false
         }
     }
@@ -613,7 +627,16 @@ extension YCLoginViewController {
             self.passwordLoginView.alpha = 0
             self.passwordTextInput.alpha = 0
         }) { (_) in
-            self.phoneTextInput.becomeFirstResponder()
+            if YCScreen.bounds.height > 568 {
+                self.phoneTextInput.becomeFirstResponder()
+            }else {
+                if self.phoneTextInput.isFirstResponder {
+                    self.phoneTextInput.resignFirstResponder()
+                }
+                if self.passwordTextInput.isFirstResponder {
+                    self.passwordTextInput.resignFirstResponder()
+                }
+            }
             self.isCodeLogin = true
         }
     }

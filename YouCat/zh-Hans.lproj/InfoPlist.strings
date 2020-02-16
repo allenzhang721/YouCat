@@ -6,3 +6,8 @@
   Copyright © 2018年 Curios. All rights reserved.
 */
 CFBundleDisplayName = "喵萌";
+
+NSContactsUsageDescription = "喵萌需要访问您的通讯录";
+NSPhotoLibraryUsageDescription = "喵萌需要访问您的相册";
+NSPhotoLibraryAddUsageDescription = "喵萌需要为您添加图片";
+NSCameraUsageDescription = "喵萌需要调用您的相机";

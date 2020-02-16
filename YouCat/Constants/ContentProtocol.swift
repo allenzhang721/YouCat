@@ -15,20 +15,47 @@ protocol YCNumberStringProtocol {
 extension YCNumberStringProtocol{
     
     func getNumberString(number: Int) -> String{
-        if number < 10000 {
-            return "\(number)"
-        }else if number < 100000000{
-            let tenT = Int(number/10000);
-            let thou = Int((number%10000)/1000)
-            if tenT < 100 {
-                return "\(tenT).\(thou)万"
+        let a = YCLanguageHelper.shareInstance.getUserLanguage()
+        if a == "zh-Hans"{
+            if number < 10000 {
+                return "\(number)"
+            }else if number < 100000000{
+                let tenT = Int(number/10000);
+                let thou = Int((number%10000)/1000)
+                if tenT < 100 {
+                    return "\(tenT).\(thou)万"
+                }else {
+                    return "\(tenT)万"
+                }
             }else {
-                return "\(tenT)万"
+                let hundredMil = Int(number/100000000);
+                return "\(hundredMil)亿"
             }
         }else {
-            let hundredMil = Int(number/100000000);
-            return "\(hundredMil)亿"
+            if number < 1000 {
+                return "\(number)"
+            }else if number < 1000000{
+                let tenT = Int(number/1000);
+                let thou = Int((number%1000)/100)
+                if tenT < 10 {
+                    return "\(tenT).\(thou)k"
+                }else {
+                    return "\(tenT)k"
+                }
+            }else if number < 1000000000{
+                let tenT = Int(number/1000000);
+                let thou = Int((number%1000000)/100)
+                if tenT < 10 {
+                    return "\(tenT).\(thou)m"
+                }else {
+                    return "\(tenT)m"
+                }
+            }else {
+                let hundredMil = Int(number/1000000000);
+                return "\(hundredMil)b"
+            }
         }
+        
     }
     
 }
@@ -54,11 +81,11 @@ extension YCContentStringProtocol {
                 let b = uuid.index(uuid.startIndex, offsetBy: 6)
                 let first = uuid[a..<b]
                 
-                return YCLanguageHelper.getString(key: "DefaultName")+String(first)
+                return YCLanguageHelper.getString(key: "DefaultUserName")+String(first)
             }
             return nikename
         }else {
-            return YCLanguageHelper.getString(key: "DefaultName")
+            return YCLanguageHelper.getString(key: "DefaultUserName")
         }
     }
     

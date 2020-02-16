@@ -55,6 +55,7 @@ class YCHomeViewController: UIViewController, YCImageProtocol {
         super.viewDidLoad()
         self.initView()
         NotificationCenter.default.addObserver(self, selector: #selector(self.loginUserChange(_:)), name: NSNotification.Name("LoginUserChange"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.refreshHome(_:)), name: NSNotification.Name("reFreshHome"), object: nil)
     }
     
     func initView() {
@@ -73,29 +74,38 @@ class YCHomeViewController: UIViewController, YCImageProtocol {
         self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.register(YCPublishTableViewCell.self, forCellReuseIdentifier: "YCHomeCell")
         
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 54))
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
        
-        self.userIcon = UIImageView();
-        headerView.addSubview(self.userIcon)
-        self.userIcon.snp.makeConstraints { (make) in
+        let iconView = UIView()
+        headerView.addSubview(iconView)
+        iconView.snp.makeConstraints { (make) in
             make.right.equalTo(-20)
-            make.top.equalTo(5)
+            make.top.equalTo(8)
             make.width.equalTo(44)
             make.height.equalTo(44)
         }
-        self.cropImageCircle(self.userIcon, 22)
+        
+        self.userIcon = UIImageView();
+        iconView.addSubview(self.userIcon)
+        self.userIcon.snp.makeConstraints { (make) in
+            make.right.equalTo(4)
+            make.top.equalTo(4)
+            make.width.equalTo(36)
+            make.height.equalTo(36)
+        }
+        self.cropImageCircle(self.userIcon, 18)
         self.userIcon.image = UIImage(named: "default_icon")
         
         let titleLabel = UILabel()
         headerView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { (make) in
-            make.left.equalTo(20)
-            make.centerY.equalTo(self.userIcon).offset(3)
+            make.left.equalTo(15)
+            make.centerY.equalTo(self.userIcon).offset(0)
         }
         titleLabel.numberOfLines = 1
         titleLabel.text = YCLanguageHelper.getString(key: "HomeLabel")
         titleLabel.textColor = YCStyleColor.black
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 26)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 36)
         
         let iconTap = UITapGestureRecognizer(target: self, action: #selector(self.iconTapHandler))
         self.userIcon.isUserInteractionEnabled = true
@@ -160,8 +170,15 @@ class YCHomeViewController: UIViewController, YCImageProtocol {
                     if self.updatePublishDate(modelList: modelList) {
                         self.tableView.reloadData()
                     }
+                    if modelList.count == 0 {
+                        self.footerFresh.endRefreshingWithNoMoreData()
+                        self.footerFresh.isHidden = true
+                    }else{
+                        self.footerFresh.endRefreshing()
+                    }
+                }else {
+                    self.footerFresh.endRefreshing()
                 }
-                self.footerFresh.endRefreshing()
             }else {
                 self.footerFresh.endRefreshing()
             }
@@ -199,6 +216,15 @@ extension YCHomeViewController: YCLoginProtocol {
     @objc func loginUserChange(_ notify: Notification) {
         self.isFirstLoad = true
         self.setUserIcon()
+    }
+    
+    @objc func refreshHome(_ notify: Notification) {
+        if self.tableView.contentOffset.y > 0 {
+            let offset = CGPoint(x: 0, y: 0)
+            self.tableView.setContentOffset(offset, animated: true)
+        }else {
+            self.headerFresh.beginRefreshing()
+        }
     }
     
     func setUserIcon(){
@@ -259,18 +285,20 @@ extension YCHomeViewController: YCPublishTableViewCellDelegate, YCAlertProtocol,
     
     func cellContentTap(_ cell: YCPublishTableViewCell?, contentIndex: Int) {
         if cell != nil, let publish = cell?.publishModel {
-            let publishDetail = YCPublishDetailViewController.getInstance()
+            let publishDetail = YCPublishDetailViewController.getInstance() as! YCPublishDetailViewController
             publishDetail.contentType = .HOME
             publishDetail.contentModel = publish
             publishDetail.contentIndex = contentIndex
             publishDetail.contents = [publish]
             publishDetail.contentID = publish.publishID
-            
-            let navigationController = UINavigationController(rootViewController: publishDetail)
-            navigationController.isNavigationBarHidden = true
-            self.present(navigationController, animated: true) {
-                
-            }
+
+            NotificationCenter.default.post(name: NSNotification.Name("RootPushPublishView"), object: publishDetail)
+
+//            let navigationController = UINavigationController(rootViewController: publishDetail)
+//            navigationController.isNavigationBarHidden = true
+//            self.present(navigationController, animated: true) {
+//
+//            }
         }
     }
     
@@ -302,11 +330,11 @@ extension YCHomeViewController: YCPublishTableViewCellDelegate, YCAlertProtocol,
     
     func cellCommentButtonClick(_ cell:YCPublishTableViewCell?){
         if let ce = cell, let publish = ce.publishModel {
-            let commentList = YCCommentListViewController.getInstance(.Publish, style: .Default) { (model) in
+            let commentList = YCCommentListViewController.getInstance(.Publish, style: .Default, completeBlock: { (model) in
                 if let publishModel = model as? YCPublishModel {
                     ce.changePublishCommentStatus(publish: publishModel)
                 }
-            }
+            }, pushBlock: nil, backBlock: nil)
             commentList.publishModel = publish
             let navigationController = UINavigationController(rootViewController: commentList)
             navigationController.isNavigationBarHidden = true

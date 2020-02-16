@@ -14,24 +14,6 @@ import Qiniu
 
 class YCSettingViewController: UIViewController, YCImageProtocol, YCContentStringProtocol, YCAlertProtocol {
     
-    static var _instaceArray: [YCSettingViewController] = [];
-    
-    static func getInstance() -> YCSettingViewController{
-        var _instance: YCSettingViewController
-        if _instaceArray.count > 0 {
-            _instance = _instaceArray[0]
-            _instaceArray.remove(at: 0)
-            return _instance
-        }else {
-            _instance = YCSettingViewController();
-        }
-        return _instance
-    }
-    
-    static func addInstance(instace: YCSettingViewController) {
-        _instaceArray.append(instace)
-    }
-    
     var userIcon: UIImageView!
     var nicknameLabel: UILabel!
     var signLabel: UILabel!
@@ -40,11 +22,14 @@ class YCSettingViewController: UIViewController, YCImageProtocol, YCContentStrin
     var logoutButton: UIButton!
     
     var loadingView: YCLoadingView!
+    var isGoto: Bool = false
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = true
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         super.viewWillAppear(animated)
         self.setValue()
+        self.isGoto = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -58,6 +43,9 @@ class YCSettingViewController: UIViewController, YCImageProtocol, YCContentStrin
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        if !self.isGoto {
+            self.resetViewController()
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -66,7 +54,6 @@ class YCSettingViewController: UIViewController, YCImageProtocol, YCContentStrin
     }
     
     func setValue() {
-        
         if let user = YCUserManager.loginUser {
             if let icon = user.icon {
                 let imgPath = icon.imagePath
@@ -93,23 +80,43 @@ class YCSettingViewController: UIViewController, YCImageProtocol, YCContentStrin
     func initView() {
         self.view.backgroundColor = YCStyleColor.white
         
-        let closeButton = UIButton()
-        closeButton.setImage(UIImage(named: "close_black"), for: .normal)
-        closeButton.setImage(UIImage(named: "close_black"), for: .highlighted)
-        closeButton.addTarget(self, action: #selector(self.closeButtonClick), for: .touchUpInside)
-        self.view.addSubview(closeButton)
-        closeButton.snp.makeConstraints { (make) in
-            make.right.equalTo(-10)
+        let backButton=UIButton()
+        backButton.setImage(UIImage(named: "back_black"), for: .normal)
+        backButton.setImage(UIImage(named: "back_black"), for: .highlighted)
+        backButton.addTarget(self, action: #selector(self.backButtonClick), for: .touchUpInside)
+        self.view.addSubview(backButton)
+        backButton.snp.makeConstraints { (make) in
             make.top.equalTo(YCScreen.safeArea.top)
+            make.left.equalTo(10)
             make.width.equalTo(44)
             make.height.equalTo(44)
         }
+        let title = UILabel()
+        self.view.addSubview(title)
+        title.snp.makeConstraints { (make) in
+            make.centerY.equalTo(backButton).offset(0)
+            make.centerX.equalTo(self.view).offset(0)
+        }
+        title.textColor = YCStyleColor.black
+        title.font = UIFont.systemFont(ofSize: 18)
+        title.textAlignment = .center
+        title.text = YCLanguageHelper.getString(key: "EditProfileTitle")
+        
+        let lineView_1 = UIView()
+        self.view.addSubview(lineView_1)
+        lineView_1.snp.makeConstraints { (make) in
+            make.top.equalTo(backButton.snp.bottom).offset(0)
+            make.left.equalTo(0)
+            make.right.equalTo(0)
+            make.height.equalTo(0.5)
+        }
+        lineView_1.backgroundColor = YCStyleColor.grayWhite
         
         self.userIcon = UIImageView()
         self.view.addSubview(self.userIcon)
         self.userIcon.snp.makeConstraints { (make) in
-            make.left.equalTo(20)
-            make.top.equalTo(YCScreen.safeArea.top+10)
+            make.right.equalTo(-44)
+            make.top.equalTo(lineView_1.snp.bottom).offset(20)
             make.width.equalTo(88)
             make.height.equalTo(88)
         }
@@ -127,22 +134,32 @@ class YCSettingViewController: UIViewController, YCImageProtocol, YCContentStrin
         iconChangeButton.setImage(UIImage(named: "icon_change"), for: .normal)
         iconChangeButton.addTarget(self, action: #selector(self.changeIconButtonClick), for: .touchUpInside)
         
-        let lineView_1 = UIView()
-        self.view.addSubview(lineView_1)
-        lineView_1.snp.makeConstraints { (make) in
-            make.top.equalTo(self.userIcon.snp.bottom).offset(20)
-            make.left.equalTo(20)
-            make.right.equalTo(-20)
-            make.height.equalTo(1)
+        let iconTitleLabel = UILabel()
+        self.view.addSubview(iconTitleLabel)
+        iconTitleLabel.snp.makeConstraints { (make) in
+            make.centerY.equalTo(self.userIcon.snp.centerY).offset(0)
+            make.left.equalTo(25)
+            make.height.equalTo(44)
         }
-        lineView_1.backgroundColor = YCStyleColor.gray
+        iconTitleLabel.textColor = YCStyleColor.black
+        iconTitleLabel.font = UIFont.systemFont(ofSize: 18)
+        iconTitleLabel.text = YCLanguageHelper.getString(key: "IconLabel")
+        
+        let iconNextImage = UIImageView()
+        iconNextImage.image = UIImage(named: "next_black")
+        self.view.addSubview(iconNextImage)
+        iconNextImage.snp.makeConstraints { (make) in
+            make.right.equalTo(-5)
+            make.centerY.equalTo(iconTitleLabel).offset(0)
+            make.width.equalTo(44)
+            make.height.equalTo(44)
+        }
         
         let nicknameTitleLabel = UILabel()
         self.view.addSubview(nicknameTitleLabel)
         nicknameTitleLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(lineView_1.snp.bottom).offset(5)
+            make.top.equalTo(self.userIcon.snp.bottom).offset(5)
             make.left.equalTo(25)
-            make.width.equalTo(60)
             make.height.equalTo(44)
         }
         nicknameTitleLabel.textColor = YCStyleColor.black
@@ -153,7 +170,7 @@ class YCSettingViewController: UIViewController, YCImageProtocol, YCContentStrin
         nicknameNextImage.image = UIImage(named: "next_black")
         self.view.addSubview(nicknameNextImage)
         nicknameNextImage.snp.makeConstraints { (make) in
-            make.right.equalTo(-10)
+            make.right.equalTo(-5)
             make.centerY.equalTo(nicknameTitleLabel).offset(0)
             make.width.equalTo(44)
             make.height.equalTo(44)
@@ -181,7 +198,6 @@ class YCSettingViewController: UIViewController, YCImageProtocol, YCContentStrin
         signTitleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(nicknameTitleLabel.snp.bottom).offset(5)
             make.left.equalTo(25)
-            make.width.equalTo(60)
             make.height.equalTo(44)
         }
         signTitleLabel.textColor = YCStyleColor.black
@@ -192,7 +208,7 @@ class YCSettingViewController: UIViewController, YCImageProtocol, YCContentStrin
         signNextImage.image = UIImage(named: "next_black")
         self.view.addSubview(signNextImage)
         signNextImage.snp.makeConstraints { (make) in
-            make.right.equalTo(-10)
+            make.right.equalTo(-5)
             make.centerY.equalTo(signTitleLabel).offset(0)
             make.width.equalTo(44)
             make.height.equalTo(44)
@@ -221,7 +237,6 @@ class YCSettingViewController: UIViewController, YCImageProtocol, YCContentStrin
         genderTitleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(signTitleLabel.snp.bottom).offset(5)
             make.left.equalTo(25)
-            make.width.equalTo(60)
             make.height.equalTo(44)
         }
         genderTitleLabel.textColor = YCStyleColor.black
@@ -232,7 +247,7 @@ class YCSettingViewController: UIViewController, YCImageProtocol, YCContentStrin
         genderNextImage.image = UIImage(named: "next_black")
         self.view.addSubview(genderNextImage)
         genderNextImage.snp.makeConstraints { (make) in
-            make.right.equalTo(-10)
+            make.right.equalTo(-5)
             make.centerY.equalTo(genderTitleLabel).offset(0)
             make.width.equalTo(44)
             make.height.equalTo(44)
@@ -260,7 +275,6 @@ class YCSettingViewController: UIViewController, YCImageProtocol, YCContentStrin
         phoneTitleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(genderTitleLabel.snp.bottom).offset(5)
             make.left.equalTo(25)
-            make.width.equalTo(60)
             make.height.equalTo(44)
         }
         phoneTitleLabel.textColor = YCStyleColor.black
@@ -271,7 +285,7 @@ class YCSettingViewController: UIViewController, YCImageProtocol, YCContentStrin
         phoneNextImage.image = UIImage(named: "next_black")
         self.view.addSubview(phoneNextImage)
         phoneNextImage.snp.makeConstraints { (make) in
-            make.right.equalTo(-10)
+            make.right.equalTo(-5)
             make.centerY.equalTo(phoneTitleLabel).offset(0)
             make.width.equalTo(44)
             make.height.equalTo(44)
@@ -329,7 +343,7 @@ class YCSettingViewController: UIViewController, YCImageProtocol, YCContentStrin
 
 extension YCSettingViewController {
     
-    @objc func closeButtonClick() {
+    @objc func backButtonClick() {
         self.closeLoginView()
     }
     
@@ -362,6 +376,7 @@ extension YCSettingViewController {
     @objc func nicknameTapHandler() {
         let nicknameView = YCUpdateNicknameViewController.getInstance()
         if let navi = self.navigationController {
+            self.isGoto = true
             navi.pushViewController(nicknameView, animated: true)
         }
     }
@@ -369,6 +384,7 @@ extension YCSettingViewController {
     @objc func signTapHandler() {
         let signView = YCUpdateSignViewController.getInstance()
         if let navi = self.navigationController {
+            self.isGoto = true
             navi.pushViewController(signView, animated: true)
         }
     }
@@ -423,10 +439,9 @@ extension YCSettingViewController {
     }
     
     func closeLoginView(animated: Bool = true) {
-        self.navigationController?.dismiss(animated: animated, completion: { () -> Void in
-            self.resetViewController()
-            YCSettingViewController.addInstance(instace: self)
-        })
+        if let nav = self.navigationController {
+            nav.popViewController(animated: true)
+        }
     }
     
     func resetViewController() {
@@ -502,12 +517,14 @@ extension YCSettingViewController: YCLoginProtocol {
 extension YCSettingViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
         if let editedImage = info[.editedImage] as? UIImage {
             self.changeUserIcon(editedImage)
+            picker.dismiss(animated: true, completion: nil)
         } else if let originalImage = info[.originalImage] as? UIImage {
             self.changeUserIcon(originalImage)
+            picker.dismiss(animated: true, completion: nil)
         }
-        dismiss(animated: true, completion: nil)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -550,4 +567,12 @@ extension YCSettingViewController: UIImagePickerControllerDelegate, UINavigation
         self.hideLoadingView()
         self.showSingleAlert("", alertMessage: YCLanguageHelper.getString(key: "UploadIconErrorMessage"), view: self, compelecationBlock: nil)
     }
+}
+
+extension YCSettingViewController: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool{
+        return true
+    }
+    
 }

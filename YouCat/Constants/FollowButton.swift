@@ -10,8 +10,8 @@ import UIKit
 
 public extension UIButton{
     
-    public struct AssociatedKeys{
-        static var defaultInterval : TimeInterval = 1 //间隔时间
+    struct AssociatedKeys{
+        static var defaultInterval : TimeInterval = 0.3 //间隔时间
         static var A_customInterval = "customInterval"
         static var A_ignoreInterval = "ignoreInterval"
     }
@@ -39,7 +39,7 @@ public extension UIButton{
         }
     }
     
-    public class func initializeMethod(){
+    class func initializeMethod(){
         if self == UIButton.self{
             let systemSel = #selector(UIButton.sendAction(_:to:for:))
             let sSel = #selector(UIButton.mySendAction(_: to: for:))
@@ -80,6 +80,7 @@ class YCFollowButton: UIView {
     var loadingView: UIActivityIndicatorView!
     
     var fontSize: Int = 16
+    var buttonRadius: Int = 16
     
     var status: YCFollowButtonStatus = .Loading {
         didSet{
@@ -96,7 +97,6 @@ class YCFollowButton: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.initView()
-        self.isUserInteractionEnabled = true
     }
     
     init(fontSize: Int) {
@@ -105,8 +105,16 @@ class YCFollowButton: UIView {
         self.initView()
     }
     
+    init(fontSize: Int, radius: Int) {
+        self.fontSize = fontSize
+        self.buttonRadius = radius
+        super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        self.initView()
+    }
     
     func initView(){
+        self.isUserInteractionEnabled = true
+
         self.bgView = UIView()
         self.addSubview(self.bgView)
         self.bgView.snp.makeConstraints { (make) in
@@ -115,7 +123,7 @@ class YCFollowButton: UIView {
             make.top.equalTo(0)
             make.bottom.equalTo(0)
         }
-        self.bgView.layer.cornerRadius = 8
+        self.bgView.layer.cornerRadius = CGFloat(self.buttonRadius)
         self.bgView.layer.borderWidth = 1
         
         self.bgLabel = UILabel()
@@ -165,8 +173,6 @@ class YCFollowButton: UIView {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.5, execute: {
             if self.status == .Loading {
                 self.bgLabel.text = ""
-                self.bgView.backgroundColor = YCStyleColor.white
-                self.bgView.layer.borderColor = YCStyleColor.grayWhite.cgColor
                 self.loadingView.startAnimating()
             }
         })
@@ -175,32 +181,36 @@ class YCFollowButton: UIView {
     func setEditProfileStatus() {
         self.bgView.backgroundColor = YCStyleColor.red
         self.bgView.layer.borderColor = YCStyleColor.red.cgColor
+        self.bgView.layer.borderWidth = 1
         self.bgLabel.text = YCLanguageHelper.getString(key: "EditProfileButtonLabel")
         self.bgLabel.textColor = YCStyleColor.white
         self.loadingView.stopAnimating()
     }
     
     func setFollowingStatus(){
-        self.bgView.backgroundColor = YCStyleColor.white
-        self.bgView.layer.borderColor = YCStyleColor.grayWhite.cgColor
+        self.bgView.backgroundColor = YCStyleColor.green
+        self.bgView.layer.borderColor = YCStyleColor.green.cgColor
+        self.bgView.layer.borderWidth = 1
         self.bgLabel.text = YCLanguageHelper.getString(key: "FollowingButtonLabel")
-        self.bgLabel.textColor = YCStyleColor.black
+        self.bgLabel.textColor = YCStyleColor.white
         self.loadingView.stopAnimating()
     }
     
     func setUnFollowStatus(){
         self.bgView.backgroundColor = YCStyleColor.red
         self.bgView.layer.borderColor = YCStyleColor.red.cgColor
+        self.bgView.layer.borderWidth = 1
         self.bgLabel.text = YCLanguageHelper.getString(key: "FollowButtonLabel")
         self.bgLabel.textColor = YCStyleColor.white
         self.loadingView.stopAnimating()
     }
     
     func setUnblockStatus(){
-        self.bgView.backgroundColor = YCStyleColor.red
-        self.bgView.layer.borderColor = YCStyleColor.red.cgColor
+        self.bgView.backgroundColor = YCStyleColor.zero
+        self.bgView.layer.borderColor = YCStyleColor.black.cgColor
+        self.bgView.layer.borderWidth = 1
         self.bgLabel.text = YCLanguageHelper.getString(key: "UnBlockButtonLabel")
-        self.bgLabel.textColor = YCStyleColor.white
+        self.bgLabel.textColor = YCStyleColor.black
         self.loadingView.stopAnimating()
     }
 }
@@ -312,6 +322,95 @@ class YCSelectedButton: UIView{
             make.right.equalTo(0)
             make.height.equalTo(2)
             make.bottom.equalTo(0)
+        }
+    }
+}
+
+extension String {
+    /** 从头开始切,切到哪里你来定*/
+    func ycSubString(to: Int) -> String {
+        if self.containIndex(nums: to) {
+            let index = self.index(self.startIndex, offsetBy: to, limitedBy: self.endIndex)
+            return (String(self[self.startIndex...index!]))
+        } else {
+            return ""
+        }
+    }
+    
+    func ycSubString(toStr: String, offsetBy: Int = 0) -> String {
+        let to = self.positionOf(sub: toStr) + offsetBy
+        if self.containIndex(nums: to) {
+            let index = self.index(self.startIndex, offsetBy: to, limitedBy: self.endIndex)
+            return (String(self[self.startIndex...index!]))
+        } else {
+            return ""
+        }
+    }
+    
+    /** 从哪开始,一直切到尾*/
+    func ycSubString(from: Int) -> String {
+        if self.containIndex(nums: from) {
+            let index = self.index(self.startIndex, offsetBy: from, limitedBy: self.endIndex)
+            return (String(self[index!..<(self.endIndex)]))
+        } else {
+            return ""
+        }
+    }
+    
+    func ycSubString(fromStr: String, offsetBy: Int = 0) -> String {
+        let from = self.positionOf(sub: fromStr) + offsetBy
+        if self.containIndex( nums: from) {
+            let index = self.index(self.startIndex, offsetBy: from, limitedBy: self.endIndex)
+            return (String(self[index!..<(self.endIndex)]))
+        } else {
+            return ""
+        }
+    }
+    
+    /** 从哪开始,切到哪里*/
+    func ycSubString(from: Int, to: Int) -> String {
+        if self.containIndex(nums: from) && self.containIndex(nums: to) {
+            let indexFrom = self.index(self.startIndex, offsetBy: from, limitedBy: self.endIndex)
+            let indexTo = self.index(self.startIndex, offsetBy: to, limitedBy: self.endIndex)
+            return (String(self[indexFrom!...indexTo!]))
+        } else {
+            return ""
+        }
+    }
+    
+    /**从那个字符串开始切,切到那个字符串(需两个不同的字符串)*/
+    func ycSubString(fromStr: String, toStr: String) -> String {
+        let from = self.positionOf(sub: fromStr)
+        let to = self.positionOf(sub: toStr)
+        if self.containIndex(nums: from) && self.containIndex(nums: to) {
+            let indexFrom = self.index(self.startIndex, offsetBy: from + fromStr.count, limitedBy: self.endIndex)
+            let indexTo = self.index(self.startIndex, offsetBy: to, limitedBy: self.endIndex)
+            return (String(self[indexFrom!..<indexTo!]))
+        } else {
+            return ""
+        }
+    }
+    
+    func positionOf(sub:String, backwards:Bool = false)->Int {
+        var pos = -1
+        if let range = range(of:sub, options: backwards ? .backwards : .literal ) {
+            if !range.isEmpty {
+                pos = self.distance(from:startIndex, to:range.lowerBound)
+            }
+        }
+        return pos
+    }
+    
+
+    func containIndex(nums: Int) -> Bool{
+        if nums > (self.count - 1) {
+            print("NSString+BDCreatString: 字符串位置错误")
+            return false
+        } else if nums < 0 {
+            print("NSString+BDCreatString: 字符串位置错误")
+            return false
+        } else {
+            return true
         }
     }
 }

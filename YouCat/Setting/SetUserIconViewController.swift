@@ -268,7 +268,11 @@ extension YCSetUserIconViewController: YCAlertProtocol {
                     if result, let image = img {
                         let imgW = Float(image.size.width)
                         let imgH = Float(image.size.height)
-                        let iconModel = YCImageModel(imageID: "", imagePath: key, snapShotPath: "", imageType: "jpg", imageIndex: 0, imageWidth: imgW, imageHeight: imgH)
+                        var iconIndex = 0
+                        if let oldIcon = newUser.icon {
+                            iconIndex = oldIcon.imageIndex + 1
+                        }
+                        let iconModel = YCImageModel(imageID: "", imagePath: key, snapShotPath: "", imageType: "jpg", imageIndex: iconIndex, imageWidth: imgW, imageHeight: imgH)
                         newUser.icon = iconModel
                         if saveAll {
                            newUser.nikeName = nickName
@@ -406,14 +410,15 @@ extension YCSetUserIconViewController: YCAlertProtocol {
 extension YCSetUserIconViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
         if let editedImage = info[.editedImage] as? UIImage {
             self.changeUserIcon(editedImage)
+            picker.dismiss(animated: true, completion: nil)
         } else if let originalImage = info[.originalImage] as? UIImage {
             self.changeUserIcon(originalImage)
+            picker.dismiss(animated: true, completion: nil)
         }
-        dismiss(animated: true, completion: nil)
     }
-
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)

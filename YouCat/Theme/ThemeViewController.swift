@@ -35,8 +35,11 @@ class YCThemeViewController: UIViewController, YCImageProtocol {
     
     let refreshCount = 20
     
+    var errorView: YCWifiErrorView?
+    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = true
+        UIApplication.shared.setStatusBarStyle(.default, animated: true)
         super.viewWillAppear(animated)
         self.setUserIcon()
     }
@@ -50,6 +53,8 @@ class YCThemeViewController: UIViewController, YCImageProtocol {
         super.viewDidLoad()
         self.initView()
         NotificationCenter.default.addObserver(self, selector: #selector(self.loginUserChange(_:)), name: NSNotification.Name("LoginUserChange"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.userLogout(_:)), name: NSNotification.Name("UserLogout"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCategory(_:)), name: NSNotification.Name("reFreshCategory"), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -71,32 +76,42 @@ class YCThemeViewController: UIViewController, YCImageProtocol {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 54))
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
         
-        self.userIcon = UIImageView();
-        headerView.addSubview(self.userIcon)
-        self.userIcon.snp.makeConstraints { (make) in
+        let iconView = UIView()
+        headerView.addSubview(iconView)
+        iconView.snp.makeConstraints { (make) in
             make.right.equalTo(-20)
-            make.top.equalTo(5)
+            make.top.equalTo(8)
             make.width.equalTo(44)
             make.height.equalTo(44)
         }
-        self.cropImageCircle(self.userIcon, 22)
+        
+        self.userIcon = UIImageView();
+        iconView.addSubview(self.userIcon)
+        self.userIcon.snp.makeConstraints { (make) in
+            make.right.equalTo(4)
+            make.top.equalTo(4)
+            make.width.equalTo(36)
+            make.height.equalTo(36)
+        }
+        self.cropImageCircle(self.userIcon, 18)
         self.userIcon.image = UIImage(named: "default_icon")
+        
+        let iconTap = UITapGestureRecognizer(target: self, action: #selector(self.iconTapHandler))
+        iconView.isUserInteractionEnabled = true
+        iconView.addGestureRecognizer(iconTap)
         
         let titleLabel = UILabel()
         headerView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { (make) in
             make.left.equalTo(20)
-            make.centerY.equalTo(self.userIcon).offset(3)
+            make.centerY.equalTo(self.userIcon).offset(0)
         }
         titleLabel.text = YCLanguageHelper.getString(key: "ThemeLabel")
         titleLabel.textColor = YCStyleColor.black
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 26)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 36)
         
-        let iconTap = UITapGestureRecognizer(target: self, action: #selector(self.iconTapHandler))
-        self.userIcon.isUserInteractionEnabled = true
-        self.userIcon.addGestureRecognizer(iconTap)
         
         self.tableView.tableHeaderView = headerView
         
@@ -139,16 +154,27 @@ class YCThemeViewController: UIViewController, YCImageProtocol {
     
     @objc func refreshPage() {
         YCThemeDomain().topThemeList(start: 0, count: refreshCount) { (modelList) in
-            if let list = modelList, list.result{
-                if let modelList = list.modelArray {
-                    self.themes.removeAll()
-                    if self.updateThemeDate(modelList: modelList) {
-                        self.tableView.reloadData()
-                        self.footerFresh.resetNoMoreData()
-                        self.footerFresh.isHidden = false
-                        let _ = YCDateManager.saveModelListDate(modelList: self.themes, account: LocalManager.theme)
+            if let list = modelList {
+                if list.result{
+                    if let modelList = list.modelArray {
+                        self.themes.removeAll()
+                        if self.updateThemeDate(modelList: modelList) {
+                            self.tableView.reloadData()
+                            self.footerFresh.resetNoMoreData()
+                            self.footerFresh.isHidden = false
+                            let _ = YCDateManager.saveModelListDate(modelList: self.themes, account: LocalManager.theme)
+                        }
                     }
                     self.headerFresh.endRefreshing()
+                    self.hideWifiErrorView()
+                }else {
+                    self.headerFresh.endRefreshing()
+                    if self.themes.count == 0 {
+                        self.showWifiErrorView()
+                    }else {
+                        self.showTempAlert("", alertMessage: YCLanguageHelper.getString(key: "WifiErrorShortMessage"), view: self, completionBlock: {
+                        })
+                    }
                 }
             }else {
                 self.headerFresh.endRefreshing()
@@ -158,19 +184,25 @@ class YCThemeViewController: UIViewController, YCImageProtocol {
     
     @objc func footerRefresh() {
         YCThemeDomain().topThemeList(start: self.themes.count, count: refreshCount) { (modelList) in
-            if let list = modelList, list.result{
-                if let modelList = list.modelArray {
-                    if self.updateThemeDate(modelList: modelList) {
-                        self.tableView.reloadData()
-                    }
-                    if modelList.count == 0 {
-                        self.footerFresh.endRefreshingWithNoMoreData()
-                        self.footerFresh.isHidden = true
-                    }else{
+            if let list = modelList {
+                if list.result{
+                    if let modelList = list.modelArray {
+                        if self.updateThemeDate(modelList: modelList) {
+                            self.tableView.reloadData()
+                        }
+                        if modelList.count == 0 {
+                            self.footerFresh.endRefreshingWithNoMoreData()
+                            self.footerFresh.isHidden = true
+                        }else{
+                            self.footerFresh.endRefreshing()
+                        }
+                    }else {
                         self.footerFresh.endRefreshing()
                     }
                 }else {
                     self.footerFresh.endRefreshing()
+                    self.showTempAlert("", alertMessage: YCLanguageHelper.getString(key: "WifiErrorShortMessage"), view: self, completionBlock: {
+                    })
                 }
             }else {
                 self.footerFresh.endRefreshing()
@@ -202,6 +234,28 @@ class YCThemeViewController: UIViewController, YCImageProtocol {
         }
         return isChange
     }
+    
+    func showWifiErrorView() {
+        if self.errorView == nil {
+            self.errorView = YCWifiErrorView(refreshComplete: {
+                self.headerFresh.beginRefreshing()
+            })
+            self.view.addSubview(self.errorView!)
+            self.errorView!.snp.makeConstraints { (make) in
+                make.width.equalTo(self.view)
+                make.height.equalTo(220)
+                make.centerX.equalTo(self.view).offset(0)
+                make.centerY.equalTo(self.view).offset(0)
+            }
+        }
+    }
+    
+    func hideWifiErrorView() {
+        if self.errorView != nil {
+            self.errorView!.removeFromSuperview()
+            self.errorView = nil
+        }
+    }
 
 }
 
@@ -220,28 +274,90 @@ extension YCThemeViewController: UITableViewDataSource {
     }
 }
 
+//let transitionDelegate = YCThemeTransition()
+let navigationTransitionDelegate = ThemeNavigationTransition()
+
 extension YCThemeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! YCThemeTableViewCell
         
+        let startFrame = cell.bgView.convert(cell.themeCover.frame, to: view)
+//        let y = cell.convert(cell.bgView.frame, to: view)
+        let cellFrame = tableView.convert(cell.frame, to: view)
         let row = indexPath.item
         let theme = self.themes[row]
-        let themeDetail = YCThemeDetailViewController.getInstance()
+        let themeDetail = YCThemeDetailViewController.getInstance() as! YCThemeDetailViewController
         themeDetail.themeModel = theme
-
-        let navigationController = UINavigationController(rootViewController: themeDetail)
-        navigationController.isNavigationBarHidden = true
-        self.present(navigationController, animated: true) {
-            
+        navigationTransitionDelegate.startPresentY = startFrame.minY
+        let wGap = YCScreen.bounds.width * 0.06
+        print("startFrame =", startFrame)
+        
+        navigationTransitionDelegate.startPresentMaskFrame = CGRect(x: wGap, y: YCScreen.safeArea.top, width: cellFrame.width - 2 * wGap, height: cellFrame.height - 30)
+        navigationTransitionDelegate.startPresentHandler = {
+            cell.isHidden = true
+            themeDetail.updateInitalViews()
         }
+        
+        navigationTransitionDelegate.finalPresentHandler = {
+            themeDetail.updateFinalViews()
+        }
+        
+        navigationTransitionDelegate.finalDismissY = startFrame.minY
+        navigationTransitionDelegate.finalDismissMaskFrame = CGRect(x: wGap, y: YCScreen.safeArea.top, width: cellFrame.width - 2 * wGap, height: cellFrame.height - 30)
+        navigationTransitionDelegate.startDismissHandler = {
+//            themeDetail.updateFinalViews()
+            themeDetail.updatestartDismiss()
+        }
+
+        navigationTransitionDelegate.finalDismissHandler = {
+//            themeDetail.updateInitalViews()
+            themeDetail.updatefinalDismiss()
+        }
+        
+        navigationTransitionDelegate.dismissDidEndHanlder = {
+            themeDetail.updateDidDismissed()
+            cell.isHidden = false
+        }
+        
+//        let navigationController = UINavigationController(rootViewController: themeDetail)
+//        navigationController.transitioningDelegate = transitionDelegate
+//        navigationController.modalPresentationStyle = .custom
+//        navigationController.isNavigationBarHidden = true
+//        self.present(navigationController, animated: true) {
+//
+//        }
+        self.navigationController?.delegate = navigationTransitionDelegate
+        
+//        navigationController?.setNavigationBarHidden(true, animated: false)
+        
+        self.navigationController?.pushViewController(themeDetail, animated: true)
+//        self.navigationController?.delegate = nil
     }
 }
 
-extension YCThemeViewController: YCLoginProtocol {
+extension YCThemeViewController: YCLoginProtocol, YCAlertProtocol {
     
     @objc func loginUserChange(_ notify: Notification) {
+//        self.isFirstLoad = true
+        self.setUserIcon()
+    }
+    
+    @objc func userLogout(_ notify: Notification) {
         self.isFirstLoad = true
         self.setUserIcon()
+    }
+    
+    @objc func refreshCategory(_ notify: Notification) {
+        if self.tableView.contentOffset.y > 0 {
+            let offset = CGPoint(x: 0, y: 0)
+            self.tableView.setContentOffset(offset, animated: true)
+//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.3) {
+//                self.headerFresh.beginRefreshing()
+//            }
+        }else {
+            self.headerFresh.beginRefreshing()
+        }
     }
     
     func setUserIcon(){

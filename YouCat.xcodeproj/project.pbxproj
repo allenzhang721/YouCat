@@ -46,16 +46,21 @@
 		25307944213EE556002DC02D /* URLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25307943213EE556002DC02D /* URLRequest.swift */; };
 		25368B76217A12EA00C3EB56 /* ThemeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25368B75217A12EA00C3EB56 /* ThemeTableViewCell.swift */; };
 		2538AD2721B948F30021F245 /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2538AD2621B948F30021F245 /* CommentViewController.swift */; };
-		253BBADA219C4ACA00DAD5BB /* VideoVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 253BBAD9219C4AC900DAD5BB /* VideoVIew.swift */; };
+		253BBADA219C4ACA00DAD5BB /* VideoVIew_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 253BBAD9219C4AC900DAD5BB /* VideoVIew_test.swift */; };
 		254C9C3121EF025C0057A023 /* ShareProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254C9C3021EF025C0057A023 /* ShareProtocol.swift */; };
+		25562C6222760DBB004F1BD6 /* PhotoAlbumUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25562C6122760DBB004F1BD6 /* PhotoAlbumUtil.swift */; };
+		25562C6A22772C96004F1BD6 /* UserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25562C6922772C96004F1BD6 /* UserListViewController.swift */; };
+		25562C6D22773604004F1BD6 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25562C6C22773604004F1BD6 /* UserTableViewCell.swift */; };
+		255846C122B1354300782021 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 255846C022B1354300782021 /* ErrorView.swift */; };
 		255BBF3221FB510F007067E0 /* Kingfisher.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 255BBF2221FB50EF007067E0 /* Kingfisher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		256299C0217DEB41005FDDFC /* PublishCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256299BF217DEB41005FDDFC /* PublishCollectionViewCell.swift */; };
 		256299C221802589005FDDFC /* PublishCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256299C121802589005FDDFC /* PublishCollectionViewLayout.swift */; };
 		256299C421808002005FDDFC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 256299C321808002005FDDFC /* Assets.xcassets */; };
 		256299C92180A6AB005FDDFC /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256299C82180A6AB005FDDFC /* UserViewController.swift */; };
 		256299CB21849004005FDDFC /* PublishDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256299CA21849004005FDDFC /* PublishDetailViewController.swift */; };
-		256299CD2185A049005FDDFC /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256299CC2185A049005FDDFC /* SliderView.swift */; };
+		256299CD2185A049005FDDFC /* SliderView_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256299CC2185A049005FDDFC /* SliderView_test.swift */; };
 		256299CF21870608005FDDFC /* PublishDetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256299CE21870608005FDDFC /* PublishDetailViewCell.swift */; };
+		25731CD622F172B600FB49B1 /* VideoUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25731CD522F172B600FB49B1 /* VideoUIView.swift */; };
 		257B040721D642180004FB1B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 257B040621D642180004FB1B /* QuartzCore.framework */; };
 		257B040921D6422B0004FB1B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 257B040821D6422B0004FB1B /* SystemConfiguration.framework */; };
 		257B040B21D642300004FB1B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 257B040A21D642300004FB1B /* Security.framework */; };
@@ -67,6 +72,7 @@
 		257B041621D642AE0004FB1B /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2523377F21D3A72C00662885 /* libsqlite3.tbd */; };
 		257B041921E254290004FB1B /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2523378121D3A76200662885 /* libc++.tbd */; };
 		257E895A21C394990084944E /* CommentListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 257E895921C394990084944E /* CommentListViewController.swift */; };
+		259AC950225E32090064987F /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 259AC94F225E32090064987F /* FavoriteViewController.swift */; };
 		25B878A121515CB300E30C91 /* UserDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B878A021515CB300E30C91 /* UserDomain.swift */; };
 		25B878A32153B84A00E30C91 /* LikeDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B878A22153B84A00E30C91 /* LikeDomain.swift */; };
 		25B878A52153CAB400E30C91 /* CommentDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B878A42153CAB400E30C91 /* CommentDomain.swift */; };
@@ -92,6 +98,7 @@
 		2C827F48206F3EEB0035DCE2 /* ThemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C827F47206F3EEB0035DCE2 /* ThemeViewController.swift */; };
 		4BDCF867747000828440DF7E /* Pods_YouCatTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D76547DA6CCEE139A5F6E084 /* Pods_YouCatTests.framework */; };
 		83A6F551E87BF929BB599A40 /* Pods_YouCat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F17FB4EF2FA68C8A2CD9B94 /* Pods_YouCat.framework */; };
+
 		951F7E7822567DE00066589F /* YCAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 951F7E7722567DE00066589F /* YCAssets.xcassets */; };
 		952318012277FA940092B8B4 /* QCMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952317FF2277FA940092B8B4 /* QCMethod.swift */; };
 		952318022277FA940092B8B4 /* CircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952318002277FA940092B8B4 /* CircleProgressView.swift */; };
@@ -103,6 +110,10 @@
 		9529EC912256778B006E0CC4 /* YCCapture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9529EC902256778B006E0CC4 /* YCCapture.storyboard */; };
 		953EF1782270CF88001D8D86 /* YCClip.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 953EF1762270CF88001D8D86 /* YCClip.storyboard */; };
 		953EF1792270CF88001D8D86 /* YCClipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953EF1772270CF88001D8D86 /* YCClipViewController.swift */; };
+
+		959CE20A22C0EDE600D683E7 /* ThemeTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 959CE20922C0EDE600D683E7 /* ThemeTransition.swift */; };
+		95C175CB22D0912A006DE231 /* ThemeNavigationTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C175CA22D0912A006DE231 /* ThemeNavigationTransition.swift */; };
+
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -237,16 +248,21 @@
 		25307943213EE556002DC02D /* URLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequest.swift; sourceTree = "<group>"; };
 		25368B75217A12EA00C3EB56 /* ThemeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTableViewCell.swift; sourceTree = "<group>"; };
 		2538AD2621B948F30021F245 /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
-		253BBAD9219C4AC900DAD5BB /* VideoVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoVIew.swift; sourceTree = "<group>"; };
+		253BBAD9219C4AC900DAD5BB /* VideoVIew_test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoVIew_test.swift; sourceTree = "<group>"; };
 		254C9C3021EF025C0057A023 /* ShareProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareProtocol.swift; sourceTree = "<group>"; };
+		25562C6122760DBB004F1BD6 /* PhotoAlbumUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumUtil.swift; sourceTree = "<group>"; };
+		25562C6922772C96004F1BD6 /* UserListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListViewController.swift; sourceTree = "<group>"; };
+		25562C6C22773604004F1BD6 /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
+		255846C022B1354300782021 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		255BBF1721FB50EF007067E0 /* Kingfisher.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Kingfisher.xcodeproj; path = Submodules/Kingfisher/Kingfisher.xcodeproj; sourceTree = "<group>"; };
 		256299BF217DEB41005FDDFC /* PublishCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishCollectionViewCell.swift; sourceTree = "<group>"; };
 		256299C121802589005FDDFC /* PublishCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishCollectionViewLayout.swift; sourceTree = "<group>"; };
 		256299C321808002005FDDFC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = YouCat/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		256299C82180A6AB005FDDFC /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
-		256299CA21849004005FDDFC /* PublishDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishDetailViewController.swift; sourceTree = "<group>"; };
-		256299CC2185A049005FDDFC /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
+		256299CA21849004005FDDFC /* PublishDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishDetailViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		256299CC2185A049005FDDFC /* SliderView_test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView_test.swift; sourceTree = "<group>"; };
 		256299CE21870608005FDDFC /* PublishDetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishDetailViewCell.swift; sourceTree = "<group>"; };
+		25731CD522F172B600FB49B1 /* VideoUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoUIView.swift; sourceTree = "<group>"; };
 		257B040621D642180004FB1B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		257B040821D6422B0004FB1B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		257B040A21D642300004FB1B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -256,6 +272,7 @@
 		257B041221D6429F0004FB1B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		257B041421D642A50004FB1B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		257E895921C394990084944E /* CommentListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentListViewController.swift; sourceTree = "<group>"; };
+		259AC94F225E32090064987F /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
 		25B878A021515CB300E30C91 /* UserDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDomain.swift; sourceTree = "<group>"; };
 		25B878A22153B84A00E30C91 /* LikeDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeDomain.swift; sourceTree = "<group>"; };
 		25B878A42153CAB400E30C91 /* CommentDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDomain.swift; sourceTree = "<group>"; };
@@ -272,6 +289,7 @@
 		25D721C221A7DE6E007F5648 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		25D721C421A7E737007F5648 /* LoginProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginProtocol.swift; sourceTree = "<group>"; };
 		25D721C621A9A9F3007F5648 /* SetUserIconViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetUserIconViewController.swift; sourceTree = "<group>"; };
+		25F66319237025DC0008D18D /* 喵萌.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "喵萌.entitlements"; sourceTree = "<group>"; };
 		2C3441F6203D89F3008BF439 /* 喵萌.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "喵萌.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C3441F9203D89F3008BF439 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2C3441FB203D89F3008BF439 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -292,6 +310,7 @@
 		5536AD062810EA944BFD8DAA /* Pods_YouCatUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouCatUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		581287F3A5F73B04B2906D2F /* Pods-YouCatTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCatTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCatTests/Pods-YouCatTests.release.xcconfig"; sourceTree = "<group>"; };
 		7EA9D9DE110AC0A34E1D6FE9 /* Pods-YouCat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCat.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouCat/Pods-YouCat.release.xcconfig"; sourceTree = "<group>"; };
+
 		951F7E7722567DE00066589F /* YCAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = YCAssets.xcassets; sourceTree = "<group>"; };
 		952317FF2277FA940092B8B4 /* QCMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCMethod.swift; sourceTree = "<group>"; };
 		952318002277FA940092B8B4 /* CircleProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleProgressView.swift; sourceTree = "<group>"; };
@@ -303,6 +322,10 @@
 		9529EC902256778B006E0CC4 /* YCCapture.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = YCCapture.storyboard; sourceTree = "<group>"; };
 		953EF1762270CF88001D8D86 /* YCClip.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = YCClip.storyboard; sourceTree = "<group>"; };
 		953EF1772270CF88001D8D86 /* YCClipViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YCClipViewController.swift; sourceTree = "<group>"; };
+
+		959CE20922C0EDE600D683E7 /* ThemeTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ThemeTransition.swift; path = YouCat/ThemeTransition.swift; sourceTree = SOURCE_ROOT; };
+		95C175CA22D0912A006DE231 /* ThemeNavigationTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeNavigationTransition.swift; sourceTree = "<group>"; };
+
 		D76547DA6CCEE139A5F6E084 /* Pods_YouCatTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouCatTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E309D7DCD1368C5CF318F47C /* Pods-YouCatTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouCatTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouCatTests/Pods-YouCatTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -411,6 +434,14 @@
 			path = URLRequest;
 			sourceTree = "<group>";
 		};
+		25562C6B227735DD004F1BD6 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				25562C6C22773604004F1BD6 /* UserTableViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		255BBF1821FB50EF007067E0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -438,7 +469,9 @@
 		256299C72180A5D2005FDDFC /* User */ = {
 			isa = PBXGroup;
 			children = (
+				25562C6B227735DD004F1BD6 /* Cell */,
 				256299C82180A6AB005FDDFC /* UserViewController.swift */,
+				25562C6922772C96004F1BD6 /* UserListViewController.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -451,6 +484,14 @@
 				2529087D21C9193300300D44 /* CommentListViewCell.swift */,
 			);
 			path = Comment;
+			sourceTree = "<group>";
+		};
+		259AC94E225E31DB0064987F /* Favorite */ = {
+			isa = PBXGroup;
+			children = (
+				259AC94F225E32090064987F /* FavoriteViewController.swift */,
+			);
+			path = Favorite;
 			sourceTree = "<group>";
 		};
 		25B878A62154F5B900E30C91 /* Manager */ = {
@@ -476,6 +517,9 @@
 				252B900D21B03A5A00E41842 /* LanguageHelper.swift */,
 				25288ED521B67D7100A333E6 /* LoadingView.swift */,
 				254C9C3021EF025C0057A023 /* ShareProtocol.swift */,
+				25562C6122760DBB004F1BD6 /* PhotoAlbumUtil.swift */,
+				255846C022B1354300782021 /* ErrorView.swift */,
+				25731CD522F172B600FB49B1 /* VideoUIView.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -522,7 +566,11 @@
 		2C3441F8203D89F3008BF439 /* YouCat */ = {
 			isa = PBXGroup;
 			children = (
+
 				9529EC85225676A2006E0CC4 /* Capture */,
+
+				25F66319237025DC0008D18D /* 喵萌.entitlements */,
+
 				25D721BE21A6E0E8007F5648 /* Header */,
 				25D721C121A6E8F2007F5648 /* Login */,
 				252B900221AFDEDA00E41842 /* Setting */,
@@ -541,8 +589,8 @@
 				2C3441F9203D89F3008BF439 /* AppDelegate.swift */,
 				256299C321808002005FDDFC /* Assets.xcassets */,
 				25B878E9215A3A1D00E30C91 /* RootTabbarController.swift */,
-				256299CC2185A049005FDDFC /* SliderView.swift */,
-				253BBAD9219C4AC900DAD5BB /* VideoVIew.swift */,
+				256299CC2185A049005FDDFC /* SliderView_test.swift */,
+				253BBAD9219C4AC900DAD5BB /* VideoVIew_test.swift */,
 				2C3441FB203D89F3008BF439 /* ViewController.swift */,
 				2C3441FD203D89F3008BF439 /* Main.storyboard */,
 				2C344202203D89F3008BF439 /* LaunchScreen.storyboard */,
@@ -574,6 +622,7 @@
 		2C35AC85203D8ACA002F0983 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				259AC94E225E31DB0064987F /* Favorite */,
 				2C35AC8C203D8D51002F0983 /* HomeViewController.swift */,
 			);
 			path = Home;
@@ -591,6 +640,8 @@
 		2C35AC87203D8B63002F0983 /* Theme */ = {
 			isa = PBXGroup;
 			children = (
+				959CE20922C0EDE600D683E7 /* ThemeTransition.swift */,
+				95C175CA22D0912A006DE231 /* ThemeNavigationTransition.swift */,
 				2C827F47206F3EEB0035DCE2 /* ThemeViewController.swift */,
 				25368B75217A12EA00C3EB56 /* ThemeTableViewCell.swift */,
 				252E5266217DA3AE00C27826 /* ThemeDetailViewController.swift */,
@@ -667,8 +718,8 @@
 				2C3441F3203D89F3008BF439 /* Frameworks */,
 				2C3441F4203D89F3008BF439 /* Resources */,
 				95EE325B26C0E3CF1ED8FD3C /* [CP] Embed Pods Frameworks */,
-				A9E3B23CCCB6AE514D996FFE /* [CP] Copy Pods Resources */,
 				255BBF3121FB5101007067E0 /* CopyFiles */,
+				D854E9DFB757B148366ACF4D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -867,9 +918,8 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-YouCat/Pods-YouCat-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-YouCat/Pods-YouCat-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/HappyDNS/HappyDNS.framework",
 				"${BUILT_PRODUCTS_DIR}/Locksmith/Locksmith.framework",
 				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
 				"${BUILT_PRODUCTS_DIR}/Qiniu/Qiniu.framework",
@@ -879,7 +929,6 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HappyDNS.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Locksmith.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Qiniu.framework",
@@ -888,29 +937,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YouCat/Pods-YouCat-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A9E3B23CCCB6AE514D996FFE /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-YouCat/Pods-YouCat-resources.sh",
-				"${PODS_ROOT}/Weibo_SDK/libWeiboSDK/WeiboSDK.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/WeiboSDK.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YouCat/Pods-YouCat-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-YouCat/Pods-YouCat-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C9C6372F58DB14703CE1E471 /* [CP] Check Pods Manifest.lock */ = {
@@ -929,6 +956,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D854E9DFB757B148366ACF4D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-YouCat/Pods-YouCat-resources.sh",
+				"${PODS_ROOT}/Weibo_SDK/libWeiboSDK/WeiboSDK.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/WeiboSDK.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-YouCat/Pods-YouCat-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E58ECC27B0E167B77F0AD9F8 /* [CP] Check Pods Manifest.lock */ = {
@@ -980,6 +1025,7 @@
 				9529EC8F22567779006E0CC4 /* YCDemoViewController.swift in Sources */,
 				25B878F1215BA01A00E30C91 /* ImageController.swift in Sources */,
 				25B878AA215510C200E30C91 /* DeviceManager.swift in Sources */,
+				959CE20A22C0EDE600D683E7 /* ThemeTransition.swift in Sources */,
 				25B878A32153B84A00E30C91 /* LikeDomain.swift in Sources */,
 				2C35AC8D203D8D51002F0983 /* HomeViewController.swift in Sources */,
 				2530524E2147D4D400BB9624 /* PublishDomain.swift in Sources */,
@@ -1007,11 +1053,16 @@
 				2C3441FA203D89F3008BF439 /* AppDelegate.swift in Sources */,
 				9529EC8C225676BF006E0CC4 /* CameraController.swift in Sources */,
 				2530525A2147FB0600BB9624 /* MediaModel.swift in Sources */,
+				25731CD622F172B600FB49B1 /* VideoUIView.swift in Sources */,
 				257E895A21C394990084944E /* CommentListViewController.swift in Sources */,
 				253052582147FA2900BB9624 /* UserModel.swift in Sources */,
 				952318022277FA940092B8B4 /* CircleProgressView.swift in Sources */,
 				25B878A82154F8B200E30C91 /* UserManager.swift in Sources */,
+
 				9529EC8A225676BF006E0CC4 /* YCPreviewViewController.swift in Sources */,
+
+				25562C6222760DBB004F1BD6 /* PhotoAlbumUtil.swift in Sources */,
+
 				252B900E21B03A5A00E41842 /* LanguageHelper.swift in Sources */,
 				25B878EF215B674000E30C91 /* StyleColor.swift in Sources */,
 				252B901821B533D800E41842 /* UploadModel.swift in Sources */,
@@ -1019,26 +1070,38 @@
 				253052502147D50B00BB9624 /* BaseDomain.swift in Sources */,
 				952318012277FA940092B8B4 /* QCMethod.swift in Sources */,
 				2538AD2721B948F30021F245 /* CommentViewController.swift in Sources */,
+
 				953EF1792270CF88001D8D86 /* YCClipViewController.swift in Sources */,
 				256299CD2185A049005FDDFC /* SliderView.swift in Sources */,
+
+				256299CD2185A049005FDDFC /* SliderView_test.swift in Sources */,
+
 				256299CF21870608005FDDFC /* PublishDetailViewCell.swift in Sources */,
 				25D0CCCA2179EF8600809D3D /* DateManager.swift in Sources */,
+				255846C122B1354300782021 /* ErrorView.swift in Sources */,
 				252B900621B0000000E41842 /* AlertProtocol.swift in Sources */,
 				25307942213EA50F002DC02D /* Constants.swift in Sources */,
 				25305260214A759200BB9624 /* ThemeModel.swift in Sources */,
-				253BBADA219C4ACA00DAD5BB /* VideoVIew.swift in Sources */,
+				253BBADA219C4ACA00DAD5BB /* VideoVIew_test.swift in Sources */,
 				252B902321B5707400E41842 /* UpdateUserViewController.swift in Sources */,
 				2529087E21C9193300300D44 /* CommentListViewCell.swift in Sources */,
+				25562C6A22772C96004F1BD6 /* UserListViewController.swift in Sources */,
+				95C175CB22D0912A006DE231 /* ThemeNavigationTransition.swift in Sources */,
 				252B900421AFDEF100E41842 /* SettingViewController.swift in Sources */,
 				253052722150DFE000BB9624 /* ThemeDomain.swift in Sources */,
 				256299C221802589005FDDFC /* PublishCollectionViewLayout.swift in Sources */,
 				25B878EC215A72F000E30C91 /* PublishTableViewCell.swift in Sources */,
 				2530526B214F86B900BB9624 /* LikeRequest.swift in Sources */,
+
 				9529EC8D225676BF006E0CC4 /* YCCaptureViewController.swift in Sources */,
+
+				25562C6D22773604004F1BD6 /* UserTableViewCell.swift in Sources */,
+
 				25D0CCCC2179FF4C00809D3D /* ContentProtocol.swift in Sources */,
 				25305262214A840500BB9624 /* LikeModel.swift in Sources */,
 				25305264214AA80A00BB9624 /* CommentModel.swift in Sources */,
 				2530524B2147CC1900BB9624 /* PublishRequest.swift in Sources */,
+				259AC950225E32090064987F /* FavoriteViewController.swift in Sources */,
 				25307944213EE556002DC02D /* URLRequest.swift in Sources */,
 				25D721C721A9A9F3007F5648 /* SetUserIconViewController.swift in Sources */,
 				25305267214BB5CA00BB9624 /* UserRequest.swift in Sources */,
@@ -1236,8 +1299,10 @@
 			baseConfigurationReference = 3344BB0AD26EA6694F17FB84 /* Pods-YouCat.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "YouCat/喵萌.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 678ACPN786;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1260,6 +1325,7 @@
 					"$(PROJECT_DIR)/ShareSDK/ShareSDK/Support/PlatformSDK/SinaWeiboSDK",
 					"$(PROJECT_DIR)/ShareSDK/ShareSDK/Support/PlatformSDK/WeChatSDK",
 				);
+				MARKETING_VERSION = 1.1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.botai.YouCat;
 				PRODUCT_NAME = "喵萌";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1274,8 +1340,10 @@
 			baseConfigurationReference = 7EA9D9DE110AC0A34E1D6FE9 /* Pods-YouCat.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "YouCat/喵萌.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 678ACPN786;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1298,6 +1366,7 @@
 					"$(PROJECT_DIR)/ShareSDK/ShareSDK/Support/PlatformSDK/SinaWeiboSDK",
 					"$(PROJECT_DIR)/ShareSDK/ShareSDK/Support/PlatformSDK/WeChatSDK",
 				);
+				MARKETING_VERSION = 1.1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.botai.YouCat;
 				PRODUCT_NAME = "喵萌";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -104,6 +104,18 @@ class YCPublishDomain: YCBaseDomain {
         }
     }
     
+    func publishDetail(publishID: String, completionBlock: @escaping (YCDomainModel?) -> Void){
+        YCPublishDetailRequest(publishID: publishID).startWithComplete { (response: YCURLRequestResult) in
+            self.backPublishModel(response: response, completionBlock: completionBlock)
+        }
+    }
+    
+    func publishDetaiByUUID(uuid: String, completionBlock: @escaping (YCDomainModel?) -> Void){
+        YCPublishDetailByUUID(uuid: uuid).startWithComplete { (response: YCURLRequestResult) in
+            self.backPublishModel(response: response, completionBlock: completionBlock)
+        }
+    }
+    
     func backPublishModel(response: YCURLRequestResult<Any>, completionBlock: @escaping (YCDomainModel?) -> Void) {
         switch response{
         case .success(let v):

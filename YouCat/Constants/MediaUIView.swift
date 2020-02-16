@@ -11,6 +11,27 @@ import Kingfisher
 import AVKit
 import MobileCoreServices
 
+class YCMediaViewModel {
+    var publishID: String!
+    var videoPlayer: AVPlayer?
+    var videoPlayerItem: AVPlayerItem?
+    var videoStatusChange: ((String?, AVPlayerItem) -> Void)?
+    var videoPlayComplete: ((AVPlayerItem) -> Void)?
+    var unUsed: Bool = true
+    
+    init(publishID: String){
+        self.publishID = publishID
+    }
+    
+    init(publishID: String, videoPlayer: AVPlayer?, videoPlayerItem: AVPlayerItem?, videoStatusChange: ((String?, AVPlayerItem) -> Void)?, videoPlayComplete: ((AVPlayerItem) -> Void)?){
+        self.publishID = publishID
+        self.videoPlayer = videoPlayer
+        self.videoPlayerItem = videoPlayerItem
+        self.videoStatusChange = videoStatusChange
+        self.videoPlayComplete = videoPlayComplete
+    }
+}
+
 class YCBaseView: UIView {
     
     var contentIndex = 0
@@ -64,7 +85,19 @@ class YCBaseView: UIView {
         
     }
     
-    func loadMedia() {
+    func loadMedia(_ mediaModel: YCMediaViewModel?) {
+        
+    }
+    
+    func willDisplayView() {
+        
+    }
+    
+    func endDisplayView() {
+        
+    }
+    
+    func displayView() {
         
     }
     
@@ -102,12 +135,61 @@ protocol YCViewDelegate {
     func viewDidPlayToEnd(view: YCBaseView)
 }
 
+class YCMediaScrollView :UIScrollView {
+    
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.panGestureRecognizer.delegate = self
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+}
+
+extension YCMediaScrollView: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let gest = gestureRecognizer as? UIPanGestureRecognizer {
+            let transP = gest.translation(in: self)
+            let frameH = self.frame.height
+            let contentSizeH = self.contentSize.height
+            let offY = self.contentOffset.y
+//            print("gestureRecognizer \(transP)  aa \(frameH) bb \(contentSizeH) cc \(offY)")
+            if (offY+frameH) > (contentSizeH - 1 ) {
+                if transP.y < 0 {
+                    self.isScrollEnabled = false
+                    return true
+                }else {
+                    self.isScrollEnabled = true
+                    return false
+                }
+            }else if offY < 1 {
+                if transP.y > 0 {
+                    self.isScrollEnabled = false
+                    return true
+                }else {
+                    self.isScrollEnabled = true
+                    return false
+                }
+            }else {
+                self.isScrollEnabled = true
+                return false
+            }
+        }
+        return false
+    }
+}
+
 class YCImageView: YCBaseView {
     
     var imageModel: YCImageModel?;
     
     var img: UIImageView?
-    var imgScrollView: UIScrollView?
+    var imgScrollView: YCMediaScrollView?
+    
+    var loading: YCMediaLoadingView?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -115,6 +197,14 @@ class YCImageView: YCBaseView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+    }
+    
+    override func displayView() {
+        self.imgScrollView?.isScrollEnabled = true
+    }
+    
+    override func play() {
+        self.imgScrollView?.isScrollEnabled = true
     }
     
     func initSnapView(){
@@ -134,40 +224,46 @@ class YCImageView: YCBaseView {
     }
     
     func initImageView() {
-        let bounds = self.frame
+        let bounds = self.bounds
         if let imgModel = self.imageModel, self.img == nil {
             let imgW = imgModel.imageWidth
             let imgH = imgModel.imageHeight
-            var imageH = CGFloat(imgH / imgW) * bounds.width
-            let viewH = bounds.height
-            var imgTop:CGFloat = 0
-            var isAdd = false
+            let imageH = CGFloat(imgH / imgW) * bounds.width
+            let viewH = bounds.height - YCScreen.fullScreenArea.bottom
             if imageH > (viewH - YCScreen.safeArea.top) {
-                if imageH < viewH {
-                    imgTop = YCScreen.safeArea.top
-                    imageH = (viewH - YCScreen.safeArea.top)
-                    isAdd = true
-                }else {
-                    self.imgScrollView = UIScrollView()
-                    self.addSubview(self.imgScrollView!)
+                self.imgScrollView = YCMediaScrollView()
+                self.addSubview(self.imgScrollView!)
+                if #available(iOS 11.0, *) {
                     self.imgScrollView?.snp.makeConstraints({ (make) in
                         make.left.equalTo(0)
                         make.top.equalTo(0)
                         make.width.equalTo(self)
-                        make.height.equalTo(self)
+                        make.height.equalTo(viewH)
+                    })
+                    let contentH = YCScreen.safeArea.top + imageH
+                    self.imgScrollView?.contentInsetAdjustmentBehavior = .never
+                    self.imgScrollView?.contentSize = CGSize(width: bounds.width, height: contentH)
+                    let imgRect = CGRect(x: 0, y: YCScreen.safeArea.top, width: bounds.width, height: imageH)
+                    self.img = UIImageView(frame: imgRect)
+                } else {
+                    self.imgScrollView?.snp.makeConstraints({ (make) in
+                        make.left.equalTo(0)
+                        make.top.equalTo(YCScreen.safeArea.top)
+                        make.width.equalTo(self)
+                        make.height.equalTo(viewH-YCScreen.safeArea.top)
                     })
                     self.imgScrollView?.contentSize = CGSize(width: bounds.width, height: imageH)
                     let imgRect = CGRect(x: 0, y: 0, width: bounds.width, height: imageH)
                     self.img = UIImageView(frame: imgRect)
-                    self.imgScrollView?.addSubview(self.img!)
-                    self.img!.contentMode = .scaleAspectFill
-                    self.img!.layer.masksToBounds = true
                 }
+                self.imgScrollView?.addSubview(self.img!)
+                self.img!.contentMode = .scaleAspectFill
+                self.img!.layer.masksToBounds = true
             }else {
-                imgTop = (viewH - imageH)/2
-                isAdd = true
-            }
-            if isAdd {
+                var imgTop:CGFloat = (viewH - imageH)/2
+                if imgTop < YCScreen.safeArea.top {
+                    imgTop = YCScreen.safeArea.top
+                }
                 self.img = UIImageView()
                 self.addSubview(self.img!)
                 self.img?.snp.makeConstraints({ (make) in
@@ -185,13 +281,11 @@ class YCImageView: YCBaseView {
     
     func loadSnapImage(_ imageModel: YCImageModel, snapShot: Bool){
         self.imageModel = imageModel
-//        let bound = YCScreen.bounds
         if let image = self.imageModel {
             self.initSnapView()
             var imgPath = ""
             if snapShot {
-//                let imageW = Int(bound.width)
-                imgPath = image.imagePath + "?imageView2/2/w/1280"
+                imgPath = image.imagePath + "?imageView2/2/w/480"
             }else {
                 imgPath = image.imagePath
             }
@@ -207,31 +301,32 @@ class YCImageView: YCBaseView {
         if let imageModel = self.imageModel {
             self.initImageView()
 //            let imageW = Int(bound.width)
-            let snapPath = imageModel.imagePath + "?imageView2/2/w/1280"
+            let snapPath = imageModel.imagePath + "?imageView2/2/w/480"
             if let img = self.img, let url = URL(string: snapPath){
                 img.kf.setImage(with: ImageResource(downloadURL: url), placeholder: self.defaultImg(), options: nil, progressBlock: nil, completionHandler: nil)
             }
         }
     }
     
-    override func loadMedia() {
-        super.loadMedia()
+    override func loadMedia(_ mediaModel: YCMediaViewModel?) {
+        super.loadMedia(mediaModel)
         if let imageModel = self.imageModel, !self.isLoading, !self.isloadComplete {
             let imgPath = imageModel.imagePath
             if let img = self.img, let url = URL(string: imgPath) {
                 self.isLoading = true
-                var loadingView: UIActivityIndicatorView?
-                loadingView = UIActivityIndicatorView(style: .whiteLarge)
-                self.addSubview(loadingView!)
-                loadingView!.snp.makeConstraints({ (make) in
-                    make.center.equalTo(self).offset(0)
-                })
-                loadingView!.startAnimating()
+                let bounds = self.bounds
+                let viewH = bounds.height - YCScreen.fullScreenArea.bottom
+                self.loading = YCMediaLoadingView(frame: CGRect(x: 0, y: viewH, width: bounds.width, height: 1))
+                self.addSubview(self.loading!)
+                if let loading = self.loading {
+                    loading.startAnimating()
+                }
                 img.kf.setImage(with: ImageResource(downloadURL: url), placeholder: nil, options: [.keepCurrentImageWhileLoading], progressBlock: nil, completionHandler: { (image, error, type, url) in
-                    if loadingView != nil {
-                        loadingView!.stopAnimating()
-                        loadingView!.removeFromSuperview()
+                    if let loading = self.loading {
+                        loading.stopAnimating()
+                        loading.removeFromSuperview()
                     }
+                    self.loading = nil
                     self.isloadComplete = true
                     self.isLoading = false
                 })
@@ -255,6 +350,11 @@ class YCImageView: YCBaseView {
         }
         self.img = nil
         self.imgScrollView = nil
+        if let loading = self.loading {
+            loading.stopAnimating()
+            loading.removeFromSuperview()
+        }
+        self.loading = nil
     }
     
     override func getSnap() -> UIImage? {
@@ -285,6 +385,7 @@ class YCAnimationView: YCBaseView {
     
     var imageModel: YCImageModel?;
     var img: AnimatedImageView?
+    var loading: YCMediaLoadingView?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -318,7 +419,7 @@ class YCAnimationView: YCBaseView {
             let imgW = imgModel.imageWidth
             let imgH = imgModel.imageHeight
             var imageH = CGFloat(imgH / imgW) * bounds.width
-            let viewH = bounds.height
+            let viewH = bounds.height - YCScreen.fullScreenArea.bottom
             var imgTop:CGFloat = 0
             if imageH > viewH {
                 imgTop = 0
@@ -335,7 +436,7 @@ class YCAnimationView: YCBaseView {
                 make.height.equalTo(imageH)
             })
             self.img?.autoPlayAnimatedImage = false
-            self.img?.runLoopMode = RunLoop.Mode.common
+            self.img?.runLoopMode = .common
             self.img?.repeatCount = .once
             self.img?.delegate = self
             self.img?.contentMode = .scaleAspectFill
@@ -382,24 +483,23 @@ class YCAnimationView: YCBaseView {
         }
     }
     
-    override func loadMedia() {
-        super.loadMedia()
+    override func loadMedia(_ mediaModel: YCMediaViewModel?) {
+        super.loadMedia(mediaModel)
         if let imageModel = self.imageModel, imageModel.imageType == "gif", !self.isLoading, !self.isloadComplete{
             let imgPath = imageModel.imagePath
             if let _ = self.img, let url = URL(string: imgPath) {
                 self.isLoading = true
-                var loadingView: UIActivityIndicatorView?
-                loadingView = UIActivityIndicatorView(style: .whiteLarge)
-                self.addSubview(loadingView!)
-                loadingView!.snp.makeConstraints({ (make) in
-                    make.center.equalTo(self).offset(0)
-                })
-                loadingView!.startAnimating()
+                let bounds = self.bounds
+                let viewH = bounds.height - YCScreen.fullScreenArea.bottom
+                self.loading = YCMediaLoadingView(frame: CGRect(x: 0, y: viewH, width: bounds.width, height: 1))
+                self.addSubview(self.loading!)
+                self.loading!.startAnimating()
                 self.img!.kf.setImage(with: ImageResource(downloadURL: url), placeholder: nil, options: [.keepCurrentImageWhileLoading], progressBlock: nil, completionHandler: { (image, error, type, url) in
-                    if loadingView != nil {
-                        loadingView!.stopAnimating()
-                        loadingView!.removeFromSuperview()
+                    if let loading = self.loading {
+                        loading.stopAnimating()
+                        loading.removeFromSuperview()
                     }
+                    self.loading = nil
                     
                     self.isloadComplete = true
                     self.isLoading = false
@@ -454,6 +554,11 @@ class YCAnimationView: YCBaseView {
             img.removeFromSuperview()
         }
         self.img = nil
+        if let loading = self.loading {
+            loading.stopAnimating()
+            loading.removeFromSuperview()
+        }
+        self.loading = nil
     }
     
     override func getSnap() -> UIImage? {
@@ -466,50 +571,56 @@ class YCAnimationView: YCBaseView {
     
     override func getMediaData(_ width:Float = 1280, _ height:Float = 960, completionBlock: @escaping (Data?) -> Void) {
         if let img = self.img, self.isloadComplete{
-            img.thumbWidth = CGFloat(width);
-            img.thumbHeight = CGFloat(height);
-            if let frames = img.animationFrames, let imgModel = self.imageModel{
+            img.ycFrameSize = CGSize(width: CGFloat(width), height:  CGFloat(height))
+            if let imgModel = self.imageModel{
                 let queue = DispatchQueue(label: "mediaData")
                 queue.async {
-                    let destination: CGImageDestination
-                    let document: [String] = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)
-                    let documentStr = document[0]
-                    let fileManager = FileManager.default
-                    let tempDirectory = NSString(string: documentStr).appendingPathComponent("gif")
-                    do {
-                        try fileManager.createDirectory(atPath: tempDirectory, withIntermediateDirectories: true, attributes: nil)
-                    } catch {
-                        completionBlock(nil)
-                        return
-                    }
-                    let gifName = imgModel.imageID+".gif"
-                    let path = NSString(string: tempDirectory).appendingPathComponent(gifName)
-                    let url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, path as CFString, .cfurlposixPathStyle, false)
-                    destination = CGImageDestinationCreateWithURL(url!, kUTTypeGIF, frames.count, nil)!
-                    
-                    let gifProperties = [
-                        kCGImagePropertyGIFDictionary as String : [
-                            kCGImagePropertyGIFLoopCount as String : 0
-                        ]
-                    ]
-                    for (_, frame) in frames.enumerated() {
-                        if let img = frame.image {
-                            let delay = frame.duration
-                            let frameProperties: [String: Any] = [
-                                kCGImagePropertyGIFDictionary as String : [
-                                    kCGImagePropertyGIFDelayTime as String :delay
-                                ]
-                            ]
-                            CGImageDestinationAddImage(destination, img.cgImage!, frameProperties as CFDictionary)
+                    let frames = img.ycAllAnimationFrames
+                    if frames.count == 0 {
+                        DispatchQueue.main.async {
+                            completionBlock(nil)
                         }
-                    }
-                    CGImageDestinationSetProperties(destination, gifProperties as CFDictionary)
-                    CGImageDestinationFinalize(destination)
-                    
-                    let fileUrl = URL(fileURLWithPath: path)
-                    let data = try? Data(contentsOf: fileUrl)
-                    DispatchQueue.main.async {
-                        completionBlock(data)
+                    }else {
+                        let destination: CGImageDestination
+                        let document: [String] = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)
+                        let documentStr = document[0]
+                        let fileManager = FileManager.default
+                        let tempDirectory = NSString(string: documentStr).appendingPathComponent("gif")
+                        do {
+                            try fileManager.createDirectory(atPath: tempDirectory, withIntermediateDirectories: true, attributes: nil)
+                        } catch {
+                            completionBlock(nil)
+                            return
+                        }
+                        let gifName = imgModel.imageID+".gif"
+                        let path = NSString(string: tempDirectory).appendingPathComponent(gifName)
+                        let url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, path as CFString, .cfurlposixPathStyle, false)
+                        destination = CGImageDestinationCreateWithURL(url!, kUTTypeGIF, frames.count, nil)!
+                        
+                        let gifProperties = [
+                            kCGImagePropertyGIFDictionary as String : [
+                                kCGImagePropertyGIFLoopCount as String : 0
+                            ]
+                        ]
+                        for (_, frame) in frames.enumerated() {
+                            if let img = frame.image {
+                                let delay = frame.duration
+                                let frameProperties: [String: Any] = [
+                                    kCGImagePropertyGIFDictionary as String : [
+                                        kCGImagePropertyGIFDelayTime as String :delay
+                                    ]
+                                ]
+                                CGImageDestinationAddImage(destination, img.cgImage!, frameProperties as CFDictionary)
+                            }
+                        }
+                        CGImageDestinationSetProperties(destination, gifProperties as CFDictionary)
+                        CGImageDestinationFinalize(destination)
+                        
+                        let fileUrl = URL(fileURLWithPath: path)
+                        let data = try? Data(contentsOf: fileUrl)
+                        DispatchQueue.main.async {
+                            completionBlock(data)
+                        }
                     }
                 }
             }
@@ -536,16 +647,23 @@ class YCVideoView: YCBaseView {
     var playButton: UIImageView?
     
     var videoView: UIView?
-    var videoPlayItem: AVPlayerItem?
-    var videoPlayer: AVPlayer?
+    var videoViewWidth: CGFloat = 0
+    var videoViewHeight: CGFloat = 0
+    var mediaModel: YCMediaViewModel?
     var videoPlayLayer: AVPlayerLayer?
-    var loadingView: UIActivityIndicatorView?
+    var videoProgressView: UIView?
+    var progressToken: Any?
+    
+    var videoUIView: YCVideoUIView?
 
     var readyPlay = false
     
     var isSnap = false
+    var isDisplayView = false
     
     var currentSecond: Double = 0
+    
+    var loading: YCMediaLoadingView?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -555,25 +673,26 @@ class YCVideoView: YCBaseView {
         super.init(frame: frame)
     }
     
-    deinit {
-        if let playerItem = self.videoPlayItem {
-            playerItem.removeObserver(self, forKeyPath: "loadedTimeRanges")
-            playerItem.removeObserver(self, forKeyPath: "status")
-        }
-        self.videoPlayItem = nil
-    }
-    
     func initSnapView(){
         self.isSnap = true
         if self.cover == nil {
-            self.videoView = UIView()
-            self.addSubview(self.videoView!)
-            self.videoView?.snp.makeConstraints { (make) in
+//            self.videoView = UIView()
+//            self.addSubview(self.videoView!)
+//            self.videoView?.snp.makeConstraints { (make) in
+//                make.left.equalTo(0)
+//                make.top.equalTo(0)
+//                make.width.equalTo(self)
+//                make.height.equalTo(self)
+//            }
+            self.videoUIView = YCVideoUIView()
+            self.addSubview(self.videoUIView!)
+            self.videoUIView?.snp.makeConstraints { (make) in
                 make.left.equalTo(0)
                 make.top.equalTo(0)
                 make.width.equalTo(self)
                 make.height.equalTo(self)
             }
+            
             self.cover = UIImageView();
             self.addSubview(self.cover!)
             self.cover?.snp.makeConstraints { (make) in
@@ -588,57 +707,66 @@ class YCVideoView: YCBaseView {
             self.playButton = UIImageView();
             self.addSubview(playButton!)
             self.playButton!.snp.makeConstraints { (make) in
-                make.center.equalTo(self.cover!).offset(0)
-                make.width.equalTo(44)
-                make.height.equalTo(44)
+                make.right.equalTo(-5)
+                make.top.equalTo(5)
+                make.width.equalTo(20)
+                make.height.equalTo(20)
             }
             self.playButton?.image = UIImage(named: "play_button_black")
-            
-            self.loadingView = UIActivityIndicatorView()
-            self.loadingView = UIActivityIndicatorView(style: .whiteLarge)
-            self.addSubview(self.loadingView!)
-            if let cover = self.cover {
-                self.loadingView?.snp.makeConstraints { (make) in
-                    make.center.equalTo(cover).offset(0)
-                }
-            }else {
-                self.loadingView?.snp.makeConstraints { (make) in
-                    make.center.equalTo(self).offset(0)
-                }
-            }
-            self.loadingView?.hidesWhenStopped = true
         }
     }
     
     func initView() {
         self.isSnap = false
         let bounds = self.frame
+        let topH = YCScreen.safeArea.top + 44
+        let viewH = bounds.height - YCScreen.fullScreenArea.bottom
+        let viewW = bounds.width
         if let videoModel = self.videoModel, self.videoView == nil {
             let vW = videoModel.videoWidth
             let vH = videoModel.videoHeight
-            var videoH = CGFloat(vH / vW) * bounds.width
-            let viewH = bounds.height
+            self.videoViewWidth = viewW
+            self.videoViewHeight = viewH
             var videoTop:CGFloat = 0
-            if videoH > viewH {
-                videoTop = 0
-                videoH = viewH
-            }else {
-                if videoH > (viewH - YCScreen.safeArea.top) {
-                    videoTop = (viewH - videoH)/2
+            var videoLeft:CGFloat = 0
+            if CGFloat(vH/vW) > (viewH-topH)/viewW {
+                let vRate = CGFloat(vW / vH)
+                let viewRate =  CGFloat(viewW / viewH)
+                if vRate > viewRate {
+                    self.videoViewWidth = CGFloat(vW / vH) * viewH
+                    videoTop = 0
+                    videoLeft = (viewW - self.videoViewWidth)/2
                 }else {
-                    videoTop = YCScreen.safeArea.top + (viewH - YCScreen.safeArea.top - videoH)/2
+                    self.videoViewHeight = CGFloat(vH / vW) * viewW
+                    videoLeft = 0
+                    videoTop = (viewH - self.videoViewHeight)/2
                 }
+            }else {
+                self.videoViewHeight = CGFloat(vH / vW) * viewW
+                videoTop = YCScreen.safeArea.top + (viewH - YCScreen.safeArea.top - self.videoViewHeight)/2
+                videoLeft = 0
             }
-            self.videoView = UIView()
-            self.addSubview(self.videoView!)
-            self.videoView?.snp.makeConstraints { (make) in
+            
+            let maskView = UIView()
+            self.addSubview(maskView)
+            maskView.snp.makeConstraints { (make) in
                 make.left.equalTo(0)
+                make.top.equalTo(0)
+                make.width.equalTo(viewW)
+                make.height.equalTo(viewH)
+            }
+            maskView.clipsToBounds = true
+            
+            self.videoView = UIView()
+            maskView.addSubview(self.videoView!)
+            self.videoView?.snp.makeConstraints { (make) in
+                make.left.equalTo(videoLeft)
                 make.top.equalTo(videoTop)
-                make.width.equalTo(self)
-                make.height.equalTo(videoH)
+                make.width.equalTo(self.videoViewWidth)
+                make.height.equalTo(self.videoViewHeight)
             }
             self.cover = UIImageView();
-            self.addSubview(self.cover!)
+            maskView.addSubview(self.cover!)
             self.cover!.snp.makeConstraints { (make) in
                 make.left.equalTo(self.videoView!)
                 make.top.equalTo(self.videoView!)
@@ -652,24 +780,57 @@ class YCVideoView: YCBaseView {
             self.addSubview(playButton!)
             self.playButton!.snp.makeConstraints { (make) in
                 make.center.equalTo(self.cover!).offset(0)
-                make.width.equalTo(44)
-                make.height.equalTo(44)
+                make.width.equalTo(64)
+                make.height.equalTo(64)
             }
             self.playButton?.image = UIImage(named: "play_button_black")
+            self.playButton?.isHidden = true
             
-            self.loadingView = UIActivityIndicatorView()
-            self.loadingView = UIActivityIndicatorView(style: .whiteLarge)
-            self.addSubview(self.loadingView!)
-            if let cover = self.cover {
-                self.loadingView?.snp.makeConstraints { (make) in
-                    make.center.equalTo(cover).offset(0)
+            self.loading = YCMediaLoadingView(frame: CGRect(x: 0, y: viewH, width: viewW, height: 1))
+            self.addSubview(self.loading!)
+            
+            self.videoProgressView = UIView(frame: CGRect(x: 0, y: viewH, width: 0, height: 0.5))
+            self.addSubview(self.videoProgressView!)
+            self.videoProgressView?.backgroundColor = YCStyleColor.white
+            self.videoProgressView?.isHidden = true
+        }
+    }
+    
+    override func willDisplayView() {
+        if self.isSnap {
+            self.isDisplayView = true
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+1) {
+                if self.isDisplayView, let videoUIView = self.videoUIView{
+                    if videoUIView.isReadyToPlay{
+                        if videoUIView.isPause {
+                            videoUIView.playVideo()
+                        }
+                    }else if let video = self.videoModel, let dynamic = video.videoDynamic {
+                        if let videoURL = URL(string: dynamic.dynamicPath){
+                            videoUIView.setVideo(with: YCVideoResource(videoURL), placeholder: nil, options: [.aotuPlay, .loop, .muted], loadedBlock: { (ready, error, url) in
+                                if ready, let cover = self.cover {
+                                    UIView.animate(withDuration: 0.3, animations: {
+                                        cover.alpha = 0
+                                    }, completion: { (_) in
+                                        cover.isHidden = true
+                                        cover.alpha = 1
+                                    })
+                                }
+                            }, playCompleteBlock: nil, progressBlock: nil)
+                        }
+                    }
                 }
-            }else {
-                self.loadingView?.snp.makeConstraints { (make) in
-                    make.center.equalTo(self).offset(0)
-                }
+                self.isDisplayView = false
             }
-            self.loadingView?.hidesWhenStopped = true
+        }
+    }
+    
+    override func endDisplayView() {
+        if self.isSnap {
+            self.isDisplayView = false
+            if let videoUIView = self.videoUIView {
+                videoUIView.pauseVideo()
+            }
         }
     }
     
@@ -702,60 +863,96 @@ class YCVideoView: YCBaseView {
         }
     }
     
-    override func loadMedia() {
-        super.loadMedia()
-        if let videoModel = self.videoModel{
-            let bound = self.frame
-            let vW = videoModel.videoWidth
-            let vH = videoModel.videoHeight
-            var videoH = CGFloat(vH / vW) * bound.width
-            let viewH = bounds.height
-            if videoH > viewH {
-                videoH = viewH
+    override func loadMedia(_ mediaModel: YCMediaViewModel?) {
+        super.loadMedia(mediaModel)
+        self.mediaModel = mediaModel
+        if !self.isLoading, let media = self.mediaModel, let videoPlayer = media.videoPlayer, let videoPlayerItem = media.videoPlayerItem, self.videoPlayLayer == nil {
+            self.isLoading = true
+            self.videoPlayLayer = AVPlayerLayer(player: videoPlayer)
+            self.videoPlayLayer?.videoGravity = .resizeAspectFill
+            
+            self.videoPlayLayer?.frame = CGRect(x: 0, y: 0, width: self.videoViewWidth, height: self.videoViewHeight)
+            self.videoView?.layer.insertSublayer(self.videoPlayLayer!, at: 0)
+            self.mediaModel?.videoStatusChange = self.videoStatusChange
+            self.mediaModel?.videoPlayComplete = self.videoPlayComplete
+            
+            if let progress = self.videoProgressView {
+                progress.frame.size.width = 0
             }
-            if let videoURL = URL(string: videoModel.videoPath), self.videoPlayItem == nil, !self.isLoading {
-                self.isLoading = true
-                self.videoPlayItem = AVPlayerItem(url: videoURL)
-                self.videoPlayItem?.addObserver(self, forKeyPath: "loadedTimeRanges", options: .new, context: nil)
-                self.videoPlayItem?.addObserver(self, forKeyPath: "status", options: .new, context: nil)
-                self.videoPlayer = AVPlayer(playerItem: self.videoPlayItem)
-                self.videoPlayLayer = AVPlayerLayer(player: self.videoPlayer)
-                self.videoPlayLayer?.videoGravity = .resizeAspectFill
-                var layerTop:CGFloat = 0.0
-                if self.isSnap {
-                    layerTop = (bound.height - videoH)/2
+            let interval = CMTime(seconds: 0.1,
+                                  preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+            // Add time observer
+            self.progressToken = self.mediaModel?.videoPlayer?.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) {
+                    [weak self] time in
+                    // update player transport UI
+                if let sf = self{
+                    if let videoPlayerItem = sf.mediaModel?.videoPlayerItem {
+                        let current = videoPlayerItem.currentTime().seconds
+                        let duration = videoPlayerItem.duration.seconds
+                        if let progress = sf.videoProgressView, !current.isNaN, !duration.isNaN, duration != 0 {
+                            var value = CGFloat(current/duration) * YCScreen.bounds.width
+                            if !value.isNaN {
+                                if value < 0 {
+                                    value = 0
+                                }
+                                progress.frame.size.width = value
+                            }
+                        }
+                    }
                 }
-                self.videoPlayLayer?.frame = CGRect(x: 0, y: layerTop, width: bound.width, height: videoH)
-                self.videoView?.layer.insertSublayer(self.videoPlayLayer!, at: 0)
-                NotificationCenter.default.addObserver(self, selector:  #selector(self.videoDidPlayToEnd(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.videoPlayItem)
+            }
+            if videoPlayerItem.status == .readyToPlay{
+                self.readyPlay = true
+                self.videoReadyToPlay()
             }
         }
     }
     
-    @objc func videoDidPlayToEnd(_ notify: Notification) {
+//    @objc func videoDidPlayToEnd(_ notify: Notification) {
+//        if let playerItem = notify.object as? AVPlayerItem {
+//            self.videoPlayComplete(playerItem)
+//        }
+//    }
+//    
+//    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+//        guard let playerItem = object as? AVPlayerItem else { return }
+//        self.videoStatusChange(keyPath, playerItem)
+//    }
+    
+    func videoPlayComplete(_ playerItem: AVPlayerItem) {
         self.isPlaying = false
         if let delegate = self.delegate {
             delegate.viewDidPlayToEnd(view: self)
         }
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        guard let playerItem = object as? AVPlayerItem else { return }
+    func videoStatusChange(_ keyPath: String?, _ playerItem: AVPlayerItem) {
         if keyPath == "loadedTimeRanges"{
             let current = playerItem.currentTime()
             if current.seconds > 0 {
                 self.readyPlay = true
                 if self.isPlaying{
                     if let cover = self.cover {
-                        cover.isHidden = true
+                        UIView.animate(withDuration: 0.3, animations: {
+                            cover.alpha = 0
+                        }) { (_) in
+                            cover.isHidden = true
+                            cover.alpha = 1
+                        }
                     }
                     if self.currentSecond == current.seconds {
-                        if let loading = self.loadingView {
+                        if let loading = self.loading {
                             loading.startAnimating()
                         }
+                        if let progress = self.videoProgressView {
+                            progress.isHidden = true
+                        }
                     }else {
-                        if let loading = self.loadingView {
+                        if let loading = self.loading {
                             loading.stopAnimating()
+                        }
+                        if let progress = self.videoProgressView {
+                            progress.isHidden = false
                         }
                     }
                     self.currentSecond = current.seconds
@@ -763,16 +960,20 @@ class YCVideoView: YCBaseView {
             }
         }else if keyPath == "status"{
             if playerItem.status == .readyToPlay{
-                self.isloadComplete = true
-                self.currentSecond = 0
-                if self.isPlaying {
-                    self.playHander()
-                }
-                self.isLoading = false
+                self.videoReadyToPlay()
             }else{
                 print("load video error ")
             }
         }
+    }
+    
+    func videoReadyToPlay(){
+        self.isloadComplete = true
+        self.currentSecond = 0
+        if self.isPlaying {
+            self.playHander()
+        }
+        self.isLoading = false
     }
     
     override func play() {
@@ -817,29 +1018,44 @@ class YCVideoView: YCBaseView {
         if let playButton = self.playButton {
             playButton.removeFromSuperview()
         }
-        if let loading = self.loadingView {
+        if let loading = self.loading {
+            loading.stopAnimating()
             loading.removeFromSuperview()
         }
-        if let playItem = self.videoPlayItem {
-            playItem.removeObserver(self, forKeyPath: "loadedTimeRanges")
-            playItem.removeObserver(self, forKeyPath: "status")
-        }
-        if let player = self.videoPlayer, self.isloadComplete{
+        if let player = self.mediaModel?.videoPlayer, self.isloadComplete{
             player.pause()
             player.seek(to: CMTime(seconds: 0, preferredTimescale: 1))
+            if let token = self.progressToken, player.rate == 1.0 {
+                self.mediaModel?.videoPlayer?.removeTimeObserver(token)
+            }
         }
+        if let _ = self.mediaModel {
+            self.mediaModel?.videoPlayComplete = nil
+            self.mediaModel?.videoStatusChange = nil
+        }
+        
         if let playLayer = self.videoPlayLayer {
             playLayer.removeFromSuperlayer()
         }
         if let videoView = self.videoView {
             videoView.removeFromSuperview()
         }
-        self.videoPlayItem = nil
-        self.videoPlayer = nil
+        if let progress = self.videoProgressView {
+            progress.removeFromSuperview()
+        }
+        if let videoUIView = self.videoUIView {
+            videoUIView.clean()
+            videoUIView.removeFromSuperview()
+        }
+        self.progressToken = nil
+        self.cover = nil
         self.videoPlayLayer = nil
+        self.videoUIView = nil
+        self.videoProgressView = nil
+        self.mediaModel = nil
         
         self.videoView = nil
-        self.loadingView = nil
+        self.loading = nil
         self.cover = nil
         self.playButton = nil
         self.readyPlay = false
@@ -851,7 +1067,7 @@ class YCVideoView: YCBaseView {
             playButton.isHidden = true
         }
         if self.isloadComplete {
-            if let videoPlayer = self.videoPlayer{
+            if let videoPlayer = self.mediaModel?.videoPlayer{
                 if !self.isPause {
                     videoPlayer.seek(to: CMTime(seconds: 0, preferredTimescale: 1))
                 }
@@ -861,23 +1077,37 @@ class YCVideoView: YCBaseView {
                 }
             }
             if self.readyPlay {
-                if let loading = self.loadingView {
+                if let loading = self.loading {
                     loading.stopAnimating()
                 }
+                if let progress = self.videoProgressView {
+                    progress.isHidden = false
+                }
                 if let cover = self.cover {
-                    cover.isHidden = true
+                    UIView.animate(withDuration: 0.3, animations: {
+                        cover.alpha = 0
+                    }) { (_) in
+                        cover.isHidden = true
+                        cover.alpha = 1
+                    }
                 }
             }else {
-                if let loading = self.loadingView {
+                if let loading = self.loading {
                     loading.startAnimating()
+                }
+                if let progress = self.videoProgressView {
+                    progress.isHidden = true
                 }
                 if let cover = self.cover {
                     cover.isHidden = false
                 }
             }
         }else {
-            if let loading = self.loadingView {
+            if let loading = self.loading {
                 loading.startAnimating()
+            }
+            if let progress = self.videoProgressView {
+                progress.isHidden = true
             }
             if let cover = self.cover {
                 cover.isHidden = false
@@ -890,10 +1120,10 @@ class YCVideoView: YCBaseView {
             playButton.isHidden = false
         }
         if self.isloadComplete {
-            if let loading = self.loadingView {
+            if let loading = self.loading {
                 loading.stopAnimating()
             }
-            if let videoPlayer = self.videoPlayer{
+            if let videoPlayer = self.mediaModel?.videoPlayer{
                 videoPlayer.pause()
                 if let second = videoPlayer.currentItem?.currentTime().seconds {
                     self.currentSecond = second
@@ -907,14 +1137,15 @@ class YCVideoView: YCBaseView {
     }
     
     func stopHander() {
+        print("stopHandler")
         if let playButton = self.playButton {
-            playButton.isHidden = false
+            playButton.isHidden = true
         }
         if self.isloadComplete {
-            if let loading = self.loadingView {
+            if let loading = self.loading {
                 loading.stopAnimating()
             }
-            if let videoPlayer = self.videoPlayer{
+            if let videoPlayer = self.mediaModel?.videoPlayer{
                 videoPlayer.pause()
                 videoPlayer.seek(to: CMTime(seconds: 0, preferredTimescale: 1))
                 self.currentSecond = 0
@@ -944,3 +1175,6 @@ class YCVideoView: YCBaseView {
     }
     
 }
+
+
+

@@ -9,17 +9,20 @@
 import UIKit
 
 class YCStyleColor {
+    static let zero: UIColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
     static let black: UIColor = UIColor.black
-    static let blackAlpha: UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.8)
+    static let blackGray: UIColor =  UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
+    static let blackAlpha: UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.9)
+    static let blackAlphaMore: UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.4)
     static let white: UIColor = UIColor.white
-    static let whiteAlpha: UIColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.8)
+    static let whiteAlpha: UIColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
     static let red: UIColor = UIColor.red
     static let redblack: UIColor = UIColor.red
     static let green: UIColor = UIColor(red: 0.247, green: 0.74, blue: 0.192, alpha: 1)
     static let blue: UIColor = UIColor(red: 0.29, green: 0.564, blue: 0.886, alpha: 1)
     static let gray: UIColor = UIColor(red: 0.56, green: 0.56, blue: 0.56, alpha: 1)
     static let grayWhite: UIColor = UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 1)
-    static let grayWhiteAlpha: UIColor = UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.2)
+    static let grayWhiteAlpha: UIColor = UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.4)
     
     
     static let gayBlue: UIColor = UIColor(red: 0.90, green: 0.90, blue: 0.925, alpha: 1)

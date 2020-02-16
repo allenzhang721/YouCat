@@ -356,3 +356,55 @@ class YCSearchThemePublishListRequest: YCListRequest {
         return "SearchThemePublishList"
     }
 }
+
+class YCPublishDetailRequest: YCBaseRequest {
+    
+    let publishID: String;
+    
+    init(publishID: String) {
+        self.publishID = publishID;
+        super.init()
+    }
+    
+    override func urlPath() -> String {
+        let urlPath = PublishRequestURL.publishDetail.description;
+        return urlPath;
+    }
+    
+    override func parameter() -> Dictionary<String, Any> {
+        let dic: [String: Any] = [
+            Parameter(.publishID): self.publishID
+        ];
+        return dic;
+    }
+    
+    override func errorMessage() -> String {
+        return "PublishDetail"
+    }
+}
+
+class YCPublishDetailByUUID: YCBaseRequest {
+    
+    let uuid: String;
+    
+    init(uuid: String) {
+        self.uuid = uuid;
+        super.init()
+    }
+    
+    override func urlPath() -> String {
+        let urlPath = PublishRequestURL.publishDetailByUUID.description;
+        return urlPath;
+    }
+    
+    override func parameter() -> Dictionary<String, Any> {
+        let dic: [String: Any] = [
+            Parameter(.uuid): self.uuid
+        ];
+        return dic;
+    }
+    
+    override func errorMessage() -> String {
+        return "PublishDetailByUUID"
+    }
+}

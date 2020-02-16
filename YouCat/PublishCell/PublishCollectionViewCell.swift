@@ -23,6 +23,7 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
     var publishView: UIView!
     var contentLabel: UILabel!
     var userIcon: UIImageView!
+    var iconBg: UIView!
     
     var likeImg: UIImageView!
     var likeCountLabel: UILabel!
@@ -35,7 +36,11 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
     
     var publishModel: YCPublishModel? {
         didSet{
-            self.didSetPublishModel();
+            if let old = oldValue, let publish = publishModel, old.publishID == publish.publishID {
+                self.didSetPublishModel();
+            }else {
+                self.setCellValue();
+            }
         }
     }
     
@@ -49,21 +54,40 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
         super.init(frame: frame)
         self.initView()
     }
+    
+    func willDisplayCell() {
+        for view in self.contentViews {
+            view.willDisplayView()
+        }
+    }
+    
+    func endDisplayCell() {
+        for view in self.contentViews {
+            view.endDisplayView()
+        }
+    }
+    
+    func releaseCell() {
+        for view in self.contentViews {
+            view.clean()
+            view.removeFromSuperview()
+        }
+        self.contentViews.removeAll()
+        self.publishModel = nil
+    }
  
     func initView() {
-        let bounds = UIScreen.main.bounds
         self.backgroundColor = YCStyleColor.white
         self.bgView = UIView()
         self.addSubview(self.bgView)
         self.bgView.snp.makeConstraints { (make) in
-            make.left.equalTo(1).priority(999)
+            make.left.equalTo(1)
             make.right.equalTo(-1).priority(999)
             make.top.equalTo(1)
             make.bottom.equalTo(-1).priority(999)
-            make.width.equalTo((bounds.width-30)/2)
         }
         self.bgView.backgroundColor = YCStyleColor.white
-        self.bgView.layer.cornerRadius = 4;
+        self.bgView.layer.cornerRadius = 8;
         self.bgView.clipsToBounds = true
         
         let shadowView = UIView()
@@ -76,8 +100,8 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
             make.bottom.equalTo(self.bgView)
         }
         shadowView.backgroundColor = YCStyleColor.white
-        shadowView.layer.cornerRadius = 4;
-        self.addShadow(shadowView, 4, 2)
+        shadowView.layer.cornerRadius = 8;
+        self.addShadow(shadowView, 8, 4)
         
         self.publishView = UIView()
         self.bgView.addSubview(self.publishView)
@@ -93,26 +117,36 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
         self.userIcon = UIImageView();
         self.addSubview(self.userIcon)
         self.userIcon.snp.makeConstraints { (make) in
-            make.left.equalTo(self.bgView).offset(5)
-            make.top.equalTo(self.publishView.snp.bottom).offset(-17)
+            make.left.equalTo(self.bgView).offset(6)
+            make.top.equalTo(self.publishView.snp.bottom).offset(-8)
+            make.width.equalTo(32)
+            make.height.equalTo(32)
+        }
+        self.cropImageCircle(self.userIcon, 16)
+        self.userIcon.image = UIImage(named: "default_icon")
+        
+        self.iconBg = UIView()
+        self.iconBg.backgroundColor = YCStyleColor.white
+        self.insertSubview(self.iconBg, belowSubview: self.userIcon)
+        self.iconBg.snp.makeConstraints { (make) in
+            make.center.equalTo(self.userIcon).offset(0)
             make.width.equalTo(34)
             make.height.equalTo(34)
         }
-        self.cropImageCircle(self.userIcon, 17)
-        self.userIcon.image = UIImage(named: "default_icon")
+        self.cropImageCircle(self.iconBg, 17)
         
         self.contentLabel = UILabel();
-        self.contentLabel.numberOfLines = 0
+        self.contentLabel.numberOfLines = 3
         self.addSubview(self.contentLabel)
         self.contentLabel.snp.makeConstraints { (make) in
             make.left.equalTo(self.bgView).offset(5)
             make.right.equalTo(self.bgView).offset(-5)
-            make.top.equalTo(self.publishView.snp.bottom).offset(22)
+            make.top.equalTo(self.publishView.snp.bottom).offset(28)
         }
-        self.contentLabel.textColor = YCStyleColor.black
+        self.contentLabel.textColor = YCStyleColor.blackGray
         self.contentLabel.font = UIFont.systemFont(ofSize: 14)
         self.contentLabel.text = ""
-        
+    
         self.likeCountLabel = UILabel();
         self.addSubview(self.likeCountLabel)
         self.likeCountLabel.snp.makeConstraints { (make) in
@@ -128,10 +162,10 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
         self.likeImg = UIImageView()
         self.addSubview(self.likeImg)
         self.likeImg.snp.makeConstraints { (make) in
-            make.right.equalTo(self.likeCountLabel.snp.left).offset(-2)
+            make.right.equalTo(self.likeCountLabel.snp.left).offset(0)
             make.centerY.equalTo(self.likeCountLabel).offset(0)
-            make.width.equalTo(22)
-            make.height.equalTo(22)
+            make.width.equalTo(33)
+            make.height.equalTo(33)
         }
         self.likeImg.image = UIImage(named: "like_gray")
         
@@ -148,10 +182,6 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
     }
     
     func didSetPublishModel(){
-        self.setCellValue()
-    }
-    
-    func setCellValue(){
         if let publish = self.publishModel {
             if let user = publish.user{
                 if let icon = user.icon {
@@ -170,10 +200,26 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
             }
             if self.type == .POST {
                 self.userIcon.isHidden = true
+                self.iconBg.isHidden = true
             }else {
                 self.userIcon.isHidden = false
+                self.iconBg.isHidden = false
             }
+            self.contentLabel.text = self.getContentString(content: publish.content)
+            self.likeCountLabel.text = self.getNumberString(number: publish.likeCount)
+            if publish.isLike == 1 {
+                self.likeImg.image = UIImage(named: "like_high")
+            }else {
+                self.likeImg.image = UIImage(named: "like_gray")
+            }
+        }
+    }
+    
+    func setCellValue(){
+        self.didSetPublishModel()
+        if let publish = self.publishModel {
             for view in self.contentViews {
+                view.clean()
                 view.removeFromSuperview()
             }
             self.contentViews.removeAll()
@@ -236,7 +282,6 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
                         var rate: Float = 1.0
                         if videoW != 0 && videoH != 0 {
                             rate = videoH/videoW;
-                            
                         }
                         self.publishView.snp.remakeConstraints { (make) in
                             make.top.equalTo(self.bgView)
@@ -251,13 +296,6 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
                     view.contentIndex = index
                 }
             }
-            self.contentLabel.text = self.getContentString(content: publish.content)
-            self.likeCountLabel.text = self.getNumberString(number: publish.likeCount)
-            if publish.isLike == 1 {
-                self.likeImg.image = UIImage(named: "like_high")
-            }else {
-                self.likeImg.image = UIImage(named: "like_gray")
-            }
             if medias.count > 1 {
                 self.publishMoreImg.isHidden = false
             }else {
@@ -271,7 +309,7 @@ class YCPublishCollectionViewCell: UICollectionViewCell, YCImageProtocol, YCNumb
 
 protocol YCPublishCollectionViewCellDelegate: YCContentStringProtocol {
     func cellUserIconTap(_ cell:YCPublishCollectionViewCell?)
-    func getPublishSize(publish: YCPublishModel, publishSize: [String : CGSize]) -> CGSize
+    func getPublishSize(publish: YCPublishModel, publishSize: [String : CGSize], frame: CGSize, sectionInset: UIEdgeInsets, minimumInteritemSpacing: Float, columnCount: Int) -> CGSize
 }
 
 extension YCPublishCollectionViewCellDelegate {
@@ -280,13 +318,13 @@ extension YCPublishCollectionViewCellDelegate {
         
     }
     
-    func getPublishSize(publish: YCPublishModel, publishSize: [String : CGSize]) -> CGSize {
+    func getPublishSize(publish: YCPublishModel, publishSize: [String : CGSize], frame: CGSize, sectionInset: UIEdgeInsets, minimumInteritemSpacing: Float, columnCount: Int) -> CGSize {
         let publishID = publish.publishID
         if let size = publishSize[publishID]{
             return size
         }else {
-            let bounds = UIScreen.main.bounds
-            let cellW = Float((bounds.width-26)/2)
+            let contentWidth = Float(frame.width - sectionInset.left - sectionInset.right)
+            let cellW = Float((contentWidth - Float(columnCount - 1)*minimumInteritemSpacing)/Float(columnCount))
             var cellH = cellW
             let medias = publish.medias
             let mediasCount = medias.count
@@ -323,14 +361,17 @@ extension YCPublishCollectionViewCellDelegate {
                 }
             }
             let content = self.getContentString(content: publish.content)
-            let label = UILabel(frame: CGRect(x: 9, y: 0, width: CGFloat(cellW-12), height: 22))
-            label.numberOfLines = 0
+            let label = UILabel(frame: CGRect(x: 0, y: 0, width: CGFloat(cellW-10), height: 22))
+            label.numberOfLines = 3
             label.textColor = YCStyleColor.black
             label.font = UIFont.systemFont(ofSize: 14)
             label.text = content
             label.sizeToFit();
-            let contentH = Float(label.frame.height)
-            cellH = mediaH + contentH + 38
+            var contentH = Float(label.frame.height)
+            if contentH > 5 {
+                contentH = contentH + 5
+            }
+            cellH = mediaH + contentH + 30
             let size = CGSize(width: CGFloat(cellW), height: CGFloat(cellH))
             return size
         }

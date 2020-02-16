@@ -15,7 +15,6 @@ func gotoSetting(title: String, mesage: String, view: UIViewController) {
         if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
             if #available(iOS 10.0, *) {
                 UIApplication.shared.open(url, options: [:], completionHandler: { (ist) in
-                    
                 })
             } else {
                 // Fallback on earlier versions
@@ -46,9 +45,12 @@ struct FilePath {
 struct YCScreen {
     static var bounds = CGRect(x: 0, y: 0, width: 0, height: 0)
     static var safeArea = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    static var fullScreenArea = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 }
 
 struct YCSocialConfigs {
+    
+    static let universalLink = "https://oia.youcat.cn"
     
     struct weibo {
         static let appKey = "1479783390"
@@ -62,7 +64,6 @@ struct YCSocialConfigs {
     }
     
     struct SMS {
-        
         static let appID = "3be50064be3b1dfa024b327c9be3eae9"
         static let appKey = "10a95e4bb9b32"
     }
@@ -76,7 +77,7 @@ enum RequestHost: CustomStringConvertible {
         case .debug:
             return "http://0.0.0.0:9909"
         case .production:
-            return "http://www.youcat.cn"
+            return "https://www.youcat.cn"
         }
     }
 }
@@ -87,6 +88,7 @@ enum PublishRequestURL: CustomStringConvertible {
     case userLikePublishList, userFollowPublishList, tagPublishList
     case searchPublishList, searchUserPublishList, searchThemePublishList, searchTagPublishList
     case activePublish, inActivePublish, retryCrawlPublish
+    case publishDetail, publishDetailByUUID
     var description: String {
         switch self {
         case .removePublish:
@@ -119,6 +121,10 @@ enum PublishRequestURL: CustomStringConvertible {
             return "/publish/searchThemePublishList"
         case .searchTagPublishList:
             return "/publish/searchTagPublishList"
+        case .publishDetail:
+            return "/publish/publishDetail"
+        case .publishDetailByUUID:
+            return "/publish/publishDetailByUUID"
         default:
             return ""
         }
@@ -129,7 +135,7 @@ enum UserRequestURL: CustomStringConvertible {
     case setManager
     case loginByPassword, loginByPhone, loginByWeibo, loginByWeChat
     case updatePassword, updateUniqueID, updateUserInfo, updateNikeName, updateSign, updateGender, updateBirthday, updateIcon, updateAddress
-    case userDetail
+    case userDetail, userDetailByUUID
     case followUser, unfollowUser, blockUser
     case followingList, followersList, blockList, themeAuthorList, followThemeUserList, blockThemeUserList
     case searchUserList
@@ -163,6 +169,8 @@ enum UserRequestURL: CustomStringConvertible {
             return "/user/updateAddress"
         case .userDetail:
             return "/user/userDetail"
+        case .userDetailByUUID:
+            return "/user/userDetailByUUID"
         case .followUser:
             return "/user/followUser"
         case .unfollowUser:
@@ -190,7 +198,7 @@ enum UserRequestURL: CustomStringConvertible {
 }
 
 enum ThemeRequestURL: CustomStringConvertible {
-    case addTheme, updateTheme, removeTheme, themeDetail
+    case addTheme, updateTheme, removeTheme, themeDetail, themeDetailByUUID
     case tradeThemeCreator, addThemeAuthor, removeThemeAuthor
     case themeList, topThemeList, followThemeList, blockThemeList, publishThemeList, searchThemeList
     case addPublishToTheme, removeThemePublish
@@ -205,6 +213,8 @@ enum ThemeRequestURL: CustomStringConvertible {
             return "/theme/removeTheme"
         case .themeDetail:
             return "/theme/themeDetail"
+        case .themeDetailByUUID:
+            return "/theme/themeDetailByUUID"
         case .themeList:
             return "/theme/themeList"
         case .topThemeList:
@@ -347,12 +357,13 @@ enum ParameterKey: CustomStringConvertible{
     
     case data, code, status, start, count, total, model, list, loginUserID, deviceID, deviceType, deviceModel, deviceVersion, deviceSystem, systemVersion, softVersion, softLanguage
     case imageID, imagePath, snapShotPath, imageType, imageIndex, imageWidth, imageHeight
-    case videoID, videoPath, videoURL, videoCover, videoWidth, videoHeight, videoTime
+    case videoID, videoPath, videoURL, videoCover, videoDynamic, videoWidth, videoHeight, videoTime
+    case dynamicID, dynamicStartTime, dynamicDuration, dynamicPath, dynamicWidth, dynamicHeight, dynamicType, dynamicIndex
     case userID, uuid, uniqueID, nikeName, signature, gender, birthday, province, city, icon, relation
     case areaCode, phone, active, setPassword, weiboUser, password, newPassword
     case followersCount, followingCount
     case publishID, content, contentType, fromType, fromID, fromURL, publishDate, user, medias, tags, publishType
-    case themeID, creator, name, description, coverImage, coverVideo, themeType, publishCount, createDate
+    case themeID, creator, name, description, coverImage, coverVideo, themeType, styleType, publishCount, createDate
     case tagID, tagName
     case likeID, beLikedID, beLikedType, likeDate
     case commentID, beRepliedUser, beCommentedID, beCommentedType, beRepliedID, commentType, commentDate, replyCount, listCount, replyList, contentImages
@@ -422,12 +433,30 @@ enum ParameterKey: CustomStringConvertible{
             return "VideoURL"
         case .videoCover:
             return "VideoCover"
+        case .videoDynamic:
+            return "VideoDynamic"
         case .videoWidth:
             return "VideoWidth"
         case .videoHeight:
             return "VideoHeight"
         case .videoTime:
             return "VideoTime"
+        case .dynamicID:
+            return "DynamicID"
+        case .dynamicStartTime:
+            return "DynamicStartTime"
+        case .dynamicDuration:
+            return "DynamicDuration"
+        case .dynamicPath:
+            return "DynamicPath"
+        case .dynamicType:
+            return "DynamicType"
+        case .dynamicIndex:
+            return "DynamicIndex"
+        case .dynamicWidth:
+            return "DynamicWidth"
+        case .dynamicHeight:
+            return "DynamicHeight"
         case .userID:
             return "UserID"
         case .uuid:
@@ -465,7 +494,7 @@ enum ParameterKey: CustomStringConvertible{
         case .weiboUser:
             return "WeiboUser"
         case .followersCount:
-            return "FollowerCount"
+            return "FollowersCount"
         case .followingCount:
             return "FollowingCount"
         case .likeCount:
@@ -516,6 +545,8 @@ enum ParameterKey: CustomStringConvertible{
             return "CoverVideo"
         case .themeType:
             return "ThemeType"
+        case .styleType:
+            return "StyleType"
         case .publishCount:
             return "PublishCount"
         case .createDate:

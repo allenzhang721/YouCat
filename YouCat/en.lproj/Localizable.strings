@@ -9,7 +9,7 @@
 "Slogon" = "喵萌，让我们一起云吸猫";
 "UserProfile" = "的个人主页";
 "HomeLabel" = "Favorite";
-"ThemeLabel" = "Category";
+"ThemeLabel" = "Discover";
 "PublishLabel" = "posts";
 "FollowersLabel" = "followers";
 "FollowingLabel" = "following";
@@ -17,20 +17,22 @@
 "LikeLabel" = "Like";
 
 "EnterCommentLabel" = "Comment";
-"DefaultName" = "User_";
+"DefaultUserName" = "User_";
+"IconLabel" = "Icon";
 "NicknameLabel" = "Name";
 "NicknamePlaceholder" = "Enter your nickname";
 "BioLabel" = "Bio";
+"IconLabel" = "Profile Photo";
 "BioPlaceholder" = "Enter your bio";
 "GenderLabel" = "Gender";
-"GenderTitle" = "Edit Gender";
+"GenderTitle" = "Gender";
 "MaleLabel" = "Male";
 "FemaleLabel" = "Female";
 "PhoneLabel" = "Phone";
 "LoginLabel" = "Log In";
 "LogoutLabel" = "Log Out";
 "LogoutTitle" = "Log Out?";
-"IconTitle" = "Edit Icon";
+"IconTitle" = "Profile Photo";
 "PhotoLabel" = "Take Photo";
 "CameraAccessTitle" = 'Allow youCat to access your camera in "Settings"->"Privacy"';
 "LibraryLabel" = "Select from Album";
@@ -49,7 +51,7 @@
 "DeleteCommentTitle" = "Delete Comment";
 "LoadMoreLabel" = "View more";
 
-"FollowButtonLabel" = "+ Follow";
+"FollowButtonLabel" =    "Follow";
 "FollowingButtonLabel" = "Following";
 "UnBlockButtonLabel" = "Unblock";
 "EditProfileButtonLabel" = "Edit Profile";
@@ -61,8 +63,9 @@
 "SaveLabel" = "Save";
 "QuitLabel" = "Quit";
 "SaveChangeTitle" = "Save Change?";
-"EditNicknameTitle" = "Edit Nickname";
-"EditBioTitle" = "Edit Bio";
+"EditNicknameTitle" = "Name";
+"EditBioTitle" = "Bio";
+"EditProfileTitle" = "Profile";
 
 "SettingLabel" = "Setting";
 "PhonePlaceholder" = "Phone number";
@@ -91,6 +94,9 @@
 "WeChatEmoticonLabel" = "WeChat Emoji";
 "WeChatMomentsLabel" = "Moments";
 "WeiboLabel" = "Weibo";
+"SavePhotoLabel" = "Save Photo";
+"SavePhotoSuccessLabel" = "Save Success";
+"SavePhotoErrorLabel" = "Save Failed";
 
 "JustNowLabel" = "Just Now";
 "YesterdayLabel" = "Yesterday";
@@ -114,3 +120,8 @@
 "LoginFailedWeiboUninstall" = "Not find Weibo, Can't login with Weibo";
 "ShareFailedWeChatUninstall" = "weChat is not installed, Can't share to weChat";
 "ShareFailedWeiboUninstall" = "Weibo is not installed, Can't share to Weibo";
+
+"WifiErrorMessage" = "Please check your network connection and try again later";
+"WifiErrorShortMessage" = "Unstable network";
+"RefreshButtonLabel" = "Refresh";
+

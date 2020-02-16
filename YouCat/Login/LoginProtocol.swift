@@ -27,6 +27,8 @@ extension YCLoginProtocol {
             loginView.completeBlock = completeBlock
             let navigationController = UINavigationController(rootViewController: loginView)
             navigationController.isNavigationBarHidden = true
+            navigationController.modalPresentationStyle = .overFullScreen
+            navigationController.modalTransitionStyle = .crossDissolve
             view.present(navigationController, animated: true) {
                 
             }

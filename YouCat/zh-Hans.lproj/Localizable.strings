@@ -9,15 +9,16 @@
 "Slogon" = "喵萌，让我们一起云吸猫";
 "UserProfile" = "的个人主页";
 "HomeLabel" = "推荐";
-"ThemeLabel" = "主题";
+"ThemeLabel" = "发现";
 "PublishLabel" = "发布";
 "FollowersLabel" = "粉丝";
 "FollowingLabel" = "关注";
 "PostLabel" = "发布";
 "LikeLabel" = "喜欢";
 
-"EnterCommentLabel" = "输入评论";
-"DefaultName" = "用户";
+"EnterCommentLabel" = "说点什么~";
+"DefaultUserName" = "用户";
+"IconLabel" = "头像";
 "NicknameLabel" = "昵称";
 "NicknamePlaceholder" = "请输入你的昵称";
 "BioLabel" = "签名";
@@ -43,16 +44,16 @@
 "ShareLabel" = "分享";
 "BlockLabel" = "加入黑名单";
 "UnBlockLabel" = "移出黑名单";
-"UnFollowLabel" = "停止关注";
+"UnFollowLabel" = "取消关注";
 "ShareButtonLabel" = "分享";
 "DeleteLabel" = "删除";
 "DeleteCommentTitle" = "删除评论";
 "LoadMoreLabel" = "加载更多";
 
-"FollowButtonLabel" = "+ 关注";
+"FollowButtonLabel" = "关注";
 "FollowingButtonLabel" = "已关注";
 "UnBlockButtonLabel" = "移出黑名单";
-"EditProfileButtonLabel" = "编辑个人资料";
+"EditProfileButtonLabel" = "编辑个人信息";
 "BlockTitle" = "是否确定将其添加至黑名单?";
 "ConfirmLabel" = "确定";
 "CancelLabel" = "取消";
@@ -63,6 +64,7 @@
 "SaveChangeTitle" = "是否保存修改?";
 "EditNicknameTitle" = "修改昵称";
 "EditBioTitle" = "修改个性签名";
+"EditProfileTitle" = "个人信息";
 
 "SettingLabel" = "设置";
 "PhonePlaceholder" = "请输入手机号码";
@@ -73,7 +75,7 @@
 "CodeLoginLabel" = "免密登录";
 "SendCodeLabel" = "获取验证码";
 "ResendCodelLabel" = "重新发送";
-"LoginOtherAccountLabel" = "其他账号登录";
+"LoginOtherAccountLabel" = "第三方账号登录";
 
 "ReplyLabel" = "回复 ";
 "CommentSuccessLabel" = "评论成功";
@@ -92,6 +94,9 @@
 "WeChatEmoticonLabel" = "微信表情";
 "WeChatMomentsLabel" = "朋友圈";
 "WeiboLabel" = "微博";
+"SavePhotoLabel" = "保存图片";
+"SavePhotoSuccessLabel" = "保存成功";
+"SavePhotoErrorLabel" = "保存失败";
 
 "JustNowLabel" = "刚刚";
 "YesterdayLabel" = "昨天";
@@ -115,3 +120,9 @@
 "LoginFailedWeiboUninstall" = "未找到微博，暂时无法微博登录";
 "ShareFailedWeChatUninstall" = "你还没有安装微信，暂时无法分享到微信";
 "ShareFailedWeiboUninstall" = "你还没有安装微博，暂时无法分享到微博";
+
+
+"WifiErrorMessage" = "网络不太给力，请检测网络后重试";
+"WifiErrorShortMessage" = "网络不太给力";
+"RefreshButtonLabel" = "重试";
+

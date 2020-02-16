@@ -239,7 +239,7 @@ class YCBaseRequest{
                 let dataStr = String(nsStr)
                 return [ParameterKey.data.description : dataStr]
             }else {
-                print("\(errorMessage) data String is error")
+                print("data String is error")
                 return [ParameterKey.data.description : ""]
             }
         } catch let error {
@@ -250,14 +250,14 @@ class YCBaseRequest{
     }
     
     func start(){
-        if(request == nil){
+        if(self.request == nil){
             let parameters = self.requestParameters();
             let url = self.requestURL();
             let method = self.requestMethod();
             print("url = \(url)")
             print("parameters = \(String(describing: parameters))")
-            request = YCURLRequest(url: url, parameters: parameters, method: method)
-            request?.connectWithBlock({(response) in
+            self.request = YCURLRequest(url: url, parameters: parameters, method: method)
+            self.request?.connectWithBlock({(response) in
                 if let complete = self.completionBlock{
                     complete(response.result)
                 }
