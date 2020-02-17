@@ -466,23 +466,25 @@ extension YCSettingViewController {
         let pick: UIImagePickerController = UIImagePickerController()
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
             PHPhotoLibrary.requestAuthorization({ (status) in
-                switch status {
-                case .notDetermined:
-                    break
-                case .restricted: //此应用程序没有被授权访问的照片数据
-                    gotoSetting(title: "", mesage: YCLanguageHelper.getString(key: "LibraryAccessTitle"), view: self)
-                    break
-                case .denied: //用户已经明确否认了这一照片数据的应用程序
-                    gotoSetting(title: "", mesage: YCLanguageHelper.getString(key: "LibraryAccessTitle"), view: self)
-                    break
-                case .authorized: //已经有权限
-                    pick.delegate = self
-                    pick.allowsEditing = true
-                    pick.sourceType = .photoLibrary
-                    self.present(pick, animated: true, completion: {
-                        
-                    })
-                    break;
+                DispatchQueue.main.async {
+                    switch status {
+                    case .notDetermined:
+                        break
+                    case .restricted: //此应用程序没有被授权访问的照片数据
+                        gotoSetting(title: "", mesage: YCLanguageHelper.getString(key: "LibraryAccessTitle"), view: self)
+                        break
+                    case .denied: //用户已经明确否认了这一照片数据的应用程序
+                        gotoSetting(title: "", mesage: YCLanguageHelper.getString(key: "LibraryAccessTitle"), view: self)
+                        break
+                    case .authorized: //已经有权限
+                        pick.delegate = self
+                        pick.allowsEditing = true
+                        pick.sourceType = .photoLibrary
+                        self.present(pick, animated: true, completion: {
+                            
+                        })
+                        break;
+                    }
                 }
             })
         }
@@ -492,16 +494,18 @@ extension YCSettingViewController {
         let pick: UIImagePickerController = UIImagePickerController()
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             AVCaptureDevice.requestAccess(for: .video, completionHandler: { (ist) in
-                let status = AVCaptureDevice.authorizationStatus(for: .video)
-                if status == .authorized{ //获得权限
-                    pick.delegate = self
-                    pick.allowsEditing = true
-                    pick.sourceType = .camera
-                    self.present(pick, animated: true, completion: {
-                        
-                    })
-                }else if status == .denied || status == .restricted {
-                    gotoSetting(title: "", mesage: YCLanguageHelper.getString(key: "CameraAccessTitle"), view: self)
+                DispatchQueue.main.async {
+                    let status = AVCaptureDevice.authorizationStatus(for: .video)
+                    if status == .authorized{ //获得权限
+                        pick.delegate = self
+                        pick.allowsEditing = true
+                        pick.sourceType = .camera
+                        self.present(pick, animated: true, completion: {
+                            
+                        })
+                    }else if status == .denied || status == .restricted {
+                        gotoSetting(title: "", mesage: YCLanguageHelper.getString(key: "CameraAccessTitle"), view: self)
+                    }
                 }
             })
         }

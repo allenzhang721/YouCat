@@ -145,6 +145,7 @@ class ThemeTransitionAnimator:NSObject, UIViewControllerAnimatedTransitioning {
         }) { (finished) in
             self.presentDidEndHanlder?()
             context.completeTransition(true)
+            fromVC.tabBarController?.tabBar.alpha = 0
         }
         
     }
@@ -238,6 +239,7 @@ class ThemeTransitionAnimator:NSObject, UIViewControllerAnimatedTransitioning {
 //            fromVC.tabBarController?.tabBar.transform = .identity
             if let tabBar = fromVC.tabBarController?.tabBar{
                 tabBar.frame.origin.y = YCScreen.bounds.height - tabBar.frame.height
+                tabBar.alpha = 1
             }
             self.finalDismissHandler?()
         }) { (finished) in

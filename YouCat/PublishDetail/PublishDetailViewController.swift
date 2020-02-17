@@ -834,16 +834,18 @@ extension YCPublishDetailViewController: YCPublishDetailViewCellDelegate, YCLogi
                         }else if index == 4 {
                             if let img = (view as! YCImageView).img?.image {
                                 YCPhotoAlbumUtil.saveImageInAlbum(image: img, albumName: YCLanguageHelper.getString(key: "DefaultName"), completion: { (result) in
-                                    switch result{
-                                    case .success:
-                                         let showMessage = YCLanguageHelper.getString(key:"SavePhotoSuccessLabel")
-                                         self.showTempAlert("", alertMessage: showMessage, view: self, completionBlock: nil)
-                                    case .denied:
-                                        gotoSetting(title: "", mesage: YCLanguageHelper.getString(key: "LibraryAccessTitle"), view: self)
-                                    case .error:
-                                        let showMessage = YCLanguageHelper.getString(key:
-                                            "SavePhotoErrorLabel")
-                                        self.showTempAlert("", alertMessage: showMessage, view: self, completionBlock: nil)
+                                    DispatchQueue.main.async {
+                                        switch result{
+                                        case .success:
+                                             let showMessage = YCLanguageHelper.getString(key:"SavePhotoSuccessLabel")
+                                             self.showTempAlert("", alertMessage: showMessage, view: self, completionBlock: nil)
+                                        case .denied:
+                                            gotoSetting(title: "", mesage: YCLanguageHelper.getString(key: "LibraryAccessTitle"), view: self)
+                                        case .error:
+                                            let showMessage = YCLanguageHelper.getString(key:
+                                                "SavePhotoErrorLabel")
+                                            self.showTempAlert("", alertMessage: showMessage, view: self, completionBlock: nil)
+                                        }
                                     }
                                 })
 //                                UIImageWriteToSavedPhotosAlbum(img, self, #selector(self.savePhoteHandler), nil)
